@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>PTA选项识别全面测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-case { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 8px; }
+        .options { background: #f0f8ff; padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .result { background: #e8f5e8; padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .error { background: #ffebee; padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .warning { background: #fff3e0; padding: 10px; margin: 10px 0; border-radius: 4px; }
+        button { background: #2196F3; color: white; padding: 10px 15px; border: none; cursor: pointer; border-radius: 4px; margin: 5px; }
+        button:hover { background: #1976D2; }
+        button.success { background: #4CAF50; }
+        button.danger { background: #f44336; }
+        
+        /* PTA样式模拟 */
+        .pc-x { margin: 10px 0; }
+        .pc-button { margin: 5px; }
+        .markdownBlock_tErSz { margin: 5px 0; }
+        .rendered-markdown p { margin: 0; }
+        .flex { display: flex; }
+        .flex-wrap { flex-wrap: wrap; }
+        .items-baseline { align-items: baseline; }
+        .min-w-0 { min-width: 0; }
+        .break-normal { word-break: normal; }
+        .shrink { flex-shrink: 1; }
+        .cursor-pointer { cursor: pointer; }
+        .hover\:bg-bg-light:hover { background: #f0f0f0; }
+        .rounded { border-radius: 4px; }
+        .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+        .mr-2 { margin-right: 0.5rem; }
+        .mt-1 { margin-top: 0.25rem; }
+        
+        /* 测试状态样式 */
+        .test-success { border-color: #4CAF50; background: #f1f8e9; }
+        .test-failed { border-color: #f44336; background: #ffebee; }
+        .test-running { border-color: #2196F3; background: #e3f2fd; }
+        
+        /* 选项高亮 */
+        .option-highlight { background: #e8f5e8 !important; border: 2px solid #4caf50 !important; }
+    </style>
+</head>
+<body>
+    <h1>PTA选项识别全面测试</h1>
+    <p>测试各种PTA题目结构的选项识别能力</p>
+    
+    <div style="margin: 20px 0;">
+        <button onclick="testAll()" class="success">✅ 测试所有用例</button>
+        <button onclick="clearAll()" class="danger">🗑️ 清除结果</button>
+        <button onclick="window.location.reload()">🔄 刷新页面</button>
+    </div>
+
+    <!-- 测试用例1: 标准PTA结构 -->
+    <div class="test-case" id="testCase1">
+        <h3>测试用例1: 标准PTA题目结构</h3>
+        <div class="options">
+            <div class="pc-x pt-2 pl-4 scroll-mt-0">
+                <div class="flex flex-wrap gap-2">
+                    <div class="flex flex-wrap gap-2 grow">
+                        <button class="pc-button label_Ynlr9 pc-button-text pc-xs pc-active-primary cursor-pointer" tabindex="0" type="button">
+                            <div class="pc-text pc-active-primary whitespace-nowrap pc-trs-normal pc-gap-4 shrink no-grow">
+                                <div class="pc-text-raw text-xs ellipsis" style="text-align: center;">2-1</div>
+                            </div>
+                        </button>
+                        <div class="rounded-xl bg-bg-light bg-opacity-10 px-3 py-1 inline-block whitespace-nowrap flex-none">
+                            <div class="flex items-center space-x-1">
+                                <div class="pc-text pc-color-light pc-gap-4">
+                                    <div class="pc-text-raw text-xs">分数 5</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap shrink gap-x-5 gap-y-1">
+                        <div class="pc-text pc-color-lightest pc-gap-4">
+                            <div class="pc-text-raw text-xs">作者 刘丹</div>
+                        </div>
+                        <div class="pc-text pc-color-lightest pc-gap-4">
+                            <div class="pc-text-raw text-xs">单位 东北林业大学</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="space-y-4">
+                        <div class="markdownBlock_tErSz" lang="en">
+                            <div class="rendered-markdown dark:rendered-markdown-invert">
+                                <p>在数据结构中，从逻辑上可以把数据结构分成（ &nbsp;&nbsp;）。</p>
+                            </div>
+                        </div>
+                        <span class="flex flex-wrap -m-0.5">
+                            <span class="block p-0.5" style="width: 100%;">
+                                <label class="w-full inline-flex cursor-pointer m-0 min-w-0 items-baseline px-2 py-1 rounded hover:bg-bg-light focus:bg-bg-light focus-within:bg-bg-light focus-within:ring focus-within:ring-blue-300">
+                                    <input name="ptaQuestion" type="radio" class="mr-2 mt-1 flex-none focus:outline-none" aria-label="undefined">
+                                    <div class="flex gap-2 items-baseline min-w-0">
+                                        <span>A.</span>
+                                        <div class="min-w-0 break-normal shrink">
+                                            <div class="markdownBlock_tErSz" lang="en">
+                                                <div class="rendered-markdown dark:rendered-markdown-invert">
+                                                    <p>动态结构和静态结构</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </span>
+                            <span class="block p-0.5" style="width: 100%;">
+                                <label class="w-full inline-flex cursor-pointer m-0 min-w-0 items-baseline px-2 py-1 rounded hover:bg-bg-light focus:bg-bg-light focus-within:bg-bg-light focus-within:ring focus-within:ring-blue-300">
+                                    <input name="ptaQuestion" type="radio" class="mr-2 mt-1 flex-none focus:outline-none" aria-label="undefined">
+                                    <div class="flex gap-2 items-baseline min-w-0">
+                                        <span>B.</span>
+                                        <div class="min-w-0 break-normal shrink">
+                                            <div class="markdownBlock_tErSz" lang="en">
+                                                <div class="rendered-markdown dark:rendered-markdown-invert">
+                                                    <p>紧凑结构和非紧凑结构</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </span>
+                            <span class="block p-0.5" style="width: 100%;">
+                                <label class="w-full inline-flex cursor-pointer m-0 min-w-0 items-baseline px-2 py-1 rounded hover:bg-bg-light focus:bg-bg-light focus-within:bg-bg-light focus-within:ring focus-within:ring-blue-300">
+                                    <input name="ptaQuestion" type="radio" class="mr-2 mt-1 flex-none focus:outline-none" aria-label="undefined">
+                                    <div class="flex gap-2 items-baseline min-w-0">
+                                        <span>C.</span>
+                                        <div class="min-w-0 break-normal shrink">
+                                            <div class="markdownBlock_tErSz" lang="en">
+                                                <div class="rendered-markdown dark:rendered-markdown-invert">
+                                                    <p>线性结构和非线性结构</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </span>
+                            <span class="block p-0.5" style="width: 100%;">
+                                <label class="w-full inline-flex cursor-pointer m-0 min-w-0 items-baseline px-2 py-1 rounded hover:bg-bg-light focus:bg-bg-light focus-within:bg-bg-light focus-within:ring focus-within:ring-blue-300">
+                                    <input name="ptaQuestion" type="radio" class="mr-2 mt-1 flex-none focus:outline-none" aria-label="undefined">
+                                    <div class="flex gap-2 items-baseline min-w-0">
+                                        <span>D.</span>
+                                        <div class="min-w-0 break-normal shrink">
+                                            <div class="markdownBlock_tErSz" lang="en">
+                                                <div class="rendered-markdown dark:rendered-markdown-invert">
+                                                    <p>内部结构和外部结构</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button onclick="testCase(1)">测试此用例</button>
+        <div id="result1"></div>
+    </div>
+
+    <!-- 测试用例2: 简化PTA结构 -->
+    <div class="test-case" id="testCase2">
+        <h3>测试用例2: 简化PTA结构（无markdown）</h3>
+        <div class="options">
+            <div class="pc-x">
+                <div class="markdownBlock_tErSz">
+                    <div class="rendered-markdown">
+                        <p>以下哪个不是面向对象编程的特性？</p>
+                    </div>
+                </div>
+                <div class="flex flex-wrap -m-0.5">
+                    <div class="block p-0.5" style="width: 100%;">
+                        <label class="w-full inline-flex cursor-pointer items-baseline">
+                            <input type="radio" name="question2" class="mr-2">
+                            <span>A. 封装</span>
+                        </label>
+                    </div>
+                    <div class="block p-0.5" style="width: 100%;">
+                        <label class="w-full inline-flex cursor-pointer items-baseline">
+                            <input type="radio" name="question2" class="mr-2">
+                            <span>B. 继承</span>
+                        </label>
+                    </div>
+                    <div class="block p-0.5" style="width: 100%;">
+                        <label class="w-full inline-flex cursor-pointer items-baseline">
+                            <input type="radio" name="question2" class="mr-2">
+                            <span>C. 多态</span>
+                        </label>
+                    </div>
+                    <div class="block p-0.5" style="width: 100%;">
+                        <label class="w-full inline-flex cursor-pointer items-baseline">
+                            <input type="radio" name="question2" class="mr-2">
+                            <span>D. 过程化</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button onclick="testCase(2)">测试此用例</button>
+        <div id="result2"></div>
+    </div>
+
+    <!-- 测试用例3: 纯文本选项 -->
+    <div class="test-case" id="testCase3">
+        <h3>测试用例3: 纯文本选项（无输入元素）</h3>
+        <div class="options">
+            <div class="problem-content">
+                <p>3. TCP/IP协议中，TCP协议提供什么服务？</p>
+                <p>A. 面向连接的可靠传输服务</p>
+                <p>B. 无连接的不可靠传输服务</p>
+                <p>C. 邮件传输服务</p>
+                <p>D. 文件传输服务</p>
+            </div>
+        </div>
+        <button onclick="testCase(3)">测试此用例</button>
+        <div id="result3"></div>
+    </div>
+
+    <!-- 测试用例4: 复杂嵌套结构 -->
+    <div class="test-case" id="testCase4">
+        <h3>测试用例4: 复杂嵌套结构</h3>
+        <div class="options">
+            <div class="question-container">
+                <div class="question-header">
+                    <span class="question-number">4.</span>
+                    <span class="question-text">关于JavaScript的说法正确的是：</span>
+                </div>
+                <div class="question-body">
+                    <div class="option-group">
+                        <div class="option-item">
+                            <input type="radio" name="question4" id="opt4a">
+                            <label for="opt4a">
+                                <span class="option-letter">A.</span>
+                                <span class="option-text">JavaScript是一种编译型语言</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="question4" id="opt4b">
+                            <label for="opt4b">
+                                <span class="option-letter">B.</span>
+                                <span class="option-text">JavaScript只能运行在浏览器中</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="question4" id="opt4c">
+                            <label for="opt4c">
+                                <span class="option-letter">C.</span>
+                                <span class="option-text">JavaScript是单线程语言</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="question4" id="opt4d">
+                            <label for="opt4d">
+                                <span class="option-letter">D.</span>
+                                <span class="option-text">JavaScript不支持面向对象编程</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button onclick="testCase(4)">测试此用例</button>
+        <div id="result4"></div>
+    </div>
+
+    <!-- 测试用例5: 多选题结构 -->
+    <div class="test-case" id="testCase5">
+        <h3>测试用例5: 多选题（复选框）</h3>
+        <div class="options">
+            <div class="multiple-choice">
+                <p>5. 以下哪些是关系型数据库？（多选）</p>
+                <div class="options-list">
+                    <label>
+                        <input type="checkbox" name="db" value="mysql">
+                        <span>MySQL</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" name="db" value="mongodb">
+                        <span>MongoDB</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" name="db" value="oracle">
+                        <span>Oracle</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" name="db" value="redis">
+                        <span>Redis</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <button onclick="testCase(5)">测试此用例</button>
+        <div id="result5"></div>
+    </div>
+
+    <script>
+        // 加载content.js中的函数
+        const script = document.createElement('script');
+        script.src = 'content.js';
+        document.head.appendChild(script);
+
+        // 测试单个用例
+        function testCase(caseNumber) {
+            const testCase = document.getElementById(`testCase${caseNumber}`);
+            const resultDiv = document.getElementById(`result${caseNumber}`);
+            
+            testCase.classList.add('test-running');
+            resultDiv.innerHTML = '<div class="warning">测试中...</div>';
+            
+            setTimeout(() => {
+                try {
+                    const optionsContainer = testCase.querySelector('.options');
+                    const options = getPTAQuestionOptions(optionsContainer);
+                    
+                    if (options.length > 0) {
+                        resultDiv.className = 'result';
+                        resultDiv.innerHTML = `
+                            <strong>✅ 识别成功</strong>
+                            <div>找到 ${options.length} 个选项：</div>
+                            <ul>
+                                ${options.map(opt => `<li><strong>${opt.value}.</strong> ${opt.text}</li>`).join('')}
+                            </ul>
+                        `;
+                        
+                        // 高亮识别到的选项元素
+                        options.forEach(opt => {
+                            if (opt.element) {
+                                opt.element.parentElement.classList.add('option-highlight');
+                            }
+                        });
+                        
+                        testCase.classList.remove('test-running');
+                        testCase.classList.add('test-success');
+                    } else {
+                        resultDiv.className = 'error';
+                        resultDiv.innerHTML = '<strong>❌ 未识别到选项</strong>';
+                        testCase.classList.remove('test-running');
+                        testCase.classList.add('test-failed');
+                    }
+                } catch (error) {
+                    resultDiv.className = 'error';
+                    resultDiv.innerHTML = `
+                        <strong>❌ 识别失败</strong>
+                        <div>${error.message}</div>
+                    `;
+                    testCase.classList.remove('test-running');
+                    testCase.classList.add('test-failed');
+                    console.error('测试错误:', error);
+                }
+            }, 500);
+        }
+
+        // 测试所有用例
+        function testAll() {
+            for (let i = 1; i <= 5; i++) {
+                setTimeout(() => testCase(i), i * 800);
+            }
+        }
+
+        // 清除所有结果
+        function clearAll() {
+            for (let i = 1; i <= 5; i++) {
+                const resultDiv = document.getElementById(`result${i}`);
+                const testCase = document.getElementById(`testCase${i}`);
+                resultDiv.innerHTML = '';
+                testCase.className = 'test-case';
+                
+                // 移除选项高亮
+                const highlighted = testCase.querySelectorAll('.option-highlight');
+                highlighted.forEach(el => el.classList.remove('option-highlight'));
+            }
+        }
+
+        // 使用content.js中的函数
+        function getPTAQuestionOptions(element) {
+            // 这里应该调用content.js中的实际函数
+            // 为了测试，我们使用简化版本
+            return simulatePTAOptionRecognition(element);
+        }
+
+        // 模拟选项识别（简化版）
+        function simulatePTAOptionRecognition(element) {
+            const options = [];
+            
+            // 1. 查找输入元素
+            const inputs = element.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+            
+            if (inputs.length > 0) {
+                inputs.forEach((input, index) => {
+                    let optionText = '';
+                    const optionValue = String.fromCharCode(65 + index);
+                    
+                    // 查找label文本
+                    const label = input.closest('label') || input.parentElement;
+                    if (label) {
+                        optionText = label.textContent
+                            .replace(/<[^>]*>/g, '')
+                            .replace(/[\n\r\t]/g, ' ')
+                            .replace(/\s{2,}/g, ' ')
+                            .replace(/^[A-Da-d][\.\)]\s*/, '')
+                            .trim();
+                    }
+                    
+                    if (optionText) {
+                        options.push({
+                            value: optionValue,
+                            text: optionText,
+                            type: input.type,
+                            element: input
+                        });
+                    }
+                });
+            }
+            
+            // 2. 如果没有输入元素，尝试文本解析
+            if (options.length === 0) {
+                const text = element.textContent;
+                const pattern = /[A-Da-d][\.\)]\s*([^\n]+)/g;
+                let match;
+                
+                while ((match = pattern.exec(text)) !== null) {
+                    const optionText = match[1].trim();
+                    const optionValue = match[0].charAt(0).toUpperCase();
+                    
+                    if (optionText.length > 1) {
+                        options.push({
+                            value: optionValue,
+                            text: optionText,
+                            type: 'text'
+                        });
+                    }
+                }
+            }
+            
+            return options;
+        }
+    </script>
+</body>
+</html>

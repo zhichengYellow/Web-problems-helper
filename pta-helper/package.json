@@ -1,0 +1,66 @@
+{
+  "name": "pta-helper",
+  "version": "1.0.0",
+  "description": "PTA答题助手 - 基于现代前端技术栈的Chrome扩展",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "pnpm lerna run build",
+    "dev": "dumi dev",
+    "docs:build": "dumi build",
+    "start": "npm run core:dev & npm run utils:dev & npm run config:dev",
+    "test": "vitest run",
+    "test:ui": "vitest --ui",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
+    "format": "prettier --write .",
+    "prepare": "husky install",
+    "core:dev": "cd ./packages/core && npm run dev",
+    "utils:dev": "cd ./packages/utils && npm run build:watch",
+    "config:dev": "cd ./packages/config && npm run build:watch"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.2.2",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@types/chrome": "^0.0.267",
+    "@types/node": "^20.10.4",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "conventional-changelog-conventionalcommits": "^7.0.2",
+    "dumi": "^2.4.5",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "father": "^4.4.0",
+    "husky": "^8.0.3",
+    "lerna": "^8.1.2",
+    "lint-staged": "^15.1.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.8",
+    "vite-plugin-chrome-extension": "^3.6.4",
+    "vitest": "^1.0.4"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npx lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "keywords": [
+    "chrome-extension",
+    "pta",
+    "programming",
+    "education",
+    "automation"
+  ],
+  "author": "binyellow",
+  "license": "MIT"
+}

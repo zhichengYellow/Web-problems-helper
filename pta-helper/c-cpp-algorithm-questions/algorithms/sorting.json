@@ -1,0 +1,35 @@
+{
+  "meta": { "category": "sorting", "title": "排序高频题", "version": "1.0" },
+  "questions": [
+    { "id": "sort-quicksort", "title": "快速排序", "description": "原地快速排序实现。", "difficulty": "medium", "tags": ["sorting", "divide-conquer"], "io": { "input": "int[] a", "output": "void" }, "examples": [{ "in": "[3,5,1,2,4]", "out": "[1,2,3,4,5]" }], "constraints": ["平均 O(n log n)"], "solution_outline": "三数取中+双指针分区+递归/尾递归优化。" },
+    { "id": "sort-mergesort", "title": "归并排序", "description": "稳定排序实现。", "difficulty": "medium", "tags": ["sorting", "merge"], "io": { "input": "int[] a", "output": "int[] sorted" }, "examples": [{ "in": "[5,2,4,6,1,3]", "out": "[1,2,3,4,5,6]" }], "constraints": ["O(n log n) 时间, O(n) 额外空间"], "solution_outline": "分治合并辅助数组。" },
+    { "id": "sort-heapsort", "title": "堆排序", "description": "使用最大堆进行原地排序。", "difficulty": "medium", "tags": ["sorting", "heap"], "io": { "input": "int[] a", "output": "void" }, "examples": [{ "in": "[4,10,3,5,1]", "out": "[1,3,4,5,10]" }], "constraints": ["O(n log n)"], "solution_outline": "建堆+下沉+交换。" },
+    { "id": "sort-counting", "title": "计数排序", "description": "整数范围有限时的线性排序。", "difficulty": "easy", "tags": ["sorting", "counting"], "io": { "input": "int[] a, int k", "output": "int[] sorted" }, "examples": [{ "in": "[1,4,1,2,7,5,2], k=9", "out": "[1,1,2,2,4,5,7]" }], "constraints": ["非比较排序"], "solution_outline": "频次统计+前缀和+稳定输出。" },
+    { "id": "sort-radix", "title": "基数排序", "description": "按位分发稳定排序（LSD）。", "difficulty": "medium", "tags": ["sorting", "radix"], "io": { "input": "int[] a", "output": "int[] sorted" }, "examples": [{ "in": "[170,45,75,90,802,24,2,66]", "out": "[2,24,45,66,75,90,170,802]" }], "constraints": ["位数与基数选择"], "solution_outline": "计数桶按位分发合并。" },
+    { "id": "sort-bucket", "title": "桶排序", "description": "在均匀分布时近似线性。", "difficulty": "medium", "tags": ["sorting", "bucket"], "io": { "input": "float[] a", "output": "float[] sorted" }, "examples": [{ "in": "[0.78,0.17,0.39,0.26,0.72,0.94,0.21,0.12,0.23,0.68]", "out": "有序" }], "constraints": ["划分桶+桶内排序"], "solution_outline": "桶划分+插入排序。" },
+    { "id": "sort-insertion", "title": "插入排序", "description": "稳定，小数组或近似有序时高效。", "difficulty": "easy", "tags": ["sorting"], "io": { "input": "int[] a", "output": "void" }, "examples": [{ "in": "[5,2,4,6,1,3]", "out": "[1,2,3,4,5,6]" }], "constraints": ["O(n^2)"], "solution_outline": "前缀维护有序，元素插入。" },
+    { "id": "sort-selection", "title": "选择排序", "description": "简单但不稳定。", "difficulty": "easy", "tags": ["sorting"], "io": { "input": "int[] a", "output": "void" }, "examples": [{ "in": "[64,25,12,22,11]", "out": "[11,12,22,25,64]" }], "constraints": ["O(n^2)"], "solution_outline": "每轮选择最小交换。" },
+    { "id": "sort-bubble", "title": "冒泡排序", "description": "基础交换排序。", "difficulty": "easy", "tags": ["sorting"], "io": { "input": "int[] a", "output": "void" }, "examples": [{ "in": "[5,1,4,2,8]", "out": "[1,2,4,5,8]" }], "constraints": ["O(n^2)"], "solution_outline": "相邻比较交换，早停优化。" },
+    { "id": "sort-shell", "title": "希尔排序", "description": "基于分组的插入排序优化。", "difficulty": "medium", "tags": ["sorting"], "io": { "input": "int[] a", "output": "void" }, "examples": [{ "in": "[8,5,3,7,6,2,1,4]", "out": "有序" }], "constraints": ["增量序列选择影响复杂度"], "solution_outline": "逐步缩小增量的插入排序。" },
+    { "id": "sort-topk-heap", "title": "堆求Top-K", "description": "求数组中前K大元素。", "difficulty": "medium", "tags": ["heap", "sorting"], "io": { "input": "int[] a, int k", "output": "int[] topk" }, "examples": [{ "in": "[3,2,1,5,6,4], k=2", "out": "[6,5]" }], "constraints": ["O(n log k)"], "solution_outline": "小顶堆维护K个元素。" },
+    { "id": "sort-dnf-colors", "title": "荷兰国旗问题", "description": "三色分类原地排序。", "difficulty": "medium", "tags": ["two-pointers", "sorting"], "io": { "input": "int[] a in {0,1,2}", "output": "void" }, "examples": [{ "in": "[2,0,2,1,1,0]", "out": "[0,0,1,1,2,2]" }], "constraints": ["O(n)"], "solution_outline": "low/mid/high 三指针分区。" },
+    { "id": "sort-quickselect-kth",
+      "title": "快速选择第K大/小",
+      "description": "使用分区法在平均线性时间选择第K大/小。",
+      "difficulty": "medium", "tags": ["quickselect", "divide-conquer"],
+      "io": { "input": "int[] a, int k", "output": "int val" },
+      "examples": [{ "in": "[3,2,3,1,2,4,5,5,6], k=4", "out": "4" }],
+      "constraints": ["平均 O(n)"],
+      "solution_outline": "随机枢轴分区，递归选择。"
+    },
+    { "id": "sort-external-outline",
+      "title": "外部排序（思路）",
+      "description": "当数据无法全部加载内存时的排序思路。",
+      "difficulty": "hard", "tags": ["external-sort", "io"],
+      "io": { "input": "file chunks", "output": "sorted stream" },
+      "examples": [{ "in": "多个数据块", "out": "归并后的有序流" }],
+      "constraints": ["磁盘IO优化"],
+      "solution_outline": "分块排序+多路归并，使用最小堆。"
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PTA答题助手</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <h1>PTA答题助手</h1>
+        <div class="content">
+            <div class="status-info">
+                <p id="pageStatus">检测页面状态中...</p>
+            </div>
+            
+            <div class="function-buttons">
+                <button id="detectBtn" class="btn">检测题目</button>
+                <button id="autoFillBtn" class="btn">自动填充</button>
+                <button id="showAnswersBtn" class="btn btn-secondary">显示答案</button>
+                <button id="submitBtn" class="btn btn-warning">提交答案</button>
+            </div>
+            
+            <div class="settings">
+                <h3>设置</h3>
+                <label>
+                    <input type="checkbox" id="autoMode"> 自动模式
+                </label>
+                <label>
+                    <input type="checkbox" id="confirmSubmit" checked> 提交前确认
+                </label>
+            </div>
+            
+            <div class="api-section">
+                <h3>智能答题服务</h3>
+                <div class="api-intro">
+                    <p class="api-description">🤖 启用AI服务获得更准确的答案</p>
+                    <div class="api-status" id="apiStatus">❌ 未配置AI服务</div>
+                </div>
+                <div class="api-actions">
+                    <button id="apiConfigBtn" class="btn-config">
+                        <span class="btn-icon">⚙️</span>
+                        <div class="btn-content">
+                            <div class="btn-title">配置AI服务</div>
+                            <div class="btn-subtitle">提升答题准确率</div>
+                        </div>
+                    </button>
+                    <button id="apiHelpBtn" class="btn-help">
+                        <span class="help-icon">❓</span>
+                        新手指南
+                    </button>
+                </div>
+            </div>
+            
+            <div id="result" class="result"></div>
+            <div id="questionInfo" class="question-info"></div>
+            
+            <div class="shortcuts">
+                <div class="shortcuts-title">快捷键</div>
+                <div class="shortcut-item">
+                    <span>检测题目</span>
+                    <span class="shortcut-key">Ctrl+Shift+D</span>
+                </div>
+                <div class="shortcut-item">
+                    <span>自动填充</span>
+                    <span class="shortcut-key">Ctrl+Shift+F</span>
+                </div>
+                <div class="shortcut-item">
+                    <span>显示答案</span>
+                    <span class="shortcut-key">Ctrl+Shift+A</span>
+                </div>
+                <div class="shortcut-item">
+                    <span>隐藏工具栏</span>
+                    <span class="shortcut-key">Ctrl+Shift+H</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>

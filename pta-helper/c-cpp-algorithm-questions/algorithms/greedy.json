@@ -1,0 +1,5 @@
+{
+  "meta": { "category": "greedy", "title": "贪心（占位）", "version": "1.0.0", "updated_at": "2025-09-23" },
+  "questions": [],
+  "note": "建议包含：区间调度、跳跃游戏、分配问题、最少箭射爆气球、哈夫曼编码等。"
+}

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>PTA答题助手快速测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 10px 0; padding: 10px; border: 1px solid #ccc; }
+        button { padding: 8px 15px; margin: 5px; background: #007bff; color: white; border: none; cursor: pointer; }
+        .success { color: green; }
+        .error { color: red; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>PTA答题助手快速测试</h1>
+    
+    <div class="test-section">
+        <h2>1. API服务测试</h2>
+        <button onclick="testAPIService()">测试API服务</button>
+        <div id="apiTestResult">等待测试...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. hunyuan服务测试</h2>
+        <button onclick="testHunyuanService()">测试hunyuan服务</button>
+        <div id="hunyuanTestResult">等待测试...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. 本地智能答案测试</h2>
+        <button onclick="testLocalAnswer()">测试本地答案生成</button>
+        <div id="localTestResult">等待测试...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. 配置检查</h2>
+        <button onclick="checkConfig()">检查配置文件</button>
+        <div id="configCheckResult">等待检查...</div>
+    </div>
+
+    <script src="api-service.js"></script>
+    <script src="hunyuan-service.js"></script>
+    <script>
+        // 测试API服务
+        async function testAPIService() {
+            const resultDiv = document.getElementById('apiTestResult');
+            resultDiv.innerHTML = '测试中...';
+            
+            try {
+                const apiService = new APIService();
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                const status = apiService.getStatus();
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        ✅ API服务初始化成功<br>
+                        <pre>${JSON.stringify(status, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        ❌ API服务测试失败: ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        // 测试hunyuan服务
+        async function testHunyuanService() {
+            const resultDiv = document.getElementById('hunyuanTestResult');
+            resultDiv.innerHTML = '测试中...';
+            
+            try {
+                const hunyuanService = new HunyuanService();
+                await hunyuanService.init();
+                
+                const isConfigured = hunyuanService.isConfigured();
+                const stats = hunyuanService.getUsageStats();
+                
+                resultDiv.innerHTML = `
+                    <div class="${isConfigured ? 'success' : 'error'}">
+                        ${isConfigured ? '✅' : '⚠️'} hunyuan服务状态<br>
+                        配置状态: ${isConfigured ? '已配置' : '未配置'}<br>
+                        缓存大小: ${stats.cacheSize}
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        ❌ hunyuan服务测试失败: ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        // 测试本地智能答案
+        async function testLocalAnswer() {
+            const resultDiv = document.getElementById('localTestResult');
+            resultDiv.innerHTML = '测试中...';
+            
+            try {
+                const apiService = new APIService();
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                const testQuestion = '数据结构的基本类型包括哪些？';
+                const testOptions = [
+                    { value: 'A', text: '线性结构' },
+                    { value: 'B', text: '树形结构' },
+                    { value: 'C', text: '图形结构' },
+                    { value: 'D', text: '以上都是' }
+                ];
+                
+                const answer = apiService.generateLocalAnswer(testQuestion, 'single_choice', testOptions);
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        ✅ 本地智能答案生成成功<br>
+                        问题: ${testQuestion}<br>
+                        生成答案: ${answer}<br>
+                        正确选项: ${testOptions.find(opt => opt.value === answer)?.text || '未知'}
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        ❌ 本地答案测试失败: ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        // 检查配置文件
+        async function checkConfig() {
+            const resultDiv = document.getElementById('configCheckResult');
+            resultDiv.innerHTML = '检查中...';
+            
+            try {
+                // 尝试加载配置文件
+                const response = await fetch('config.js');
+                const configText = await response.text();
+                
+                const hasSecretId = configText.includes('您的腾讯云SecretId');
+                const hasSecretKey = configText.includes('您的腾讯云SecretKey');
+                
+                resultDiv.innerHTML = `
+                    <div class="${!hasSecretId && !hasSecretKey ? 'success' : 'error'}">
+                        ${!hasSecretId && !hasSecretKey ? '✅' : '⚠️'} 配置文件检查<br>
+                        配置文件: ${hasSecretId || hasSecretKey ? '需要配置' : '已配置'}<br>
+                        ${hasSecretId ? '❌ 请替换SecretId' : '✅ SecretId已配置'}<br>
+                        ${hasSecretKey ? '❌ 请替换SecretKey' : '✅ SecretKey已配置'}
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        ❌ 配置文件检查失败: ${error.message}<br>
+                        请确保 config.js 文件存在
+                    </div>
+                `;
+            }
+        }
+        
+        // 页面加载时自动运行基本测试
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(testAPIService, 1000);
+            setTimeout(testHunyuanService, 1500);
+        });
+    </script>
+</body>
+</html>

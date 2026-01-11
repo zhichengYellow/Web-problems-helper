@@ -1,0 +1,5 @@
+{
+  "meta": { "category": "heap", "title": "堆（占位）", "version": "1.0.0", "updated_at": "2025-09-23" },
+  "questions": [],
+  "note": "建议包含：前 K 大元素、合并 K 个有序链表、数据流中位数、小顶堆/大顶堆基础等。"
+}

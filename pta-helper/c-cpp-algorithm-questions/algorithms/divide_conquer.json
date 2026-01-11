@@ -1,0 +1,5 @@
+{
+  "meta": { "category": "divide_conquer", "title": "分治（占位）", "version": "1.0.0", "updated_at": "2025-09-23" },
+  "questions": [],
+  "note": "建议包含：归并求逆序对、最近点对、二维前缀/树状数组分治、快速选择等。"
+}

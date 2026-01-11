@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>选择题选项识别测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-case { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .options { background: #f0f8ff; padding: 10px; margin: 10px 0; }
+        .result { background: #e8f5e8; padding: 10px; margin: 10px 0; }
+        .error { background: #ffebee; padding: 10px; margin: 10px 0; }
+        button { background: #2196F3; color: white; padding: 10px 15px; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>选择题选项识别测试</h1>
+    
+    <div class="test-case">
+        <h3>测试用例1: 标准单选按钮</h3>
+        <div class="options" id="test1">
+            <label><input type="radio" name="test1" value="A"> A. 第一个选项内容</label><br>
+            <label><input type="radio" name="test1" value="B"> B. 第二个选项内容</label><br>
+            <label><input type="radio" name="test1" value="C"> C. 第三个选项内容</label>
+        </div>
+        <button onclick="testOptions('test1')">测试识别</button>
+        <div id="result1"></div>
+    </div>
+
+    <div class="test-case">
+        <h3>测试用例2: 分离的label和input</h3>
+        <div class="options" id="test2">
+            <input type="radio" name="test2" value="1" id="t2_1">
+            <label for="t2_1">选项一的文本描述</label><br>
+            <input type="radio" name="test2" value="2" id="t2_2">
+            <label for="t2_2">选项二的文本描述</label>
+        </div>
+        <button onclick="testOptions('test2')">测试识别</button>
+        <div id="result2"></div>
+    </div>
+
+    <div class="test-case">
+        <h3>测试用例3: 纯文本选项</h3>
+        <div class="options" id="test3">
+            <p>A) 文本选项A的内容描述</p>
+            <p>B) 文本选项B的内容描述</p>
+            <p>C) 文本选项C的内容描述</p>
+        </div>
+        <button onclick="testOptions('test3')">测试识别</button>
+        <div id="result3"></div>
+    </div>
+
+    <script>
+        // 简化的选项识别函数（核心逻辑）
+        function getQuestionOptions(element) {
+            const options = [];
+            const inputs = element.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+            
+            if (inputs.length > 0) {
+                inputs.forEach(input => {
+                    let optionText = '';
+                    const optionValue = input.value || '';
+                    
+                    // 查找关联label
+                    if (input.id) {
+                        const label = document.querySelector(`label[for="${input.id}"]`);
+                        if (label) optionText = label.textContent.trim();
+                    }
+                    
+                    // 查找父级label
+                    if (!optionText) {
+                        const label = input.closest('label');
+                        if (label) optionText = label.textContent.trim();
+                    }
+                    
+                    // 清理选项文本
+                    if (optionText) {
+                        optionText = optionText
+                            .replace(/<[^>]*>/g, '')
+                            .replace(/[•▪▶➤›]/g, '')
+                            .replace(/^\s*[A-Da-d]\)?\s*/, '')
+                            .replace(/^\s*\d+\.?\s*/, '')
+                            .replace(new RegExp(`^\\s*${optionValue}\\s*`), '')
+                            .replace(/\s+/g, ' ')
+                            .trim();
+                    }
+                    
+                    // 使用input value作为备选
+                    if (!optionText) {
+                        optionText = optionValue || input.name || '';
+                    }
+                    
+                    if (optionText) {
+                        options.push({
+                            value: optionValue || String(options.length + 1),
+                            text: optionText,
+                            type: input.type
+                        });
+                    }
+                });
+            } else {
+                // 纯文本选项识别
+                const text = element.textContent;
+                const patterns = [
+                    /[A-Da-d][\.\)]\s*([^\n]+)/g,
+                    /\d+[\.\)]\s*([^\n]+)/g,
+                    /[A-Da-d]\)\s*([^\n]+)/g
+                ];
+                
+                patterns.forEach(pattern => {
+                    let match;
+                    while ((match = pattern.exec(text)) !== null) {
+                        const optionText = match[1] ? match[1].trim() : match[0].trim();
+                        if (optionText && optionText.length > 1) {
+                            options.push({
+                                value: match[0].charAt(0),
+                                text: optionText,
+                                type: 'text'
+                            });
+                        }
+                    }
+                });
+            }
+            
+            return options;
+        }
+        
+        function testOptions(testId) {
+            const element = document.getElementById(testId);
+            const resultDiv = document.getElementById('result' + testId.slice(-1));
+            
+            try {
+                const options = getQuestionOptions(element);
+                resultDiv.className = 'result';
+                resultDiv.innerHTML = `
+                    <strong>识别成功:</strong> 找到 ${options.length} 个选项
+                    <ul>
+                        ${options.map(opt => `<li>${opt.text} (值: ${opt.value})</li>`).join('')}
+                    </ul>
+                `;
+            } catch (error) {
+                resultDiv.className = 'error';
+                resultDiv.innerHTML = `<strong>识别失败:</strong> ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

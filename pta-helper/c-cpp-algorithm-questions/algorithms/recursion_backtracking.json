@@ -1,0 +1,5 @@
+{
+  "meta": { "category": "recursion_backtracking", "title": "递归与回溯（占位）", "version": "1.0.0", "updated_at": "2025-09-23" },
+  "questions": [],
+  "note": "建议包含：排列组合、子集、N 皇后、数独求解、括号生成、路径回溯等。"
+}

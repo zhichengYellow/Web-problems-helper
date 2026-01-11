@@ -1,0 +1,170 @@
+{
+  "meta": { "category": "array", "title": "数组高频题", "version": "1.0" },
+  "questions": [
+    {
+      "id": "array-two-sum",
+      "title": "两数之和",
+      "description": "给定整数数组 nums 和目标值 target，返回两数之和等于 target 的索引对。",
+      "difficulty": "easy",
+      "tags": ["array", "hash"],
+      "io": { "input": "int[] nums, int target", "output": "int[] indices" },
+      "examples": [{ "in": "[2,7,11,15], 9", "out": "[0,1]" }],
+      "constraints": ["2 <= n <= 1e5", "-1e9 <= nums[i] <= 1e9"],
+      "solution_outline": "哈希表记录补数索引，O(n)。"
+    },
+    {
+      "id": "array-remove-duplicates",
+      "title": "删除排序数组中的重复项",
+      "description": "原地删除排序数组中的重复元素，返回新长度。",
+      "difficulty": "easy",
+      "tags": ["array", "two-pointers"],
+      "io": { "input": "int[] nums", "output": "int len" },
+      "examples": [{ "in": "[1,1,2]", "out": "2" }],
+      "constraints": ["原地操作", "非递减序列"],
+      "solution_outline": "双指针写入不重复元素。"
+    },
+    {
+      "id": "array-rotate",
+      "title": "旋转数组",
+      "description": "将数组向右旋转 k 步。",
+      "difficulty": "medium",
+      "tags": ["array", "in-place"],
+      "io": { "input": "int[] nums, int k", "output": "void" },
+      "examples": [{ "in": "[1,2,3,4,5,6,7], 3", "out": "[5,6,7,1,2,3,4]" }],
+      "constraints": ["O(1) 额外空间"],
+      "solution_outline": "三次反转：全局反转+两段反转。"
+    },
+    {
+      "id": "array-maximum-subarray",
+      "title": "最大子数组和",
+      "description": "返回连续子数组的最大和。",
+      "difficulty": "medium",
+      "tags": ["array", "kadane", "dp"],
+      "io": { "input": "int[] nums", "output": "int" },
+      "examples": [{ "in": "[-2,1,-3,4,-1,2,1,-5,4]", "out": "6" }],
+      "constraints": ["n <= 1e5"],
+      "solution_outline": "Kadane算法：当前和为负则重置。"
+    },
+    {
+      "id": "array-merge-intervals",
+      "title": "合并区间",
+      "description": "合并重叠区间。",
+      "difficulty": "medium",
+      "tags": ["array", "intervals", "sorting"],
+      "io": { "input": "int[][] intervals", "output": "int[][]" },
+      "examples": [{ "in": "[[1,3],[2,6],[8,10],[15,18]]", "out": "[[1,6],[8,10],[15,18]]" }],
+      "constraints": ["按起点排序后线性合并"],
+      "solution_outline": "排序后维护当前合并区间。"
+    },
+    {
+      "id": "array-product-except-self",
+      "title": "除自身以外数组的乘积",
+      "description": "返回每个位置除自身外所有元素的乘积，不使用除法。",
+      "difficulty": "medium",
+      "tags": ["array", "prefix-suffix"],
+      "io": { "input": "int[] nums", "output": "int[] ans" },
+      "examples": [{ "in": "[1,2,3,4]", "out": "[24,12,8,6]" }],
+      "constraints": ["O(n) 时间, O(1) 额外空间"],
+      "solution_outline": "前缀乘积与后缀乘积两遍扫描。"
+    },
+    {
+      "id": "array-move-zeroes",
+      "title": "移动零",
+      "description": "将数组中的零移动到末尾，保持非零元素相对顺序。",
+      "difficulty": "easy",
+      "tags": ["array", "two-pointers", "in-place"],
+      "io": { "input": "int[] nums", "output": "void" },
+      "examples": [{ "in": "[0,1,0,3,12]", "out": "[1,3,12,0,0]" }],
+      "constraints": ["原地操作"],
+      "solution_outline": "双指针写入非零，再补零。"
+    },
+    {
+      "id": "array-three-sum",
+      "title": "三数之和",
+      "description": "返回数组中所有不重复的三元组，使其和为0。",
+      "difficulty": "medium",
+      "tags": ["array", "two-pointers", "sorting"],
+      "io": { "input": "int[] nums", "output": "int[][] triples" },
+      "examples": [{ "in": "[-1,0,1,2,-1,-4]", "out": "[[-1,-1,2],[-1,0,1]]" }],
+      "constraints": ["排序+左右夹逼"],
+      "solution_outline": "固定一位，另两位双指针，注意去重。"
+    },
+    {
+      "id": "array-sliding-window-maximum",
+      "title": "滑动窗口最大值",
+      "description": "给定数组和窗口大小 k，返回每个窗口的最大值。",
+      "difficulty": "hard",
+      "tags": ["array", "deque", "sliding-window"],
+      "io": { "input": "int[] nums, int k", "output": "int[] maxVals" },
+      "examples": [{ "in": "[1,3,-1,-3,5,3,6,7], 3", "out": "[3,3,5,5,6,7]" }],
+      "constraints": ["O(n) 维护单调队列"],
+      "solution_outline": "双端队列维护候选下标的单调性。"
+    },
+    {
+      "id": "array-binary-search",
+      "title": "二分查找",
+      "description": "在有序数组中查找目标值的索引。",
+      "difficulty": "easy",
+      "tags": ["array", "binary-search"],
+      "io": { "input": "int[] nums, int target", "output": "int idx" },
+      "examples": [{ "in": "[1,3,5,7], 5", "out": "2" }],
+      "constraints": ["O(log n)"],
+      "solution_outline": "标准二分模板，注意越界与收敛。"
+    },
+    {
+      "id": "array-subarray-sum-k",
+      "title": "和为K的子数组",
+      "description": "统计和为 K 的连续子数组个数。",
+      "difficulty": "medium",
+      "tags": ["array", "prefix-sum", "hash"],
+      "io": { "input": "int[] nums, int k", "output": "int count" },
+      "examples": [{ "in": "[1,1,1], 2", "out": "2" }],
+      "constraints": ["前缀和+哈希计数"],
+      "solution_outline": "map记录前缀和出现次数，累加目标前缀。"
+    },
+    {
+      "id": "array-missing-number",
+      "title": "缺失的数字",
+      "description": "给定[0..n]的数组缺失一个数，找出它。",
+      "difficulty": "easy",
+      "tags": ["array", "math", "xor"],
+      "io": { "input": "int[] nums", "output": "int missing" },
+      "examples": [{ "in": "[3,0,1]", "out": "2" }],
+      "constraints": ["O(n)"],
+      "solution_outline": "异或或总和差法。"
+    },
+    {
+      "id": "array-top-k-frequent",
+      "title": "前K个高频元素",
+      "description": "返回出现频率最高的 K 个元素。",
+      "difficulty": "medium",
+      "tags": ["array", "heap", "bucket"],
+      "io": { "input": "int[] nums, int k", "output": "int[] topk" },
+      "examples": [{ "in": "[1,1,1,2,2,3], 2", "out": "[1,2]" }],
+      "constraints": ["堆或桶排序，O(n log k)/O(n)"],
+      "solution_outline": "哈希计数+小顶堆或桶。"
+    },
+    {
+      "id": "array-sort-colors",
+      "title": "颜色分类",
+      "description": "仅有0/1/2的数组原地排序（荷兰国旗问题）。",
+      "difficulty": "medium",
+      "tags": ["array", "two-pointers", "dnf"],
+      "io": { "input": "int[] nums", "output": "void" },
+      "examples": [{ "in": "[2,0,2,1,1,0]", "out": "[0,0,1,1,2,2]" }],
+      "constraints": ["O(n), O(1)空间"],
+      "solution_outline": "三指针：low, mid, high。"
+    },
+    {
+      "id": "array-spiral-matrix",
+      "title": "螺旋矩阵遍历",
+      "description": "按螺旋顺序遍历矩阵。",
+      "difficulty": "medium",
+      "tags": ["array", "matrix"],
+      "io": { "input": "int[][] matrix", "output": "int[] order" },
+      "examples": [{ "in": "[[1,2,3],[4,5,6],[7,8,9]]", "out": "[1,2,3,6,9,8,7,4,5]" }],
+      "constraints": ["边界收缩法"],
+      "solution_outline": "维护上下左右边界，循环推进。"
+    }
+  ]
+}

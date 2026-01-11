@@ -1,0 +1,85 @@
+.DS_Store
+
+# Secrets
+.env
+
+# Build outputs
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+# PTA答题助手 - Git忽略文件
+
+# 操作系统生成的文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 编辑器和IDE文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 日志文件
+*.log
+logs/
+
+# 临时文件
+*.tmp
+*.temp
+temp/
+tmp/
+
+# 浏览器扩展打包文件
+*.crx
+*.pem
+*.zip
+
+# Node.js (如果将来需要)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 测试覆盖率报告
+coverage/
+
+# 构建输出
+dist/
+build/
+
+# Java / Maven
+target/
+*.class
+
+# Java / Gradle（预留）
+.gradle/
+
+# Java IDE（预留）
+.classpath
+.project
+.settings/
+
+# 环境配置文件
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 运行时/本机状态文件
+*.pid
+
+# 本地真实配置（请用 *example 文件作为模板）
+**/config-real.js
+
+# 工具/助手目录
+.codebuddy/
+
+# 备份文件
+*.bak
+*.backup

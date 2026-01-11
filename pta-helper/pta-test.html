@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>PTA题目选项识别测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-case { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .options { background: #f0f8ff; padding: 10px; margin: 10px 0; }
+        .result { background: #e8f5e8; padding: 10px; margin: 10px 0; }
+        .error { background: #ffebee; padding: 10px; margin: 10px 0; }
+        button { background: #2196F3; color: white; padding: 10px 15px; border: none; cursor: pointer; }
+        
+        /* PTA样式模拟 */
+        .pc-x { margin: 10px 0; }
+        .pc-button { margin: 5px; }
+        .markdownBlock_tErSz { margin: 5px 0; }
+        .rendered-markdown p { margin: 0; }
+        .flex { display: flex; }
+        .flex-wrap { flex-wrap: wrap; }
+        .items-baseline { align-items: baseline; }
+        .min-w-0 { min-width: 0; }
+        .break-normal { word-break: normal; }
+        .shrink { flex-shrink: 1; }
+        .cursor-pointer { cursor: pointer; }
+        .hover\:bg-bg-light:hover { background: #f0f0f0; }
+        .rounded { border-radius: 4px; }
+        .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+        .mr-2 { margin-right: 0.5rem; }
+        .mt-1 { margin-top: 0.25rem; }
+    </style>
+</head>
+<body>
+    <h1>PTA题目选项识别测试</h1>
+    <p>基于真实PTA题目结构的选项识别测试</p>
+    
+    <div class="test-case">
+        <h3>测试用例: PTA标准题目结构</h3>
+        <div class="options" id="ptaTest">
+            <!-- 模拟您提供的PTA题目结构 -->
+            <div class="pc-x pt-2 pl-4 scroll-mt-0">
+                <div class="flex flex-wrap gap-2">
+                    <div class="flex flex-wrap gap-2 grow">
+                        <button class="pc-button label_Ynlr9 pc-button-text pc-xs pc-active-primary cursor-pointer" tabindex="0" type="button">
+                            <div class="pc-text pc-active-primary whitespace-nowrap pc-trs-normal pc-gap-4 shrink no-grow">
+                                <div class="pc-text-raw text-xs ellipsis" style="text-align: center;">2-1</div>
+                            </div>
+                        </button>
+                        <div class="rounded-xl bg-bg-light bg-opacity-10 px-3 py-1 inline-block whitespace-nowrap flex-none">
+                            <div class="flex items-center space-x-1">
+                                <div class="pc-text pc-color-light pc-gap-4">
+                                    <div class="pc-text-raw text-xs">分数 5</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap shrink gap-x-5 gap-y-1">
+                        <div class="pc-text pc-color-lightest pc-gap-4">
+                            <div class="pc-text-raw text-xs">作者 刘丹</div>
+                        </div>
+                        <div class="pc-text pc-color-lightest pc-gap-4">
+                            <div class="pc-text-raw text-xs">单位 东北林业大学</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="space-y-4">
+                        <div class="markdownBlock_tErSz" lang="en">
+                            <div class="rendered-markdown dark:rendered-markdown-invert">
+                                <p>在数据结构中，从逻辑上可以把数据结构分成（ &nbsp;&nbsp;）。</p>
+                            </div>
+                        </div>
+                        <span class="flex flex-wrap -m-0.5">
+                            <span class="block p-0.5" style="width: 100%;">
+                                <label class="w-full inline-flex cursor-pointer m-0 min-w-0 items-baseline px-2 py-1 rounded hover:bg-bg-light focus:bg-bg-light focus-within:bg-bg-light focus-within:ring focus-within:ring-blue-300">
+                                    <input name="ptaQuestion" type="radio" class="mr-2 mt-1 flex-none focus:outline-none" aria-label="undefined">
+                                    <div class="flex gap-2 items-baseline min-w-0">
+                                        <span>A.</span>
+                                        <div class="min-w-0 break-normal shrink">
+                                            <div class="markdownBlock_tErSz" lang="en">
+                                                <div class="rendered-markdown dark:rendered-markdown-invert">
+                                                    <p>动态结构和静态结构</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </span>
+                            <span class="block p-0.5" style="width: 100%;">
+                                <label class="w-full inline-flex cursor-pointer m-0 min-w-0 items-baseline px-2 py-1 rounded hover:bg-bg-light focus:bg-bg-light focus-within:bg-bg-light focus-within:ring focus-within:ring-blue-300">
+                                    <input name="ptaQuestion" type="radio" class="mr-2 mt-1 flex-none focus:outline-none" aria-label="undefined">
+                                    <div class="flex gap-2 items-baseline min-w-0">
+                                        <span>B.</span>
+                                        <div class="min-w-0 break-normal shrink">
+                                            <div class="markdownBlock_tErSz" lang="en">
+                                                <div class="rendered-markdown dark:rendered-markdown-invert">
+                                                    <p>紧凑结构和非紧凑结构</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </span>
+                            <span class="block p-0.5" style="width: 100%;">
+                                <label class="w-full inline-flex cursor-pointer m-0 min-w-0 items-baseline px-2 py-1 rounded hover:bg-bg-light focus:bg-bg-light focus-within:bg-bg-light focus-within:ring focus-within:ring-blue-300">
+                                    <input name="ptaQuestion" type="radio" class="mr-2 mt-1 flex-none focus:outline-none" aria-label="undefined">
+                                    <div class="flex gap-2 items-baseline min-w-0">
+                                        <span>C.</span>
+                                        <div class="min-w-0 break-normal shrink">
+                                            <div class="markdownBlock_tErSz" lang="en">
+                                                <div class="rendered-markdown dark:rendered-markdown-invert">
+                                                    <p>线性结构和非线性结构</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </span>
+                            <span class="block p-0.5" style="width: 100%;">
+                                <label class="w-full inline-flex cursor-pointer m-0 min-w-0 items-baseline px-2 py-1 rounded hover:bg-bg-light focus:bg-bg-light focus-within:bg-bg-light focus-within:ring focus-within:ring-blue-300">
+                                    <input name="ptaQuestion" type="radio" class="mr-2 mt-1 flex-none focus:outline-none" aria-label="undefined">
+                                    <div class="flex gap-2 items-baseline min-w-0">
+                                        <span>D.</span>
+                                        <div class="min-w-0 break-normal shrink">
+                                            <div class="markdownBlock_tErSz" lang="en">
+                                                <div class="rendered-markdown dark:rendered-markdown-invert">
+                                                    <p>内部结构和外部结构</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button onclick="testPTAOptions('ptaTest')">测试PTA选项识别</button>
+        <div id="ptaResult"></div>
+    </div>
+
+    <script>
+        // PTA专用选项识别函数（增强版）
+        function getPTAQuestionOptions(element) {
+            const options = [];
+            
+            console.log('🔍 开始PTA选项识别...');
+            console.log('目标元素:', element);
+            
+            // 1. 查找所有可能的输入元素
+            const inputElements = element.querySelectorAll([
+                'input[type="radio"]', 
+                'input[type="checkbox"]',
+                '[role="radio"]', 
+                '[role="checkbox"]'
+            ].join(', '));
+            
+            console.log(`📊 找到 ${inputElements.length} 个输入元素`);
+            
+            if (inputElements.length > 0) {
+                inputElements.forEach((input, index) => {
+                    console.log(`\n🔧 处理输入元素 ${index + 1}:`, input);
+                    
+                    let optionText = '';
+                    let optionValue = input.value || String.fromCharCode(65 + index); // A, B, C, D
+                    
+                    // 策略1: 查找父级label（PTA标准结构）
+                    const parentLabel = input.closest('label');
+                    if (parentLabel) {
+                        console.log('🏷️ 找到父级label:', parentLabel);
+                        
+                        // 查找markdown内容（PTA特有）
+                        const markdown = parentLabel.querySelector('.markdownBlock_tErSz');
+                        if (markdown) {
+                            optionText = markdown.textContent.trim();
+                            console.log(`📖 通过markdown找到选项: "${optionText}"`);
+                        }
+                        
+                        // 如果没有markdown，查找选项文本容器
+                        if (!optionText) {
+                            const textContainer = parentLabel.querySelector([
+                                '.min-w-0',
+                                '.break-normal',
+                                '.shrink',
+                                '[class*="text"]',
+                                '[class*="content"]'
+                            ].join(', '));
+                            
+                            if (textContainer) {
+                                optionText = textContainer.textContent.trim();
+                                console.log(`📦 通过文本容器找到选项: "${optionText}"`);
+                            }
+                        }
+                        
+                        // 如果还没有找到，使用label的完整文本
+                        if (!optionText) {
+                            optionText = parentLabel.textContent.trim();
+                            // 智能清理文本
+                            optionText = cleanPTAOptionText(optionText, optionValue);
+                            console.log(`🏷️ 通过label文本找到选项: "${optionText}"`);
+                        }
+                    }
+                    
+                    // 策略2: 查找关联label（for属性）
+                    if (!optionText && input.id) {
+                        const label = document.querySelector(`label[for="${input.id}"]`);
+                        if (label) {
+                            optionText = cleanPTAOptionText(label.textContent.trim(), optionValue);
+                            console.log(`🔗 通过for属性找到选项: "${optionText}"`);
+                        }
+                    }
+                    
+                    // 策略3: 查找相邻文本节点
+                    if (!optionText) {
+                        // 查找包含选项字母的相邻span
+                        const letterSpan = input.nextElementSibling;
+                        if (letterSpan && letterSpan.textContent && /^[A-Da-d]\.?$/.test(letterSpan.textContent.trim())) {
+                            const textContainer = letterSpan.nextElementSibling;
+                            if (textContainer) {
+                                optionText = textContainer.textContent.trim();
+                                console.log(`➡️ 通过相邻元素找到选项: "${optionText}"`);
+                            }
+                        }
+                    }
+                    
+                    // 策略4: 使用默认值
+                    if (!optionText) {
+                        optionText = `选项${optionValue}`;
+                        console.log(`📝 使用默认选项: "${optionText}"`);
+                    }
+                    
+                    // 最终清理和验证
+                    optionText = cleanPTAOptionText(optionText, optionValue);
+                    
+                    if (isValidOptionText(optionText)) {
+                        options.push({
+                            value: optionValue,
+                            text: optionText,
+                            type: input.type || 'radio',
+                            element: input,
+                            rawElement: input
+                        });
+                        console.log(`✅ 成功添加选项 ${optionValue}: "${optionText}"`);
+                    } else {
+                        console.log(`❌ 跳过无效选项: "${optionText}"`);
+                    }
+                });
+            }
+            
+            // 如果没有找到输入元素，尝试文本解析
+            if (options.length === 0) {
+                console.log('📝 尝试文本解析选项...');
+                const textOptions = extractOptionsFromText(element.textContent);
+                textOptions.forEach(opt => {
+                    if (!options.some(existing => existing.text === opt.text)) {
+                        options.push(opt);
+                        console.log(`📄 从文本添加选项: "${opt.text}"`);
+                    }
+                });
+            }
+            
+            console.log(`🎯 最终识别到 ${options.length} 个选项`);
+            return options;
+        }
+        
+        // 清理PTA选项文本
+        function cleanPTAOptionText(text, optionValue) {
+            if (!text) return '';
+            
+            return text
+                .replace(/<[^>]*>/g, '') // 移除HTML标签
+                .replace(/[\n\r\t]/g, ' ') // 替换换行和制表符
+                .replace(/\s{2,}/g, ' ') // 合并多个空格
+                .replace(/^[A-Da-d][\.\)]\s*/, '') // 移除选项前缀如"A."
+                .replace(/^\d+[\.\)]\s*/, '') // 移除数字前缀如"1."
+                .replace(new RegExp(`^\\s*${optionValue}\\s*`), '') // 移除input value
+                .replace(/^[●○■□▶➤›•▪]\s*/, '') // 移除项目符号
+                .replace(/^\.\s*/, '') // 移除开头的点
+                .trim();
+        }
+        
+        // 从文本中提取选项
+        function extractOptionsFromText(text) {
+            const options = [];
+            const patterns = [
+                /[A-Da-d][\.\)]\s*([^\n]+?)(?=\s*(?:[A-Da-d][\.\)]|\d+[\.\)]|$))/g,
+                /\d+[\.\)]\s*([^\n]+?)(?=\s*(?:[A-Da-d][\.\)]|\d+[\.\)]|$))/g,
+                /[①②③④⑤⑥]\s*([^\n]+)/g
+            ];
+            
+            patterns.forEach(pattern => {
+                let match;
+                while ((match = pattern.exec(text)) !== null) {
+                    let optionText = match[1] ? match[1].trim() : match[0].trim();
+                    if (optionText && optionText.length > 1) {
+                        // 提取选项标识符
+                        const optionMatch = match[0].match(/^([A-Da-d])/);
+                        const optionValue = optionMatch ? optionMatch[1].toUpperCase() : 
+                            String.fromCharCode(65 + options.length);
+                        
+                        optionText = cleanPTAOptionText(optionText, optionValue);
+                        
+                        if (isValidOptionText(optionText)) {
+                            options.push({
+                                value: optionValue,
+                                text: optionText,
+                                type: 'text'
+                            });
+                        }
+                    }
+                }
+            });
+            
+            return options;
+        }
+        
+        // 验证选项文本有效性
+        function isValidOptionText(text) {
+            if (!text || text.length < 1) return false;
+            if (text.length > 200) return false;
+            if (/^\d+$/.test(text)) return false;
+            if (/^[A-Da-d]$/.test(text)) return false;
+            if (/^[\.\)\s]+$/.test(text)) return false;
+            return true;
+        }
+        
+        function testPTAOptions(testId) {
+            const element = document.getElementById(testId);
+            const resultDiv = document.getElementById('ptaResult');
+            
+            console.clear();
+            console.log('=== PTA选项识别测试开始 ===');
+            
+            try {
+                const options = getPTAQuestionOptions(element);
+                
+                resultDiv.className = 'result';
+                resultDiv.innerHTML = `
+                    <strong>✅ PTA选项识别成功</strong>
+                    <div>找到 ${options.length} 个选项</div>
+                    <ul>
+                        ${options.map(opt => `<li><strong>${opt.value}.</strong> ${opt.text}</li>`).join('')}
+                    </ul>
+                    <div><small>查看浏览器控制台获取详细识别过程</small></div>
+                `;
+                
+                // 高亮识别到的选项
+                options.forEach(opt => {
+                    if (opt.element) {
+                        opt.element.parentElement.style.backgroundColor = '#e8f5e8';
+                        opt.element.parentElement.style.border = '2px solid #4caf50';
+                    }
+                });
+                
+            } catch (error) {
+                resultDiv.className = 'error';
+                resultDiv.innerHTML = `
+                    <strong>❌ 识别失败</strong>
+                    <div>${error.message}</div>
+                `;
+                console.error('PTA选项识别错误:', error);
+            }
+            
+            console.log('=== PTA选项识别测试结束 ===');
+        }
+        
+        // 添加全局测试函数
+        window.testAllPTAOptions = function() {
+            const testCases = document.querySelectorAll('.test-case');
+            testCases.forEach((testCase, index) => {
+                const testId = testCase.querySelector('[id]').id;
+                const resultDiv = testCase.querySelector('.result, .error') || 
+                                document.createElement('div');
+                resultDiv.className = 'result';
+                testCase.appendChild(resultDiv);
+                
+                setTimeout(() => {
+                    testPTAOptions(testId);
+                }, index * 500);
+            });
+        };
+    </script>
+</body>
+</html>

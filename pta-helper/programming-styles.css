@@ -1,0 +1,427 @@
+/* 编程题检测功能专用样式 */
+
+/* 编程题检测结果模态框 */
+.pta-helper-programming-result-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.pta-helper-programming-result-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.pta-helper-programming-result-modal .modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.pta-helper-programming-result-modal .modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.pta-helper-programming-result-modal .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.pta-helper-programming-result-modal .modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.pta-helper-programming-result-modal .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.pta-helper-programming-result-modal .close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.pta-helper-programming-result-modal .modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* 结果区域样式 */
+.result-section {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+}
+
+.result-section h4 {
+    margin: 0 0 12px 0;
+    color: #333;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.result-section p {
+    margin: 8px 0;
+    color: #555;
+    line-height: 1.5;
+}
+
+.result-section strong {
+    color: #333;
+    font-weight: 600;
+}
+
+/* 样例代码块样式 */
+.example-block {
+    margin: 12px 0;
+}
+
+.example-block strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.example-block pre {
+    background: #2d3748;
+    color: #e2e8f0;
+    padding: 12px 16px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 13px;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.example-block code {
+    background: none;
+    color: inherit;
+    padding: 0;
+    font-size: inherit;
+}
+
+/* 提示列表样式 */
+.result-section ul {
+    margin: 8px 0;
+    padding-left: 20px;
+}
+
+.result-section li {
+    margin: 4px 0;
+    color: #555;
+    line-height: 1.4;
+}
+
+/* 操作按钮样式 */
+.result-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+.copy-template-btn,
+.insert-template-btn {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-template-btn {
+    background: #6c757d;
+    color: white;
+}
+
+.copy-template-btn:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+}
+
+.insert-template-btn {
+    background: #28a745;
+    color: white;
+}
+
+.insert-template-btn:hover {
+    background: #218838;
+    transform: translateY(-1px);
+}
+
+/* 工具栏按钮增强样式 */
+.pta-helper-toolbar .prog-detect-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+}
+
+.pta-helper-toolbar .prog-detect-btn:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.pta-helper-toolbar .template-btn {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    color: white;
+    border: none;
+}
+
+.pta-helper-toolbar .template-btn:hover {
+    background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
+}
+
+/* 编程题特有的题目高亮样式 */
+.pta-helper-programming-highlight {
+    border: 2px solid #667eea !important;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%) !important;
+    border-radius: 8px !important;
+    position: relative;
+}
+
+.pta-helper-programming-highlight::before {
+    content: '💻 编程题';
+    position: absolute;
+    top: -12px;
+    left: 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 10;
+}
+
+/* 代码编辑器检测指示器 */
+.pta-helper-code-editor-detected {
+    position: relative;
+}
+
+.pta-helper-code-editor-detected::after {
+    content: '✅ 代码编辑器已检测';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #28a745;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    z-index: 100;
+    pointer-events: none;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .pta-helper-programming-result-modal .modal-content {
+        width: 95%;
+        max-height: 95vh;
+    }
+    
+    .pta-helper-programming-result-modal .modal-header {
+        padding: 16px 20px;
+    }
+    
+    .pta-helper-programming-result-modal .modal-body {
+        padding: 20px;
+    }
+    
+    .result-section {
+        padding: 12px;
+        margin-bottom: 16px;
+    }
+    
+    .result-actions {
+        flex-direction: column;
+    }
+    
+    .copy-template-btn,
+    .insert-template-btn {
+        width: 100%;
+    }
+    
+    .example-block pre {
+        font-size: 12px;
+        padding: 10px 12px;
+    }
+}
+
+/* 暗色主题支持 */
+@media (prefers-color-scheme: dark) {
+    .pta-helper-programming-result-modal .modal-content {
+        background: #1a202c;
+        color: #e2e8f0;
+    }
+    
+    .result-section {
+        background: #2d3748;
+        border-left-color: #667eea;
+    }
+    
+    .result-section h4 {
+        color: #e2e8f0;
+    }
+    
+    .result-section p {
+        color: #cbd5e0;
+    }
+    
+    .result-section strong {
+        color: #e2e8f0;
+    }
+    
+    .result-section li {
+        color: #cbd5e0;
+    }
+    
+    .result-actions {
+        border-top-color: #4a5568;
+    }
+}
+
+/* 动画效果 */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -40%) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.pta-helper-programming-result-modal.show .modal-content {
+    animation: slideInUp 0.3s ease-out;
+}
+
+/* 加载状态样式 */
+.pta-helper-programming-detecting {
+    position: relative;
+    pointer-events: none;
+}
+
+.pta-helper-programming-detecting::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(102, 126, 234, 0.1);
+    border-radius: 8px;
+    z-index: 1;
+}
+
+.pta-helper-programming-detecting::after {
+    content: '🔍 检测中...';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #667eea;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 2;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+}
+
+/* 成功检测状态 */
+.pta-helper-programming-detected {
+    border: 2px solid #28a745 !important;
+    background: rgba(40, 167, 69, 0.1) !important;
+}
+
+.pta-helper-programming-detected::before {
+    content: '✅ 编程题已检测';
+    position: absolute;
+    top: -12px;
+    left: 12px;
+    background: #28a745;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 10;
+}
+
+/* 检测失败状态 */
+.pta-helper-programming-failed {
+    border: 2px solid #dc3545 !important;
+    background: rgba(220, 53, 69, 0.1) !important;
+}
+
+.pta-helper-programming-failed::before {
+    content: '❌ 检测失败';
+    position: absolute;
+    top: -12px;
+    left: 12px;
+    background: #dc3545;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 10;
+}

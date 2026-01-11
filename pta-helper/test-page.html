@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PTA答题助手测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .question-item {
+            border: 1px solid #ddd;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .options {
+            margin: 10px 0;
+        }
+        .options label {
+            display: block;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+        .options input {
+            margin-right: 8px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        .submit-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 20px 0;
+        }
+        .submit-btn:hover {
+            background: #45a049;
+        }
+        .header {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PTA答题助手测试页面</h1>
+        <p>这是一个模拟PTA答题页面，用于测试插件功能</p>
+        <p><strong>注意：</strong>请确保URL包含 "pintia.cn" 才能激活插件</p>
+    </div>
+
+    <!-- 单选题 -->
+    <div class="question-item">
+        <div class="question-title">1. 计算机的基本组成包括哪些部分？</div>
+        <div class="options">
+            <label><input type="radio" name="q1" value="A"> A. 输入设备、输出设备</label>
+            <label><input type="radio" name="q1" value="B"> B. CPU、内存</label>
+            <label><input type="radio" name="q1" value="C"> C. 硬件系统、软件系统</label>
+            <label><input type="radio" name="q1" value="D"> D. 以上都是</label>
+        </div>
+    </div>
+
+    <!-- 多选题 -->
+    <div class="question-item">
+        <div class="question-title">2. 以下哪些是编程语言？（多选）</div>
+        <div class="options">
+            <label><input type="checkbox" name="q2" value="A"> A. C语言</label>
+            <label><input type="checkbox" name="q2" value="B"> B. Java</label>
+            <label><input type="checkbox" name="q2" value="C"> C. Python</label>
+            <label><input type="checkbox" name="q2" value="D"> D. HTML</label>
+        </div>
+    </div>
+
+    <!-- 判断题 -->
+    <div class="question-item">
+        <div class="question-title">3. 栈是一种线性数据结构。</div>
+        <div class="options">
+            <label><input type="radio" name="q3" value="true"> 正确</label>
+            <label><input type="radio" name="q3" value="false"> 错误</label>
+        </div>
+    </div>
+
+    <!-- 填空题 -->
+    <div class="question-item">
+        <div class="question-title">4. 请填写：1 + 1 = ____</div>
+        <input type="text" name="q4" placeholder="请输入答案">
+    </div>
+
+    <!-- 编程题 -->
+    <div class="question-item">
+        <div class="question-title">5. 编写一个Hello World程序</div>
+        <textarea name="q5" placeholder="请在此处编写代码..."></textarea>
+    </div>
+
+    <!-- 另一种格式的题目 -->
+    <div class="problem-item">
+        <h3>6. CPU的主要功能是什么？</h3>
+        <div>
+            <label><input type="radio" name="q6" value="A"> A. 存储数据</label><br>
+            <label><input type="radio" name="q6" value="B"> B. 运算和控制</label><br>
+            <label><input type="radio" name="q6" value="C"> C. 输入输出</label><br>
+            <label><input type="radio" name="q6" value="D"> D. 显示图像</label>
+        </div>
+    </div>
+
+    <!-- 提交按钮 -->
+    <button type="submit" class="submit-btn">提交答案</button>
+
+    <div style="margin-top: 40px; padding: 20px; background: #e3f2fd; border-radius: 5px;">
+        <h3>🔧 测试说明</h3>
+        <p><strong>如何测试插件：</strong></p>
+        <ol>
+            <li>确保插件已正确安装并启用</li>
+            <li>在浏览器地址栏中将URL修改为包含 "pintia.cn" 的地址（例如：https://pintia.cn/test）</li>
+            <li>刷新页面，应该能看到右上角的浮动工具栏</li>
+            <li>点击"🔍 检测题目"按钮测试检测功能</li>
+            <li>点击"✨ 自动填充"按钮测试填充功能</li>
+        </ol>
+        
+        <p><strong>预期结果：</strong></p>
+        <ul>
+            <li>应该检测到6道题目</li>
+            <li>题目会被绿色边框高亮</li>
+            <li>部分题目应该能够自动填充答案</li>
+            <li>右上角会显示通知消息</li>
+        </ul>
+
+        <p><strong>快捷键测试：</strong></p>
+        <ul>
+            <li><code>Ctrl+Shift+D</code> - 检测题目</li>
+            <li><code>Ctrl+Shift+F</code> - 自动填充</li>
+            <li><code>Ctrl+Shift+H</code> - 隐藏/显示工具栏</li>
+        </ul>
+    </div>
+
+    <script>
+        // 模拟一些PTA页面的行为
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('测试页面加载完成');
+            
+            // 添加一些事件监听器来模拟真实的PTA页面
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    console.log('输入变化:', this.name, this.value);
+                });
+            });
+            
+            // 提交按钮事件
+            document.querySelector('.submit-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('这是测试页面，不会真正提交答案');
+            });
+        });
+    </script>
+</body>
+</html>

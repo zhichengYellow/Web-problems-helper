@@ -1,0 +1,5 @@
+{
+  "meta": { "category": "graph", "title": "图（占位）", "version": "1.0.0", "updated_at": "2025-09-23" },
+  "questions": [],
+  "note": "建议包含：拓扑排序、连通分量、环检测、最短路径、二分图判断等。"
+}

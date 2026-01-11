@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>腾讯云hunyuan-lite测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .config-section { margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .test-section { margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .result-section { padding: 15px; border: 1px solid #ccc; border-radius: 5px; background: #f9f9f9; }
+        input[type="text"], input[type="password"] { width: 300px; padding: 5px; margin: 5px 0; }
+        button { padding: 8px 15px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>腾讯云hunyuan-lite集成测试</h1>
+        
+        <div class="config-section">
+            <h2>配置腾讯云密钥</h2>
+            <div>
+                <label>SecretId: </label>
+                <input type="text" id="secretId" placeholder="输入您的SecretId">
+            </div>
+            <div>
+                <label>SecretKey: </label>
+                <input type="password" id="secretKey" placeholder="输入您的SecretKey">
+            </div>
+            <button onclick="saveConfig()">保存配置</button>
+            <span id="configStatus"></span>
+        </div>
+
+        <div class="test-section">
+            <h2>测试hunyuan-lite</h2>
+            <div>
+                <label>测试问题: </label>
+                <input type="text" id="testQuestion" value="什么是数据结构？" style="width: 500px;">
+            </div>
+            <button onclick="testHunyuan()">测试调用</button>
+        </div>
+
+        <div class="result-section">
+            <h2>测试结果</h2>
+            <div id="testResult">等待测试...</div>
+        </div>
+    </div>
+
+    <script src="hunyuan-service.js"></script>
+    <script>
+        // 保存配置
+        function saveConfig() {
+            const secretId = document.getElementById('secretId').value;
+            const secretKey = document.getElementById('secretKey').value;
+            
+            if (!secretId || !secretKey) {
+                alert('请填写完整的SecretId和SecretKey');
+                return;
+            }
+
+            hunyuanService.setConfig(secretId, secretKey)
+                .then(() => {
+                    document.getElementById('configStatus').innerHTML = 
+                        '<span class="success">✅ 配置保存成功</span>';
+                    console.log('配置已保存');
+                })
+                .catch(error => {
+                    document.getElementById('configStatus').innerHTML = 
+                        '<span class="error">❌ 配置保存失败: ' + error.message + '</span>';
+                });
+        }
+
+        // 测试hunyuan调用
+        async function testHunyuan() {
+            const question = document.getElementById('testQuestion').value;
+            const resultDiv = document.getElementById('testResult');
+            
+            if (!hunyuanService.isConfigured()) {
+                resultDiv.innerHTML = '<span class="error">❌ 请先配置腾讯云密钥</span>';
+                return;
+            }
+
+            resultDiv.innerHTML = '正在调用hunyuan-lite...';
+
+            try {
+                const response = await hunyuanService.callHunyuanLite(question);
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <strong>✅ 调用成功！</strong>
+                        <pre>${JSON.stringify(response, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <strong>❌ 调用失败:</strong>
+                        <div>${error.message}</div>
+                        <pre>${error.stack}</pre>
+                    </div>
+                `;
+            }
+        }
+
+        // 页面加载时检查配置状态
+        document.addEventListener('DOMContentLoaded', async () => {
+            await hunyuanService.init();
+            if (hunyuanService.isConfigured()) {
+                document.getElementById('configStatus').innerHTML = 
+                    '<span class="success">✅ 已检测到有效配置</span>';
+            }
+        });
+    </script>
+</body>
+</html>

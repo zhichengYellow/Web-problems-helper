@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>PTA答题助手 - 配置界面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2196F3;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+        }
+        .section h2 {
+            color: #333;
+            margin-top: 0;
+            border-bottom: 2px solid #2196F3;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        button {
+            background: #2196F3;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #1976D2;
+        }
+        button.success {
+            background: #4CAF50;
+        }
+        button.danger {
+            background: #f44336;
+        }
+        button.warning {
+            background: #ff9800;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            border-left: 4px solid #2196F3;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-online {
+            background: #4CAF50;
+        }
+        .status-offline {
+            background: #f44336;
+        }
+        .status-warning {
+            background: #ff9800;
+        }
+        .archive-info {
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .api-list {
+            margin: 10px 0;
+        }
+        .api-item {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .api-item:hover {
+            background: #f0f8ff;
+        }
+        .api-item.selected {
+            border-color: #2196F3;
+            background: #e3f2fd;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .test-success {
+            background: #e8f5e8;
+            border: 1px solid #4CAF50;
+        }
+        .test-error {
+            background: #ffebee;
+            border: 1px solid #f44336;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PTA答题助手配置</h1>
+        
+        <!-- API配置部分 -->
+        <div class="section">
+            <h2>API设置</h2>
+            
+            <div class="form-group">
+                <label>选择API服务:</label>
+                <div class="api-list" id="apiList">
+                    <!-- API列表将通过JS动态生成 -->
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="apiKey">API密钥:</label>
+                <input type="text" id="apiKey" placeholder="输入API密钥（可选）">
+            </div>
+            
+            <div class="form-group">
+                <label for="baseURL">API地址:</label>
+                <input type="text" id="baseURL" placeholder="API基础地址">
+            </div>
+            
+            <!-- 腾讯云hunyuan-lite配置 -->
+            <div class="form-group" id="hunyuanConfig" style="display: none;">
+                <div class="archive-info" style="background: #e3f2fd; border-left: 4px solid #2196F3;">
+                    <strong>后端服务模式已启用</strong><br>
+                    API密钥已由后端服务统一管理，无需在此配置。<br>
+                    请确保本地后端服务已启动 (http://localhost:3001)。
+                </div>
+            </div>
+            
+            <div class="form-group" id="hunyuanConfig2" style="display: none;">
+                <!-- 隐藏密钥输入框 -->
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="enabled" checked>
+                <label for="enabled">启用API服务</label>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="fallbackEnabled" checked>
+                <label for="fallbackEnabled">启用智能回退</label>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="syncEnabled" checked>
+                <label for="syncEnabled">启用云端同步</label>
+            </div>
+            
+            <button onclick="saveConfig()">保存配置</button>
+            <button onclick="testConnection()" class="warning">测试连接</button>
+            <div id="testResult" class="test-result hidden"></div>
+        </div>
+        
+        <!-- 统计信息部分 -->
+        <div class="section">
+            <h2>使用统计</h2>
+            
+            <div class="stats-grid" id="statsGrid">
+                <!-- 统计信息将通过JS动态生成 -->
+            </div>
+            
+            <button onclick="refreshStats()">刷新统计</button>
+            <button onclick="resetStats()" class="warning">重置统计</button>
+        </div>
+        
+        <!-- 本地存档管理 -->
+        <div class="section">
+            <h2>本地存档</h2>
+            
+            <div class="archive-info" id="archiveInfo">
+                <!-- 存档信息将通过JS动态生成 -->
+            </div>
+            
+            <button onclick="exportArchive()">导出存档</button>
+            <button onclick="importArchive()">导入存档</button>
+            <button onclick="clearArchive()" class="danger">清空存档</button>
+            <button onclick="clearCache()" class="warning">清空缓存</button>
+        </div>
+        
+        <!-- 使用说明 -->
+        <div class="section">
+            <h2>使用说明</h2>
+            <p>1. 选择适合的API服务，免费API有调用次数限制</p>
+            <p>2. API密钥可选，没有密钥时使用智能回退方案</p>
+            <p>3. 本地存档会自动保存找到的题目答案</p>
+            <p>4. 定期导出存档备份以防数据丢失</p>
+        </div>
+    </div>
+
+    <script src="hunyuan-service.js"></script>
+    <script src="api-service.js"></script>
+    <script>
+        // 初始化配置界面
+        document.addEventListener('DOMContentLoaded', function() {
+            loadConfig();
+            refreshStats();
+            updateArchiveInfo();
+            renderAPIList();
+        });
+        
+        // 加载配置
+        async function loadConfig() {
+            try {
+                const config = await chrome.storage.local.get(['apiConfig', 'hunyuanConfig']);
+                if (config.apiConfig) {
+                    document.getElementById('apiKey').value = config.apiConfig.apiKey || '';
+                    document.getElementById('baseURL').value = config.apiConfig.baseURL || '';
+                    document.getElementById('enabled').checked = config.apiConfig.enabled !== false;
+                    document.getElementById('fallbackEnabled').checked = config.apiConfig.fallbackEnabled !== false;
+                    document.getElementById('syncEnabled').checked = config.apiConfig.syncEnabled !== false;
+                    
+                    // 选择当前API
+                    const currentAPI = config.apiConfig.currentAPI || 'zhixun-api';
+                    document.querySelectorAll('.api-item').forEach(item => {
+                        item.classList.remove('selected');
+                        if (item.dataset.api === currentAPI) {
+                            item.classList.add('selected');
+                        }
+                    });
+                    
+                    // 显示/隐藏hunyuan配置
+                    toggleHunyuanConfig(currentAPI);
+                }
+                
+                // 加载hunyuan配置
+                // 后端托管模式下，不再需要加载前端存储的密钥
+                /*
+                if (config.hunyuanConfig) {
+                    document.getElementById('secretId').value = config.hunyuanConfig.secretId || '';
+                    document.getElementById('secretKey').value = config.hunyuanConfig.secretKey || '';
+                }
+                */
+            } catch (error) {
+                console.error('加载配置失败:', error);
+            }
+        }
+        
+        // 切换hunyuan配置显示
+        function toggleHunyuanConfig(apiKey) {
+            const hunyuanConfig = document.getElementById('hunyuanConfig');
+            const hunyuanConfig2 = document.getElementById('hunyuanConfig2');
+            
+            if (apiKey === 'hunyuan-lite') {
+                hunyuanConfig.style.display = 'block';
+                hunyuanConfig2.style.display = 'block';
+            } else {
+                hunyuanConfig.style.display = 'none';
+                hunyuanConfig2.style.display = 'none';
+            }
+        }
+        
+        // 保存配置
+        async function saveConfig() {
+            try {
+                const selectedAPI = document.querySelector('.api-item.selected')?.dataset.api || 'zhixun-api';
+                const apiConfig = {
+                    apiKey: document.getElementById('apiKey').value.trim(),
+                    baseURL: document.getElementById('baseURL').value.trim(),
+                    enabled: document.getElementById('enabled').checked,
+                    fallbackEnabled: document.getElementById('fallbackEnabled').checked,
+                    syncEnabled: document.getElementById('syncEnabled').checked,
+                    currentAPI: selectedAPI
+                };
+                
+                // 保存hunyuan配置
+                // 后端托管模式下，前端不再保存密钥
+                const hunyuanConfig = {
+                    secretId: '', // document.getElementById('secretId').value.trim(),
+                    secretKey: '' // document.getElementById('secretKey').value.trim()
+                };
+                
+                await apiService.setConfig(apiConfig);
+                
+                // 保存hunyuan配置到单独存储
+                if (typeof chrome !== 'undefined' && chrome.storage) {
+                    await chrome.storage.local.set({ hunyuanConfig });
+                } else if (typeof localStorage !== 'undefined') {
+                    localStorage.setItem('hunyuan_config', JSON.stringify(hunyuanConfig));
+                }
+                
+                // 如果使用hunyuan-lite，设置配置
+                if (selectedAPI === 'hunyuan-lite' && window.hunyuanService) {
+                    await window.hunyuanService.setConfig(hunyuanConfig.secretId, hunyuanConfig.secretKey);
+                }
+                
+                showMessage('配置保存成功', 'success');
+            } catch (error) {
+                showMessage('保存失败: ' + error.message, 'error');
+            }
+        }
+        
+        // 测试连接
+        async function testConnection() {
+            const testResult = document.getElementById('testResult');
+            testResult.className = 'test-result';
+            testResult.innerHTML = '测试中...';
+            testResult.classList.remove('hidden');
+            
+            try {
+                const result = await apiService.testConnection();
+                if (result.success) {
+                    testResult.className = 'test-result test-success';
+                    testResult.innerHTML = '✅ 连接成功: ' + result.message;
+                } else {
+                    testResult.className = 'test-result test-error';
+                    testResult.innerHTML = '❌ 连接失败: ' + result.message;
+                }
+            } catch (error) {
+                testResult.className = 'test-result test-error';
+                testResult.innerHTML = '❌ 测试错误: ' + error.message;
+            }
+        }
+        
+        // 刷新统计信息
+        function refreshStats() {
+            const stats = apiService.getStatistics();
+            const statsGrid = document.getElementById('statsGrid');
+            
+            statsGrid.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-value">${stats.totalSearches}</div>
+                    <div class="stat-label">总搜索次数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.localHits}</div>
+                    <div class="stat-label">本地命中</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.apiHits}</div>
+                    <div class="stat-label">API命中</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.successRate}%</div>
+                    <div class="stat-label">成功率</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.archiveSize}</div>
+                    <div class="stat-label">存档数量</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.cacheSize}</div>
+                    <div class="stat-label">缓存数量</div>
+                </div>
+            `;
+        }
+        
+        // 更新存档信息
+        function updateArchiveInfo() {
+            const status = apiService.getStatus();
+            const archiveInfo = document.getElementById('archiveInfo');
+            
+            archiveInfo.innerHTML = `
+                <strong>本地存档状态:</strong><br>
+                题目数量: ${status.archiveSize} / ${apiService.archiveLimit}<br>
+                缓存数量: ${status.cacheSize}<br>
+                最后更新: ${new Date().toLocaleString()}
+            `;
+        }
+        
+        // 渲染API列表
+        function renderAPIList() {
+            const apiList = document.getElementById('apiList');
+            const apis = apiService.defaultAPIs;
+            
+            apiList.innerHTML = '';
+            for (const [key, api] of Object.entries(apis)) {
+                const apiItem = document.createElement('div');
+                apiItem.className = 'api-item';
+                apiItem.dataset.api = key;
+                apiItem.innerHTML = `
+                    <strong>${api.name}</strong><br>
+                    <small>${api.description}</small><br>
+                    <small>限制: ${api.rateLimit} 次/天</small>
+                `;
+                
+                apiItem.addEventListener('click', () => {
+                    document.querySelectorAll('.api-item').forEach(item => {
+                        item.classList.remove('selected');
+                    });
+                    apiItem.classList.add('selected');
+                    document.getElementById('baseURL').value = api.baseURL;
+                    
+                    // 显示/隐藏hunyuan配置
+                    toggleHunyuanConfig(key);
+                });
+                
+                apiList.appendChild(apiItem);
+            }
+        }
+        
+        // 重置统计
+        async function resetStats() {
+            if (confirm('确定要重置统计信息吗？')) {
+                apiService.resetStatistics();
+                refreshStats();
+                showMessage('统计信息已重置', 'success');
+            }
+        }
+        
+        // 导出存档
+        async function exportArchive() {
+            const data = apiService.exportArchive('json');
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `pta-archive-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            
+            URL.revokeObjectURL(url);
+            showMessage('存档导出成功', 'success');
+        }
+        
+        // 导入存档
+        async function importArchive() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    try {
+                        const text = await file.text();
+                        const result = apiService.importArchive(text, 'json');
+                        
+                        if (result.success) {
+                            updateArchiveInfo();
+                            showMessage(`成功导入 ${result.count} 条记录`, 'success');
+                        } else {
+                            showMessage('导入失败: ' + result.error, 'error');
+                        }
+                    } catch (error) {
+                        showMessage('文件读取失败: ' + error.message, 'error');
+                    }
+                }
+            };
+            
+            input.click();
+        }
+        
+        // 清空存档
+        async function clearArchive() {
+            if (confirm('确定要清空本地存档吗？此操作不可恢复。')) {
+                const result = apiService.clearArchive();
+                updateArchiveInfo();
+                showMessage(`已清空 ${result.cleared} 条记录`, 'success');
+            }
+        }
+        
+        // 清空缓存
+        async function clearCache() {
+            apiService.clearCache();
+            showMessage('缓存已清空', 'success');
+        }
+        
+        // 显示消息
+        function showMessage(message, type = 'success') {
+            alert(`${type === 'success' ? '✅' : '❌'} ${message}`);
+        }
+    </script>
+</body>
+</html>

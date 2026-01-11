@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PTA答题助手 - API服务浏览器测试</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        .test-result {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        .progress {
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            height: 100%;
+            background: #28a745;
+            transition: width 0.3s;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📡 PTA答题助手 - API服务浏览器测试</h1>
+        
+        <div class="test-section">
+            <h2>🔧 环境检测</h2>
+            <div id="env-result" class="test-result info">正在检测环境...</div>
+            <button onclick="testEnvironment()">运行环境检测</button>
+        </div>
+
+        <div class="test-section">
+            <h2>🚀 API服务初始化</h2>
+            <div id="init-result" class="test-result">等待初始化...</div>
+            <button onclick="initAPIService()">初始化API服务</button>
+        </div>
+
+        <div class="test-section">
+            <h2>🧪 功能测试</h2>
+            <div id="function-result" class="test-result">等待功能测试...</div>
+            <button onclick="runFunctionTests()">运行功能测试</button>
+            
+            <div class="progress" id="test-progress" style="display: none;">
+                <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>📊 实时统计</h2>
+            <div id="stats-result" class="test-result">统计信息将在此显示...</div>
+            <button onclick="updateStats()">刷新统计</button>
+            
+            <div class="stats-grid" id="stats-grid" style="display: none;">
+                <!-- 统计卡片将通过JS动态生成 -->
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>💾 存储测试</h2>
+            <div id="storage-result" class="test-result">存储测试结果将在此显示...</div>
+            <button onclick="testStorage()">测试存储功能</button>
+        </div>
+
+        <div class="test-section">
+            <h2>🎯 综合评估</h2>
+            <div id="summary-result" class="test-result">等待综合评估...</div>
+            <button onclick="runCompleteAssessment()">运行完整评估</button>
+        </div>
+    </div>
+
+    <script src="api-service.js"></script>
+    <script>
+        let apiService = null;
+        const testQuestions = [
+            {
+                text: '在数据结构中，从逻辑上可以把数据结构分成（   ）。',
+                type: 'single_choice',
+                options: [
+                    { text: '动态结构和静态结构', value: 'A' },
+                    { text: '紧凑结构和非紧凑结构', value: 'B' },
+                    { text: '线性结构和非线性结构', value: 'C' },
+                    { text: '内部结构和外部结构', value: 'D' }
+                ],
+                expected: 'C'
+            },
+            {
+                text: '算法的时间复杂度取决于（    ）。',
+                type: 'single_choice',
+                options: [
+                    { text: '问题的规模', value: 'A' },
+                    { text: '待处理数据的初态', value: 'B' },
+                    { text: '计算机的配置', value: 'C' },
+                    { text: 'A和B', value: 'D' }
+                ],
+                expected: 'D'
+            }
+        ];
+
+        // 环境检测
+        function testEnvironment() {
+            const envResult = document.getElementById('env-result');
+            const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
+            const isChromeExtension = typeof chrome !== 'undefined' && chrome.storage;
+            
+            let result = `🌐 环境检测结果:\n`;
+            result += `- 浏览器环境: ${isBrowser ? '✅ 是' : '❌ 否'}\n`;
+            result += `- Chrome扩展环境: ${isChromeExtension ? '✅ 是' : '❌ 否'}\n`;
+            result += `- localStorage支持: ${typeof localStorage !== 'undefined' ? '✅ 是' : '❌ 否'}\n`;
+            result += `- fetch API支持: ${typeof fetch !== 'undefined' ? '✅ 是' : '❌ 否'}\n`;
+            
+            envResult.textContent = result;
+            envResult.className = 'test-result success';
+        }
+
+        // 初始化API服务
+        async function initAPIService() {
+            const initResult = document.getElementById('init-result');
+            initResult.textContent = '🔄 正在初始化API服务...';
+            initResult.className = 'test-result info';
+            
+            try {
+                apiService = new APIService();
+                await apiService.init();
+                
+                let result = '✅ API服务初始化成功！\n\n';
+                result += `📊 服务状态:\n`;
+                const status = apiService.getStatus();
+                result += `- 服务启用: ${status.enabled ? '✅ 是' : '❌ 否'}\n`;
+                result += `- API密钥: ${status.hasKey ? '✅ 已设置' : '❌ 未设置'}\n`;
+                result += `- 本地存档: ${status.archiveSize} 条记录\n`;
+                result += `- 缓存大小: ${status.cacheSize} 条记录\n`;
+                
+                initResult.textContent = result;
+                initResult.className = 'test-result success';
+                
+            } catch (error) {
+                initResult.textContent = `❌ API服务初始化失败: ${error.message}`;
+                initResult.className = 'test-result error';
+            }
+        }
+
+        // 运行功能测试
+        async function runFunctionTests() {
+            if (!apiService) {
+                alert('请先初始化API服务！');
+                return;
+            }
+
+            const functionResult = document.getElementById('function-result');
+            const progressBar = document.getElementById('progress-bar');
+            const testProgress = document.getElementById('test-progress');
+            
+            testProgress.style.display = 'block';
+            progressBar.style.width = '0%';
+            functionResult.textContent = '🔄 开始功能测试...';
+            functionResult.className = 'test-result info';
+
+            let results = [];
+            let successCount = 0;
+
+            for (let i = 0; i < testQuestions.length; i++) {
+                const question = testQuestions[i];
+                progressBar.style.width = `${((i + 1) / testQuestions.length) * 100}%`;
+                
+                try {
+                    const startTime = Date.now();
+                    const result = await apiService.searchAnswer(
+                        question.text,
+                        question.type,
+                        question.options
+                    );
+                    const duration = Date.now() - startTime;
+                    
+                    const isSuccess = result === question.expected;
+                    if (isSuccess) successCount++;
+                    
+                    results.push({
+                        question: question.text.substring(0, 30) + '...',
+                        result: result,
+                        expected: question.expected,
+                        success: isSuccess,
+                        duration: duration
+                    });
+
+                    // 更新结果显示
+                    let currentResults = results.map((r, idx) => 
+                        `${idx + 1}. ${r.question}\n   🎯 结果: ${r.result || '无结果'}\n   ✅ 预期: ${r.expected}\n   ⏱️  耗时: ${r.duration}ms\n   📊 状态: ${r.success ? '✓ 成功' : '✗ 失败'}\n`
+                    ).join('\n');
+                    
+                    functionResult.textContent = `📋 测试进度: ${i + 1}/${testQuestions.length}\n\n${currentResults}`;
+                    
+                    // 短暂延迟
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    
+                } catch (error) {
+                    results.push({
+                        question: question.text.substring(0, 30) + '...',
+                        error: error.message,
+                        success: false
+                    });
+                }
+            }
+
+            // 最终结果
+            const successRate = (successCount / testQuestions.length) * 100;
+            let finalResult = `🎯 功能测试完成！\n\n`;
+            finalResult += `✅ 成功: ${successCount}/${testQuestions.length}\n`;
+            finalResult += `📊 成功率: ${successRate.toFixed(1)}%\n\n`;
+            finalResult += results.map(r => 
+                r.error ? `❌ ${r.question}\n   错误: ${r.error}` : 
+                `${r.success ? '✅' : '❌'} ${r.question}\n   结果: ${r.result || '无结果'} | 预期: ${r.expected} | 耗时: ${r.duration}ms`
+            ).join('\n\n');
+
+            functionResult.textContent = finalResult;
+            functionResult.className = successRate >= 50 ? 'test-result success' : 'test-result warning';
+            testProgress.style.display = 'none';
+        }
+
+        // 更新统计信息
+        function updateStats() {
+            if (!apiService) {
+                alert('请先初始化API服务！');
+                return;
+            }
+
+            const statsResult = document.getElementById('stats-result');
+            const statsGrid = document.getElementById('stats-grid');
+            const stats = apiService.usageStats;
+            const status = apiService.getStatus();
+
+            let result = `📈 实时统计信息:\n\n`;
+            result += `🔢 总搜索次数: ${stats.totalSearches || 0}\n`;
+            result += `🏠 本地命中: ${stats.localHits || 0}\n`;
+            result += `🌐 API命中: ${stats.apiHits || 0}\n`;
+            result += `❌ 失败搜索: ${stats.failedSearches || 0}\n`;
+            result += `📦 存档大小: ${status.archiveSize}\n`;
+            result += `💾 缓存大小: ${status.cacheSize}\n`;
+
+            statsResult.textContent = result;
+            statsResult.className = 'test-result info';
+
+            // 更新统计卡片
+            statsGrid.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-value">${stats.totalSearches || 0}</div>
+                    <div class="stat-label">总搜索次数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.localHits || 0}</div>
+                    <div class="stat-label">本地命中</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.apiHits || 0}</div>
+                    <div class="stat-label">API命中</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${status.archiveSize}</div>
+                    <div class="stat-label">存档记录</div>
+                </div>
+            `;
+            statsGrid.style.display = 'grid';
+        }
+
+        // 测试存储功能
+        async function testStorage() {
+            if (!apiService) {
+                alert('请先初始化API服务！');
+                return;
+            }
+
+            const storageResult = document.getElementById('storage-result');
+            storageResult.textContent = '🔄 测试存储功能...';
+            storageResult.className = 'test-result info';
+
+            try {
+                // 测试数据
+                const testData = {
+                    text: '存储功能测试题目',
+                    type: 'single_choice',
+                    options: [{ text: '测试选项', value: 'A' }],
+                    answer: 'A'
+                };
+
+                // 添加到存档
+                apiService.addToLocalArchive(
+                    testData.text,
+                    testData.type,
+                    testData.options,
+                    testData.answer
+                );
+
+                // 检查是否保存成功
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                const found = apiService.searchLocalArchive(testData.text, testData.type, testData.options);
+                
+                if (found) {
+                    storageResult.textContent = `✅ 存储功能测试成功！\n\n`;
+                    storageResult.textContent += `📝 测试题目: ${testData.text}\n`;
+                    storageResult.textContent += `🎯 存储答案: ${found}\n`;
+                    storageResult.textContent += `💾 当前存档大小: ${apiService.localArchive.size} 条记录`;
+                    storageResult.className = 'test-result success';
+                } else {
+                    storageResult.textContent = '❌ 存储功能测试失败：未找到存储的数据';
+                    storageResult.className = 'test-result error';
+                }
+
+            } catch (error) {
+                storageResult.textContent = `❌ 存储功能测试失败: ${error.message}`;
+                storageResult.className = 'test-result error';
+            }
+        }
+
+        // 运行完整评估
+        async function runCompleteAssessment() {
+            const summaryResult = document.getElementById('summary-result');
+            summaryResult.textContent = '🔄 开始综合评估...';
+            summaryResult.className = 'test-result info';
+
+            // 按顺序运行所有测试
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            testEnvironment();
+            
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            await initAPIService();
+            
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            await runFunctionTests();
+            
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            updateStats();
+            
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            await testStorage();
+
+            // 最终评估
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            if (apiService) {
+                const stats = apiService.usageStats;
+                const totalSearches = stats.totalSearches || 0;
+                const successfulSearches = (stats.localHits || 0) + (stats.apiHits || 0);
+                const successRate = totalSearches > 0 ? (successfulSearches / totalSearches) * 100 : 0;
+                
+                let assessment = `🎯 综合评估完成！\n\n`;
+                assessment += `📊 总体表现:\n`;
+                assessment += `- 总测试次数: ${totalSearches}\n`;
+                assessment += `- 成功次数: ${successfulSearches}\n`;
+                assessment += `- 成功率: ${successRate.toFixed(1)}%\n\n`;
+                
+                assessment += `🔧 功能状态:\n`;
+                assessment += `- API服务: ${apiService.isEnabled ? '✅ 启用' : '❌ 禁用'}\n`;
+                assessment += `- 回退机制: ${apiService.fallbackEnabled ? '✅ 启用' : '❌ 禁用'}\n`;
+                assessment += `- 同步功能: ${apiService.syncEnabled ? '✅ 启用' : '❌ 禁用'}\n\n`;
+                
+                assessment += `💾 存储状态:\n`;
+                assessment += `- 本地存档: ${apiService.localArchive.size} 条记录\n`;
+                assessment += `- 缓存记录: ${apiService.cache.size} 条记录\n`;
+                
+                summaryResult.textContent = assessment;
+                summaryResult.className = successRate >= 70 ? 'test-result success' : 
+                                         successRate >= 40 ? 'test-result warning' : 'test-result error';
+            }
+        }
+
+        // 页面加载时自动运行环境检测
+        window.onload = testEnvironment;
+    </script>
+</body>
+</html>

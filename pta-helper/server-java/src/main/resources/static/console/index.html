@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>PTA Helper 控制台</title>
+    <link rel="stylesheet" href="./console.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="title">PTA Helper 控制台</div>
+      <div class="sub">本地题库 / 错题统计 / 知识点分析</div>
+    </header>
+
+    <main class="container">
+      <section class="card" id="section-status">
+        <div class="card-title">服务状态</div>
+        <div class="row">
+          <button id="btn-refresh-status" class="btn">刷新</button>
+          <span id="status-text" class="muted">未检测</span>
+        </div>
+        <pre id="status-json" class="pre"></pre>
+      </section>
+
+      <section class="card" id="section-questions">
+        <div class="card-title">题库</div>
+        <div class="row wrap">
+          <input id="q-query" class="input" placeholder="搜索：题干/答案/知识点/tag/type/source" />
+          <button id="btn-search" class="btn">搜索</button>
+          <button id="btn-new" class="btn btn-primary">新增题目</button>
+        </div>
+
+        <div id="editor" class="editor hidden">
+          <div class="editor-title" id="editor-title">新增题目</div>
+          <div class="grid">
+            <label class="label">题型
+              <input id="f-type" class="input" placeholder="single/multiple/true_false/fill_blank/short_answer/programming" />
+            </label>
+            <label class="label">来源
+              <input id="f-source" class="input" placeholder="可选" />
+            </label>
+            <label class="label span-2">题干
+              <textarea id="f-question" class="textarea" rows="5" placeholder="题目内容"></textarea>
+            </label>
+            <label class="label span-2">选项（可选；每行一个；格式：A|选项内容 或 直接写内容）
+              <textarea id="f-options" class="textarea" rows="4" placeholder="A|xxx\nB|yyy\nC|zzz"></textarea>
+            </label>
+            <label class="label">答案
+              <input id="f-answer" class="input" placeholder="可选" />
+            </label>
+            <label class="label">知识点（逗号分隔）
+              <input id="f-knowledge" class="input" placeholder="例如：二分查找, 动态规划" />
+            </label>
+            <label class="label">标签（逗号分隔）
+              <input id="f-tags" class="input" placeholder="例如：PTA, 期末" />
+            </label>
+            <div class="row span-2">
+              <button id="btn-save" class="btn btn-primary">保存</button>
+              <button id="btn-cancel" class="btn">取消</button>
+              <span id="editor-hint" class="muted"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="table" id="q-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>题型</th>
+                <th>题干</th>
+                <th>知识点</th>
+                <th>标签</th>
+                <th>更新时间</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card" id="section-wrong">
+        <div class="card-title">错题统计</div>
+        <div class="row">
+          <button id="btn-refresh-wrong" class="btn">刷新</button>
+          <span id="wrong-text" class="muted"></span>
+        </div>
+        <div class="table-wrap">
+          <table class="table" id="wrong-table">
+            <thead>
+              <tr>
+                <th>题型</th>
+                <th>题干</th>
+                <th>错题次数</th>
+                <th>最近一次</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card" id="section-analytics">
+        <div class="card-title">知识点分析</div>
+        <div class="row">
+          <button id="btn-refresh-analytics" class="btn">刷新</button>
+          <span id="analytics-text" class="muted"></span>
+        </div>
+        <div class="table-wrap">
+          <table class="table" id="analytics-table">
+            <thead>
+              <tr>
+                <th>知识点</th>
+                <th>错题次数</th>
+                <th>涉及错题数</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span class="muted">入口：/console ｜ 数据目录由 PTA_CONSOLE_DATA_DIR 控制</span>
+    </footer>
+
+    <script src="./console.js"></script>
+  </body>
+</html>

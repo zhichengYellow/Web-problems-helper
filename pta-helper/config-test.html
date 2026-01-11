@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PTA答题助手 - 配置测试</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .test-btn {
+            background: #27ae60;
+            margin-right: 10px;
+        }
+        .test-btn:hover {
+            background: #219a52;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 PTA答题助手 - 配置测试</h1>
+        
+        <div class="form-group">
+            <label for="apiKey">API密钥 (腾讯云SecretId/SecretKey):</label>
+            <input type="text" id="apiKey" placeholder="输入您的腾讯云API密钥">
+        </div>
+        
+        <div class="form-group">
+            <label for="currentAPI">选择API服务:</label>
+            <select id="currentAPI">
+                <option value="hunyuan-lite">腾讯云hunyuan-lite (主要)</option>
+                <option value="zhixun-api">知寻题库API (备用)</option>
+                <option value="wikipedia-api">Wikipedia API (补充)</option>
+                <option value="duckduckgo-api">DuckDuckGo API (补充)</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <button class="test-btn" onclick="testConfig()">🧪 测试配置</button>
+            <button onclick="saveConfig()">💾 保存配置</button>
+        </div>
+        
+        <div id="testResult" class="result"></div>
+        
+        <div class="status">
+            <h3>当前状态:</h3>
+            <div id="currentStatus">正在加载状态...</div>
+        </div>
+    </div>
+
+    <script>
+        // 加载当前配置
+        function loadCurrentConfig() {
+            try {
+                const config = JSON.parse(localStorage.getItem('pta_api_config') || '{}');
+                document.getElementById('apiKey').value = config.apiKey || '';
+                document.getElementById('currentAPI').value = config.currentAPI || 'hunyuan-lite';
+                updateStatus();
+            } catch (error) {
+                console.error('加载配置失败:', error);
+            }
+        }
+
+        // 更新状态显示
+        function updateStatus() {
+            if (typeof apiService !== 'undefined') {
+                const status = apiService.getStatus();
+                document.getElementById('currentStatus').innerHTML = `
+                    <p>✅ 服务状态: ${status.enabled ? '启用' : '禁用'}</p>
+                    <p>🔑 API密钥: ${status.hasKey ? '已配置' : '未配置'}</p>
+                    <p>🌐 当前API: ${status.currentAPI}</p>
+                    <p>📊 本地存档: ${status.archiveSize} 条记录</p>
+                    <p>🔍 总搜索次数: ${status.totalSearches}</p>
+                    <p>🏠 本地命中: ${status.localHits}</p>
+                    <p>🌍 API命中: ${status.apiHits}</p>
+                `;
+            } else {
+                document.getElementById('currentStatus').innerHTML = 'API服务未加载';
+            }
+        }
+
+        // 测试配置
+        async function testConfig() {
+            const resultDiv = document.getElementById('testResult');
+            resultDiv.style.display = 'block';
+            
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const currentAPI = document.getElementById('currentAPI').value;
+            
+            if (!apiKey && currentAPI === 'hunyuan-lite') {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = '❌ 请先配置腾讯云API密钥';
+                return;
+            }
+            
+            resultDiv.className = 'result';
+            resultDiv.innerHTML = '🔄 正在测试配置...';
+            
+            try {
+                const testConfig = {
+                    apiKey: apiKey,
+                    currentAPI: currentAPI
+                };
+                
+                const result = await apiService.testConfig(testConfig);
+                
+                if (result.success) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        ✅ <strong>配置测试成功!</strong><br>
+                        ${result.message}<br>
+                        ${result.result ? '测试结果: ' + JSON.stringify(result.result) : ''}
+                    `;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = `
+                        ❌ <strong>配置测试失败:</strong><br>
+                        ${result.error || result.message}
+                    `;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `❌ 测试过程中发生错误: ${error.message}`;
+            }
+        }
+
+        // 保存配置
+        async function saveConfig() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const currentAPI = document.getElementById('currentAPI').value;
+            
+            const config = {
+                apiKey: apiKey,
+                currentAPI: currentAPI,
+                enabled: true,
+                fallbackEnabled: true,
+                syncEnabled: true
+            };
+            
+            try {
+                // 更新API服务配置
+                apiService.updateConfig(config);
+                
+                // 保存到localStorage
+                localStorage.setItem('pta_api_config', JSON.stringify(config));
+                
+                // 更新状态显示
+                updateStatus();
+                
+                alert('✅ 配置已保存并生效!');
+            } catch (error) {
+                alert('❌ 保存配置失败: ' + error.message);
+            }
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCurrentConfig();
+            
+            // 定期更新状态
+            setInterval(updateStatus, 3000);
+        });
+    </script>
+</body>
+</html>

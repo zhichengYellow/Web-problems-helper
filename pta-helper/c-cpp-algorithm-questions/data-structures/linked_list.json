@@ -1,0 +1,26 @@
+{
+  "meta": { "category": "linked_list", "title": "链表高频题", "version": "1.0" },
+  "questions": [
+    { "id": "ll-reverse", "title": "反转链表", "description": "反转单链表。", "difficulty": "easy", "tags": ["linked-list"], "io": { "input": "ListNode* head", "output": "ListNode* newHead" }, "examples": [{ "in": "1->2->3->4->5", "out": "5->4->3->2->1" }], "constraints": ["迭代或递归"], "solution_outline": "迭代指针翻转 prev/curr。" },
+    { "id": "ll-detect-cycle", "title": "环形链表", "description": "判断链表是否有环并返回入环点（II）。", "difficulty": "medium", "tags": ["linked-list", "two-pointers"], "io": { "input": "ListNode* head", "output": "ListNode* entry/null" }, "examples": [{ "in": "3->2->0->-4, pos=1", "out": "2" }], "constraints": ["O(n)"], "solution_outline": "快慢指针相遇后找入环点。" },
+    { "id": "ll-merge-two", "title": "合并两个有序链表", "description": "合并两个升序链表。", "difficulty": "easy", "tags": ["linked-list"], "io": { "input": "ListNode* l1, ListNode* l2", "output": "ListNode* merged" }, "examples": [{ "in": "1->2->4 & 1->3->4", "out": "1->1->2->3->4->4" }], "constraints": ["原地指针"], "solution_outline": "哑结点 + 两指针推进。" },
+    { "id": "ll-remove-nth", "title": "删除链表的倒数第N个节点", "description": "一次遍历删除倒数第N个。", "difficulty": "medium", "tags": ["linked-list", "two-pointers"], "io": { "input": "ListNode* head, int n", "output": "ListNode* newHead" }, "examples": [{ "in": "1->2->3->4->5, n=2", "out": "1->2->3->5" }], "constraints": ["一次遍历"], "solution_outline": "快指针先走n步，慢指针定位删除。" },
+    { "id": "ll-middle", "title": "链表中间节点", "description": "返回中间节点。", "difficulty": "easy", "tags": ["linked-list", "two-pointers"], "io": { "input": "ListNode* head", "output": "ListNode* mid" }, "examples": [{ "in": "1->2->3->4->5", "out": "3" }], "constraints": ["奇偶长度处理"], "solution_outline": "快指针每次两步，慢指针一步。" },
+    { "id": "ll-palindrome", "title": "回文链表", "description": "判断链表是否回文。", "difficulty": "medium", "tags": ["linked-list"], "io": { "input": "ListNode* head", "output": "bool" }, "examples": [{ "in": "1->2->2->1", "out": "true" }], "constraints": ["O(1) 空间"], "solution_outline": "找中点+反转后半+比较。" },
+    { "id": "ll-add-two-numbers", "title": "两数相加", "description": "链表表示非负整数，返回和。", "difficulty": "medium", "tags": ["linked-list"], "io": { "input": "ListNode* l1, ListNode* l2", "output": "ListNode* sum" }, "examples": [{ "in": "[2,4,3]+[5,6,4]", "out": "[7,0,7]" }], "constraints": ["进位处理"], "solution_outline": "逐位相加，维护进位。" },
+    { "id": "ll-intersection", "title": "相交链表", "description": "找两链表相交节点。", "difficulty": "easy", "tags": ["linked-list"], "io": { "input": "ListNode* a, ListNode* b", "output": "ListNode* inter/null" }, "examples": [{ "in": "A:4->1->8->4->5; B:5->6->1->8->4->5", "out": "8" }], "constraints": ["O(n)"], "solution_outline": "双指针 A->B, B->A 同步对齐。" },
+    { "id": "ll-odd-even-list", "title": "奇偶链表", "description": "重排将奇数位置节点在前偶数在后。", "difficulty": "medium", "tags": ["linked-list", "rearrange"], "io": { "input": "ListNode* head", "output": "ListNode* newHead" }, "examples": [{ "in": "1->2->3->4->5", "out": "1->3->5->2->4" }], "constraints": ["原地重排"], "solution_outline": "维护odd/evn尾指针拼接。" },
+    { "id": "ll-rotate", "title": "旋转链表",
+      "description": "将链表向右旋转 k 位。",
+      "difficulty": "medium", "tags": ["linked-list"],
+      "io": { "input": "ListNode* head, int k", "output": "ListNode* newHead" },
+      "examples": [{ "in": "1->2->3->4->5, k=2", "out": "4->5->1->2->3" }],
+      "constraints": ["环化求新尾新头"], "solution_outline": "计算长度，连成环，断开。"
+    },
+    { "id": "ll-copy-random", "title": "复制带随机指针的链表", "description": "深拷贝随机指针链表。", "difficulty": "hard", "tags": ["linked-list", "hash"], "io": { "input": "Node* head", "output": "Node* copy" }, "examples": [{ "in": "复杂随机指针结构", "out": "深拷贝结果" }], "constraints": ["O(n)"], "solution_outline": "哈希映射或三步法穿插节点。" },
+    { "id": "ll-sort", "title": "排序链表", "description": "在 O(n log n) 时间内常数空间排序链表。", "difficulty": "hard", "tags": ["linked-list", "merge-sort"], "io": { "input": "ListNode* head", "output": "ListNode* sorted" }, "examples": [{ "in": "4->2->1->3", "out": "1->2->3->4" }], "constraints": ["自顶/底归并"], "solution_outline": "快慢指针分割+归并。" },
+    { "id": "ll-reorder", "title": "重排链表", "description": "L0→L1→…→Ln-1→Ln 重排为 L0→Ln→L1→Ln-1→…", "difficulty": "medium", "tags": ["linked-list"], "io": { "input": "ListNode* head", "output": "void" }, "examples": [{ "in": "1->2->3->4", "out": "1->4->2->3" }], "constraints": ["O(n)"], "solution_outline": "分割反转后半再交叉合并。" },
+    { "id": "ll-delete-duplicates-sorted", "title": "删除排序链表中的重复元素", "description": "保留一个重复。", "difficulty": "easy", "tags": ["linked-list"], "io": { "input": "ListNode* head", "output": "ListNode* newHead" }, "examples": [{ "in": "1->1->2->3->3", "out": "1->2->3" }], "constraints": ["一次遍历"], "solution_outline": "跳过重复节点。" },
+    { "id": "ll-partition", "title": "分隔链表", "description": "按值 x 分隔，<x 的节点在前。", "difficulty": "medium", "tags": ["linked-list"], "io": { "input": "ListNode* head, int x", "output": "ListNode* newHead" }, "examples": [{ "in": "1->4->3->2->5->2, x=3", "out": "1->2->2->4->3->5" }], "constraints": ["稳定性"], "solution_outline": "两个虚头链连接。" }
+  ]
+}

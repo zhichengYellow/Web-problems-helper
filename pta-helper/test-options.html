@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>选项识别测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-case { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .options { background: #f5f5f5; padding: 10px; margin: 10px 0; }
+        .result { background: #e8f5e8; padding: 10px; margin: 10px 0; border-left: 4px solid #4CAF50; }
+        .error { background: #ffebee; padding: 10px; margin: 10px 0; border-left: 4px solid #f44336; }
+    </style>
+</head>
+<body>
+    <h1>选项识别功能测试</h1>
+    
+    <div class="test-case">
+        <h3>测试用例 1: 标准单选按钮</h3>
+        <div class="options">
+            <label><input type="radio" name="q1" value="A"> A. 选项A内容</label><br>
+            <label><input type="radio" name="q1" value="B"> B. 选项B内容</label><br>
+            <label><input type="radio" name="q1" value="C"> C. 选项C内容</label>
+        </div>
+    </div>
+
+    <div class="test-case">
+        <h3>测试用例 2: 分离的label和input</h3>
+        <div class="options">
+            <input type="radio" name="q2" value="A" id="q2a">
+            <label for="q2a">选项A文本</label><br>
+            
+            <input type="radio" name="q2" value="B" id="q2b">
+            <label for="q2b">选项B文本</label>
+        </div>
+    </div>
+
+    <div class="test-case">
+        <h3>测试用例 3: 多选复选框</h3>
+        <div class="options">
+            <div class="form-check">
+                <input type="checkbox" name="q3" value="1">
+                <span>选项1描述</span>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" name="q3" value="2">
+                <span>选项2描述</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-case">
+        <h3>测试用例 4: 纯文本选项</h3>
+        <div class="options">
+            <p>A) 第一个文本选项</p>
+            <p>B) 第二个文本选项</p>
+            <p>C) 第三个文本选项</p>
+        </div>
+    </div>
+
+    <div class="test-case">
+        <h3>测试用例 5: 复杂HTML结构</h3>
+        <div class="options">
+            <div class="ant-radio-wrapper">
+                <span class="ant-radio">
+                    <input type="radio" name="q5" value="X">
+                </span>
+                <span>复杂选项X</span>
+            </div>
+            <div class="ant-radio-wrapper">
+                <span class="ant-radio">
+                    <input type="radio" name="q5" value="Y">
+                </span>
+                <span>复杂选项Y</span>
+            </div>
+        </div>
+    </div>
+
+    <button onclick="runTests()">运行测试</button>
+    
+    <div id="results"></div>
+
+    <script>
+        function runTests() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<h2>测试结果</h2>';
+            
+            const testCases = document.querySelectorAll('.test-case');
+            let passed = 0;
+            let total = testCases.length;
+            
+            testCases.forEach((testCase, index) => {
+                const resultDiv = document.createElement('div');
+                resultDiv.className = 'result';
+                
+                try {
+                    // 模拟getQuestionOptions函数
+                    const options = simulateGetQuestionOptions(testCase.querySelector('.options'));
+                    
+                    resultDiv.innerHTML = `
+                        <h4>测试用例 ${index + 1} - 通过</h4>
+                        <p>识别到 ${options.length} 个选项:</p>
+                        <ul>
+                            ${options.map(opt => `<li>${opt.text} (值: ${opt.value})</li>`).join('')}
+                        </ul>
+                    `;
+                    passed++;
+                } catch (error) {
+                    resultDiv.className = 'error';
+                    resultDiv.innerHTML = `
+                        <h4>测试用例 ${index + 1} - 失败</h4>
+                        <p>错误: ${error.message}</p>
+                    `;
+                }
+                
+                resultsDiv.appendChild(resultDiv);
+            });
+            
+            const summary = document.createElement('div');
+            summary.className = passed === total ? 'result' : 'error';
+            summary.innerHTML = `<h3>测试完成: ${passed}/${total} 通过</h3>`;
+            resultsDiv.appendChild(summary);
+        }
+        
+        function simulateGetQuestionOptions(element) {
+            // 简化的选项识别逻辑（基于实际函数的核心逻辑）
+            const options = [];
+            const inputs = element.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+            
+            if (inputs.length > 0) {
+                inputs.forEach(input => {
+                    let optionText = '';
+                    
+                    // 查找关联label
+                    if (input.id) {
+                        const label = document.querySelector(`label[for="${input.id}"]`);
+                        if (label) optionText = label.textContent.trim();
+                    }
+                    
+                    // 查找父级label
+                    if (!optionText) {
+                        const label = input.closest('label');
+                        if (label) optionText = label.textContent.trim();
+                    }
+                    
+                    // 查找相邻文本
+                    if (!optionText) {
+                        let sibling = input.nextElementSibling;
+                        while (sibling && !optionText) {
+                            if (sibling.textContent.trim()) {
+                                optionText = sibling.textContent.trim();
+                            }
+                            sibling = sibling.nextElementSibling;
+                        }
+                    }
+                    
+                    options.push({
+                        value: input.value || '未知',
+                        text: optionText || '未识别文本',
+                        type: input.type
+                    });
+                });
+            } else {
+                // 纯文本选项识别
+                const text = element.textContent;
+                const patterns = [
+                    /[A-Da-d][\.\)]\s*([^\n]+)/g,
+                    /\d+[\.\)]\s*([^\n]+)/g,
+                    /[A-Da-d]\)\s*([^\n]+)/g
+                ];
+                
+                patterns.forEach(pattern => {
+                    let match;
+                    while ((match = pattern.exec(text)) !== null) {
+                        options.push({
+                            value: match[0].charAt(0),
+                            text: match[1].trim(),
+                            type: 'text'
+                        });
+                    }
+                });
+            }
+            
+            if (options.length === 0) {
+                throw new Error('未识别到任何选项');
+            }
+            
+            return options;
+        }
+    </script>
+</body>
+</html>

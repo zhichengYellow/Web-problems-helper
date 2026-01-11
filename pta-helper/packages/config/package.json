@@ -1,0 +1,41 @@
+{
+  "name": "@pta-helper/config",
+  "version": "0.0.1",
+  "description": "PTA Helper Configuration",
+  "keywords": [
+    "pta",
+    "config",
+    "constants"
+  ],
+  "homepage": "https://github.com/binyellow",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/binyellow"
+  },
+  "license": "MIT",
+  "author": "binyellow <571704908@qq.com>",
+  "main": "./lib/index.js",
+  "module": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "typings": "./lib/index.d.ts",
+  "files": [
+    "lib",
+    "package.json"
+  ],
+  "scripts": {
+    "build": "father build",
+    "build:watch": "father dev",
+    "coverage": "vitest run --coverage",
+    "doctor": "father doctor",
+    "test": "vitest run",
+    "test-u": "vitest -u run",
+    "update:deps": "pnpm update --interactive --latest"
+  },
+  "devDependencies": {
+    "father": "^4.4.0",
+    "vitest": "^1.0.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

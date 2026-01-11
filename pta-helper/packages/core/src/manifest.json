@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "PTA答题助手",
+  "version": "2.0.0",
+  "description": "基于现代前端技术栈的PTA平台自动化答题插件",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://pintia.cn/*",
+    "https://*.pintia.cn/*",
+    "https://api.sh-api.com/*",
+    "https://*.sh-api.com/*",
+    "https://api.openedu.org/*",
+    "https://community-api.education/*",
+    "https://api.academic-free.org/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "PTA答题助手"
+  },
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://pintia.cn/*",
+        "https://*.pintia.cn/*"
+      ],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [{
+    "resources": [
+      "assets/**/*.json"
+    ],
+    "matches": ["<all_urls>"]
+  }]
+}

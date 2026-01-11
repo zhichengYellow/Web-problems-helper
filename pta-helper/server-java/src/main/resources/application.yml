@@ -1,0 +1,18 @@
+server:
+  port: ${PORT:3001}
+
+pta:
+  tencent:
+    secret-id: ${TENCENT_SECRET_ID:}
+    secret-key: ${TENCENT_SECRET_KEY:}
+    region: ${TENCENT_REGION:ap-guangzhou}
+    version: ${TENCENT_VERSION:2023-09-01}
+    base-url: ${TENCENT_BASE_URL:https://hunyuan.tencentcloudapi.com}
+    service: hunyuan
+  console:
+    data-dir: ${PTA_CONSOLE_DATA_DIR:./data}
+
+spring:
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false

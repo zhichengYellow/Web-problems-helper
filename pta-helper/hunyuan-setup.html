@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>腾讯云hunyuan-lite配置</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0070f3;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin: 20px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: #0070f3;
+            outline: none;
+        }
+        button {
+            background: #0070f3;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            margin: 20px 0;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .success {
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .error {
+            background: #f44336;
+            color: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            border-left: 4px solid #2196F3;
+        }
+        .steps {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>腾讯云hunyuan-lite配置</h1>
+        
+        <div class="info">
+            <strong>📋 配置说明</strong>
+            <p>请输入您的腾讯云API密钥以启用hunyuan-lite智能答题功能</p>
+        </div>
+        
+        <div class="steps">
+            <strong>🔑 获取密钥步骤：</strong>
+            <ol>
+                <li>访问 <a href="https://console.cloud.tencent.com/cam/capi" target="_blank">腾讯云控制台</a></li>
+                <li>进入「访问管理」→「API密钥管理」</li>
+                <li>创建新的SecretId和SecretKey</li>
+                <li>确保开通hunyuan-lite服务权限</li>
+                <li>将密钥填入下方表单</li>
+            </ol>
+        </div>
+
+        <form id="configForm">
+            <div class="form-group">
+                <label for="secretId">腾讯云SecretId:</label>
+                <input type="text" id="secretId" placeholder="输入您的SecretId" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="secretKey">腾讯云SecretKey:</label>
+                <input type="password" id="secretKey" placeholder="输入您的SecretKey" required>
+            </div>
+            
+            <button type="submit">保存配置</button>
+        </form>
+
+        <div id="message" class="hidden"></div>
+
+        <div class="info">
+            <strong>💡 使用提示：</strong>
+            <ul>
+                <li>配置完成后，在PTA答题助手中选择「腾讯云hunyuan-lite」作为API服务</li>
+                <li>密钥仅存储在本地浏览器中，不会上传到任何服务器</li>
+                <li>如需更换密钥，可重新访问此页面进行配置</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('configForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const secretId = document.getElementById('secretId').value.trim();
+            const secretKey = document.getElementById('secretKey').value.trim();
+            
+            if (!secretId || !secretKey) {
+                showMessage('请填写完整的SecretId和SecretKey', 'error');
+                return;
+            }
+
+            try {
+                // 保存到localStorage
+                localStorage.setItem('hunyuan_config', JSON.stringify({
+                    secretId: secretId,
+                    secretKey: secretKey,
+                    configuredAt: new Date().toISOString()
+                }));
+
+                // 如果hunyuanService已加载，立即更新配置
+                if (typeof hunyuanService !== 'undefined') {
+                    await hunyuanService.setConfig(secretId, secretKey);
+                }
+
+                showMessage('✅ 配置保存成功！现在可以在PTA答题助手中使用hunyuan-lite服务了', 'success');
+                
+                // 清空表单
+                document.getElementById('secretId').value = '';
+                document.getElementById('secretKey').value = '';
+                
+            } catch (error) {
+                showMessage('❌ 保存失败: ' + error.message, 'error');
+            }
+        });
+
+        // 加载已保存的配置
+        function loadSavedConfig() {
+            try {
+                const savedConfig = localStorage.getItem('hunyuan_config');
+                if (savedConfig) {
+                    const config = JSON.parse(savedConfig);
+                    document.getElementById('secretId').value = config.secretId || '';
+                    document.getElementById('secretKey').value = config.secretKey || '';
+                    
+                    if (config.secretId && config.secretKey) {
+                        showMessage('✅ 检测到已保存的配置，如需修改请重新填写', 'success');
+                    }
+                }
+            } catch (error) {
+                console.log('无保存的配置或配置已损坏');
+            }
+        }
+
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = type;
+            messageDiv.classList.remove('hidden');
+            
+            // 5秒后自动隐藏
+            setTimeout(() => {
+                messageDiv.classList.add('hidden');
+            }, 5000);
+        }
+
+        // 页面加载时检查已有配置
+        document.addEventListener('DOMContentLoaded', loadSavedConfig);
+    </script>
+</body>
+</html>

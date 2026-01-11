@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PTA答题助手 - 配置测试页面</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+        .warning { color: orange; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+        input { padding: 8px; margin: 5px; width: 300px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 PTA答题助手配置测试</h1>
+        
+        <div class="test-section">
+            <h2>1. API服务状态</h2>
+            <div id="api-status">正在检测API服务状态...</div>
+            <button onclick="checkAPIStatus()">重新检测状态</button>
+        </div>
+
+        <div class="test-section">
+            <h2>2. 配置更新测试</h2>
+            <div>
+                <label>API密钥 (格式: SecretId:SecretKey):</label><br>
+                <input type="text" id="apiKey" placeholder="AKIDxxxxxxxx:xxxxxxxxxxxx">
+            </div>
+            <div>
+                <label>默认API:</label><br>
+                <select id="currentAPI">
+                    <option value="hunyuan-lite">腾讯云hunyuan-lite</option>
+                    <option value="zhixun-api">知寻题库API</option>
+                </select>
+            </div>
+            <button onclick="testConfigUpdate()">测试配置更新</button>
+            <div id="config-test-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>3. 连接测试</h2>
+            <button onclick="testConnection()">测试API连接</button>
+            <div id="connection-test-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>4. 状态信息</h2>
+            <button onclick="showStatus()">显示当前状态</button>
+            <pre id="status-info"></pre>
+        </div>
+    </div>
+
+    <script>
+        // 初始化检测
+        function checkAPIStatus() {
+            const statusDiv = document.getElementById('api-status');
+            
+            if (typeof apiService === 'undefined') {
+                statusDiv.innerHTML = '<span class="error">❌ apiService未定义 - 请确保在正确环境中运行</span>';
+                return;
+            }
+            
+            const status = apiService.getStatus();
+            statusDiv.innerHTML = `
+                <span class="success">✅ API服务可用</span><br>
+                - 当前API: ${status.currentAPI}<br>
+                - 启用状态: ${status.enabled ? '已启用' : '已禁用'}<br>
+                - 本地存档: ${status.archiveSize} 条记录<br>
+                - 总搜索次数: ${status.totalSearches}
+            `;
+        }
+
+        // 测试配置更新
+        function testConfigUpdate() {
+            const apiKey = document.getElementById('apiKey').value;
+            const currentAPI = document.getElementById('currentAPI').value;
+            const resultDiv = document.getElementById('config-test-result');
+            
+            if (!apiKey) {
+                resultDiv.innerHTML = '<span class="warning">⚠️ 请输入API密钥</span>';
+                return;
+            }
+            
+            try {
+                // 测试组合格式API密钥解析
+                const [secretId, secretKey] = apiKey.split(':');
+                if (!secretId || !secretKey) {
+                    resultDiv.innerHTML = '<span class="error">❌ API密钥格式错误，请使用 SecretId:SecretKey 格式</span>';
+                    return;
+                }
+                
+                // 更新配置
+                apiService.updateConfig({
+                    apiKey: apiKey,
+                    currentAPI: currentAPI,
+                    enabled: true
+                });
+                
+                resultDiv.innerHTML = `
+                    <span class="success">✅ 配置更新成功！</span><br>
+                    - SecretId: ${secretId.substring(0, 8)}...<br>
+                    - SecretKey: ${secretKey.substring(0, 8)}...<br>
+                    - 当前API: ${currentAPI}
+                `;
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="error">❌ 配置更新失败: ${error.message}</span>`;
+            }
+        }
+
+        // 测试API连接
+        function testConnection() {
+            const resultDiv = document.getElementById('connection-test-result');
+            resultDiv.innerHTML = '正在测试连接...';
+            
+            apiService.testConfig()
+                .then(result => {
+                    if (result.success) {
+                        resultDiv.innerHTML = `<span class="success">✅ 连接测试成功: ${result.message}</span>`;
+                    } else {
+                        resultDiv.innerHTML = `<span class="error">❌ 连接测试失败: ${result.error || result.message}</span>`;
+                    }
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `<span class="error">❌ 连接测试异常: ${error.message}</span>`;
+                });
+        }
+
+        // 显示状态信息
+        function showStatus() {
+            const statusDiv = document.getElementById('status-info');
+            const status = apiService.getStatus();
+            
+            statusDiv.textContent = JSON.stringify(status, null, 2);
+        }
+
+        // 页面加载时自动检测状态
+        window.onload = checkAPIStatus;
+    </script>
+</body>
+</html>

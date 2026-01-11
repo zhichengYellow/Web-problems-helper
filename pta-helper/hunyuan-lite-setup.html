@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>腾讯云hunyuan-lite专用配置</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; max-width: 800px; }
+        .container { border: 1px solid #ddd; padding: 20px; border-radius: 8px; }
+        h1 { color: #007bff; }
+        .step { margin: 15px 0; padding: 10px; background: #f8f9fa; border-left: 4px solid #007bff; }
+        .code { background: #2d2d2d; color: #f8f8f2; padding: 10px; border-radius: 4px; font-family: monospace; }
+        .important { color: #dc3545; font-weight: bold; }
+        .success { color: #28a745; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 腾讯云hunyuan-lite专用配置指南</h1>
+        
+        <div class="step">
+            <h2>1. 获取腾讯云API密钥</h2>
+            <p>访问 <a href="https://console.cloud.tencent.com/cam/capi" target="_blank">腾讯云API密钥管理</a></p>
+            <p class="important">⚠️ 确保选择「hunyuan-lite」服务区域：ap-guangzhou</p>
+        </div>
+
+        <div class="step">
+            <h2>2. 配置config.js文件</h2>
+            <p>打开 <code>config.js</code> 文件，填入您的密钥：</p>
+            <div class="code">
+// 腾讯云hunyuan-lite专用配置
+const hunyuanConfig = {
+    secretId: 'AKIDyour_secret_id_here',
+    secretKey: 'your_secret_key_here',
+    
+    model: 'hunyuan-lite',
+    region: 'ap-guangzhou',
+    version: '2023-09-01',
+    
+    // 优化参数
+    temperature: 0.1,
+    topP: 0.9,
+    maxTokens: 1024,
+    
+    timeout: 15000,
+    retryCount: 2,
+    cacheEnabled: true,
+    cacheTimeout: 600000,
+    
+    examMode: true,
+    conciseAnswer: true,
+    
+    enableUsageStats: true,
+    maxMonthlyCalls: 1000
+};
+            </div>
+        </div>
+
+        <div class="step">
+            <h2>3. hunyuan-lite优势</h2>
+            <ul>
+                <li>💰 <strong>成本优化</strong>: 比标准模型费用降低80%</li>
+                <li>⚡ <strong>响应快速</strong>: 平均响应时间 < 2秒</li>
+                <li>🎯 <strong>答案精确</strong>: 专门针对教育题目优化</li>
+                <li>🇨🇳 <strong>中文优化</strong>: 完美支持中文题目和答案</li>
+                <li>📊 <strong>使用统计</strong>: 内置费用控制和用量监控</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <h2>4. 费用说明</h2>
+            <p>hunyuan-lite采用按量计费：</p>
+            <ul>
+                <li>输入 tokens: 0.005元/千tokens</li>
+                <li>输出 tokens: 0.02元/千tokens</li>
+                <li>预估单题成本: 0.001-0.005元</li>
+            </ul>
+            <p class="important">💡 建议设置每月最大调用限制防止意外费用</p>
+        </div>
+
+        <div class="step">
+            <h2>5. 测试配置</h2>
+            <p>完成配置后，打开测试页面验证：</p>
+            <ul>
+                <li><a href="quick-test.html">快速功能测试</a></li>
+                <li><a href="test-hunyuan-browser.html">完整hunyuan测试</a></li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <h2>6. 故障排除</h2>
+            <p class="important">常见问题：</p>
+            <ul>
+                <li>❌ 认证失败：检查SecretId/SecretKey是否正确</li>
+                <li>❌ 区域错误：确保区域设置为 ap-guangzhou</li>
+                <li>❌ 权限不足：检查账户余额和权限设置</li>
+                <li>❌ 网络问题：确保网络可以访问腾讯云API</li>
+            </ul>
+        </div>
+
+        <div class="step success">
+            <h2>✅ 配置完成</h2>
+            <p>现在您的PTA答题助手已专门针对hunyuan-lite优化！</p>
+            <p>享受低成本、高效率的题目回答服务吧！</p>
+        </div>
+    </div>
+</body>
+</html>

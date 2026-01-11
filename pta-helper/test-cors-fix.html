@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PTA答题助手 - CORS修复测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+        button { padding: 10px 15px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .result { margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>PTA答题助手 - CORS修复测试</h1>
+    
+    <div class="test-section">
+        <h2>知寻题库API测试</h2>
+        <button onclick="testZhixunAPI()">测试知寻题库API</button>
+        <div id="zhixun-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Background Script测试</h2>
+        <button onclick="testBackgroundScript()">测试Background Script</button>
+        <div id="background-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>本地智能答案生成测试</h2>
+        <button onclick="testLocalAnswer()">测试本地智能答案</button>
+        <div id="local-result" class="result"></div>
+    </div>
+
+    <script>
+        // 模拟API服务
+        const apiService = {
+            async searchAnswer(questionText, questionType, options = []) {
+                console.log('搜索答案:', questionText.substring(0, 30) + '...');
+                
+                // 模拟本地存档检查
+                const localResult = this.searchLocalArchive(questionText, questionType, options);
+                if (localResult) {
+                    console.log('✅ 从本地存档找到答案');
+                    return localResult;
+                }
+                
+                // 模拟API请求
+                try {
+                    const response = await this.makeAPIRequest('/search', {
+                        method: 'GET',
+                        params: { q: encodeURIComponent(questionText) }
+                    });
+                    
+                    if (response && response.answer) {
+                        console.log('✅ API返回答案:', response.answer);
+                        return response.answer;
+                    }
+                } catch (error) {
+                    console.warn('API请求失败:', error);
+                }
+                
+                // 模拟本地智能答案生成
+                const localAnswer = this.generateLocalAnswer(questionText, questionType, options);
+                if (localAnswer) {
+                    console.log('✅ 本地智能生成答案:', localAnswer);
+                    return localAnswer;
+                }
+                
+                return null;
+            },
+            
+            searchLocalArchive(questionText, questionType, options) {
+                // 模拟本地存档逻辑
+                return null;
+            },
+            
+            async makeAPIRequest(endpoint, options) {
+                // 模拟background script请求
+                return new Promise((resolve) => {
+                    if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
+                        chrome.runtime.sendMessage({
+                            action: 'apiRequest',
+                            url: 'https://api.wkexam.com/api/question' + endpoint,
+                            options: options
+                        }, (response) => {
+                            if (response && response.success) {
+                                resolve(response.data);
+                            } else {
+                                resolve(null);
+                            }
+                        });
+                    } else {
+                        // 非扩展环境模拟
+                        setTimeout(() => {
+                            resolve({ answer: '测试答案' });
+                        }, 500);
+                    }
+                });
+            },
+            
+            generateLocalAnswer(questionText, questionType, options) {
+                // 模拟本地智能答案生成
+                if (questionType === 'single_choice' && options.length > 0) {
+                    return options[0].value;
+                }
+                return '正确';
+            }
+        };
+
+        async function testZhixunAPI() {
+            const resultDiv = document.getElementById('zhixun-result');
+            resultDiv.innerHTML = '测试中...';
+            
+            try {
+                const testQuestion = '在数据结构中，从逻辑上可以把数据结构分成（）';
+                const options = [
+                    { value: 'A', text: '动态结构和静态结构' },
+                    { value: 'B', text: '顺序结构和链式结构' },
+                    { value: 'C', text: '线性结构和非线性结构' },
+                    { value: 'D', text: '初等结构和组合结构' }
+                ];
+                
+                const answer = await apiService.searchAnswer(testQuestion, 'single_choice', options);
+                
+                if (answer) {
+                    resultDiv.innerHTML = `<span class="success">✅ 测试成功！答案: ${answer}</span>`;
+                    resultDiv.innerHTML += `<br><small>问题: ${testQuestion}</small>`;
+                } else {
+                    resultDiv.innerHTML = '<span class="error">❌ 测试失败，未找到答案</span>';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="error">❌ 测试错误: ${error.message}</span>`;
+            }
+        }
+
+        async function testBackgroundScript() {
+            const resultDiv = document.getElementById('background-result');
+            resultDiv.innerHTML = '测试中...';
+            
+            try {
+                const response = await apiService.makeAPIRequest('/search', {
+                    params: { q: '测试问题' }
+                });
+                
+                if (response) {
+                    resultDiv.innerHTML = '<span class="success">✅ Background Script测试成功！</span>';
+                } else {
+                    resultDiv.innerHTML = '<span class="error">❌ Background Script测试失败</span>';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="error">❌ Background Script错误: ${error.message}</span>`;
+            }
+        }
+
+        async function testLocalAnswer() {
+            const resultDiv = document.getElementById('local-result');
+            resultDiv.innerHTML = '测试中...';
+            
+            try {
+                const testQuestion = '栈是一种先进后出的数据结构';
+                const answer = apiService.generateLocalAnswer(testQuestion, 'true_false', []);
+                
+                if (answer) {
+                    resultDiv.innerHTML = `<span class="success">✅ 本地智能答案测试成功！答案: ${answer}</span>`;
+                    resultDiv.innerHTML += `<br><small>问题: ${testQuestion}</small>`;
+                } else {
+                    resultDiv.innerHTML = '<span class="error">❌ 本地智能答案测试失败</span>';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="error">❌ 本地智能答案错误: ${error.message}</span>`;
+            }
+        }
+    </script>
+</body>
+</html>

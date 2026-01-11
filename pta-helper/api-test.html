@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>API服务测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-case { margin: 10px 0; padding: 10px; border: 1px solid #ccc; }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+        .loading { background: #fff3cd; border-color: #ffeaa7; }
+    </style>
+</head>
+<body>
+    <h1>API服务功能测试</h1>
+    <div id="test-results"></div>
+
+    <script src="api-service.js"></script>
+    <script>
+        // 测试数据
+        const testQuestions = [
+            {
+                text: '在数据结构中，从逻辑上可以把数据结构分成（   ）。',
+                type: 'single_choice',
+                options: [
+                    { text: '动态结构和静态结构', value: 'A' },
+                    { text: '紧凑结构和非紧凑结构', value: 'B' },
+                    { text: '线性结构和非线性结构', value: 'C' },
+                    { text: '内部结构和外部结构', value: 'D' }
+                ],
+                expected: 'C'
+            },
+            {
+                text: '算法的时间复杂度取决于（    ）。',
+                type: 'single_choice',
+                options: [
+                    { text: '问题的规模', value: 'A' },
+                    { text: '待处理数据的初态', value: 'B' },
+                    { text: '计算机的配置', value: 'C' },
+                    { text: 'A和B', value: 'D' }
+                ],
+                expected: 'D'
+            }
+        ];
+
+        async function runTests() {
+            const resultsDiv = document.getElementById('test-results');
+            resultsDiv.innerHTML = '<div class="loading">🔧 初始化API服务...</div>';
+
+            try {
+                // 初始化API服务
+                const apiService = new APIService();
+                await apiService.init();
+                
+                resultsDiv.innerHTML = '<div class="success">✅ API服务初始化完成</div>';
+                
+                // 运行测试用例
+                for (let i = 0; i < testQuestions.length; i++) {
+                    const question = testQuestions[i];
+                    const testDiv = document.createElement('div');
+                    testDiv.className = 'test-case loading';
+                    testDiv.innerHTML = `
+                        <strong>测试 ${i + 1}:</strong> ${question.text}
+                        <div>选项: ${question.options.map(opt => `${opt.value}. ${opt.text}`).join(', ')}</div>
+                        <div>预期答案: ${question.expected}</div>
+                        <div class="status">搜索中...</div>
+                    `;
+                    resultsDiv.appendChild(testDiv);
+
+                    try {
+                        const result = await apiService.searchAnswer(
+                            question.text,
+                            question.type,
+                            question.options
+                        );
+                        
+                        const isSuccess = result === question.expected;
+                        testDiv.className = isSuccess ? 'test-case success' : 'test-case error';
+                        testDiv.querySelector('.status').innerHTML = `
+                            搜索结果: ${result || '无结果'}
+                            <br>状态: ${isSuccess ? '✅ 匹配' : '❌ 不匹配'}
+                            ${result ? '<br>💾 已保存到本地存档' : ''}
+                        `;
+                        
+                    } catch (error) {
+                        testDiv.className = 'test-case error';
+                        testDiv.querySelector('.status').innerHTML = `
+                            ❌ 搜索失败: ${error.message}
+                        `;
+                    }
+                    
+                    // 延迟避免频繁请求
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+
+                // 显示统计信息
+                const statsDiv = document.createElement('div');
+                statsDiv.className = 'test-case success';
+                statsDiv.innerHTML = `
+                    <h3>📊 统计信息</h3>
+                    <div>总搜索次数: ${apiService.usageStats.totalSearches}</div>
+                    <div>本地命中: ${apiService.usageStats.localHits}</div>
+                    <div>API命中: ${apiService.usageStats.apiHits}</div>
+                    <div>失败搜索: ${apiService.usageStats.failedSearches}</div>
+                    <div>缓存大小: ${apiService.cache.size}</div>
+                    <div>存档大小: ${apiService.localArchive.size}</div>
+                `;
+                resultsDiv.appendChild(statsDiv);
+
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="error">
+                        ❌ API服务初始化失败: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // 开始测试
+        runTests().catch(console.error);
+    </script>
+</body>
+</html>

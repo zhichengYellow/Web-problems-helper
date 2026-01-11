@@ -1,0 +1,33 @@
+{
+  "name": "@pta-helper/core",
+  "version": "0.0.1",
+  "description": "PTA Helper Core Extension",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:ui": "vitest --ui"
+  },
+  "dependencies": {
+    "@pta-helper/utils": "workspace:*",
+    "@pta-helper/config": "workspace:*",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "antd": "^5.12.8",
+    "@ant-design/icons": "^5.2.6",
+    "ahooks": "^3.7.8"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.267",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.8",
+    "vite-plugin-chrome-extension": "^3.6.4",
+    "vitest": "^1.0.4"
+  }
+}

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PTA答题助手 - 调试测试页面</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .question-item {
+            border: 2px solid #e0e0e0;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        
+        .question-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .options {
+            margin: 10px 0;
+        }
+        
+        .option {
+            margin: 5px 0;
+            padding: 5px;
+        }
+        
+        .test-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        
+        .test-button:hover {
+            background: #45a049;
+        }
+        
+        .debug-info {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧪 PTA答题助手调试测试页面</h1>
+        <p>用于测试插件功能是否正常工作</p>
+    </div>
+
+    <div class="test-section">
+        <h2>📋 测试说明</h2>
+        <ol>
+            <li><strong>修改URL</strong>：将浏览器地址栏URL改为包含 "pintia.cn" 的地址（如：https://pintia.cn/test）</li>
+            <li><strong>重新加载插件</strong>：在Chrome扩展程序页面点击PTA答题助手的刷新按钮</li>
+            <li><strong>刷新页面</strong>：重新加载此测试页面</li>
+            <li><strong>查看工具栏</strong>：应该在右上角看到紫色的浮动工具栏</li>
+            <li><strong>测试功能</strong>：点击下方的测试按钮验证各项功能</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>🎯 模拟题目区域</h2>
+        
+        <div class="question-item">
+            <div class="question-title">1. 计算机的基本组成包括哪些部分？</div>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" name="q1" value="A" id="q1a">
+                    <label for="q1a">A. 运算器、控制器</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q1" value="B" id="q1b">
+                    <label for="q1b">B. 运算器、控制器、存储器</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q1" value="C" id="q1c">
+                    <label for="q1c">C. 运算器、控制器、存储器、输入设备、输出设备</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q1" value="D" id="q1d">
+                    <label for="q1d">D. 以上都不对</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-item">
+            <div class="question-title">2. 以下哪些是编程语言？（多选题）</div>
+            <div class="options">
+                <div class="option">
+                    <input type="checkbox" name="q2" value="A" id="q2a">
+                    <label for="q2a">A. Python</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" name="q2" value="B" id="q2b">
+                    <label for="q2b">B. Java</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" name="q2" value="C" id="q2c">
+                    <label for="q2c">C. HTML</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" name="q2" value="D" id="q2d">
+                    <label for="q2d">D. C++</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-item">
+            <div class="question-title">3. 请输入"Hello World"程序的输出结果：</div>
+            <div class="options">
+                <input type="text" name="q3" placeholder="请输入答案" style="width: 300px; padding: 5px;">
+            </div>
+        </div>
+
+        <div class="question-item">
+            <div class="question-title">4. 编写一个简单的Python函数：</div>
+            <div class="options">
+                <textarea name="q4" rows="5" cols="50" placeholder="def hello():&#10;    # 请编写代码"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🧪 功能测试</h2>
+        <div>
+            <button class="test-button" onclick="testPluginLoaded()">检查插件是否加载</button>
+            <button class="test-button" onclick="testDetection()">测试题目检测</button>
+            <button class="test-button" onclick="testAutoFill()">测试自动填充</button>
+            <button class="test-button" onclick="clearDebug()">清空调试信息</button>
+        </div>
+        
+        <div id="test-status" class="status info">
+            等待测试...
+        </div>
+        
+        <h3>📊 调试信息</h3>
+        <div id="debug-output" class="debug-info">
+            调试信息将显示在这里...
+        </div>
+    </div>
+
+    <script>
+        let debugOutput = document.getElementById('debug-output');
+        let testStatus = document.getElementById('test-status');
+        
+        function log(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            debugOutput.textContent += `[${timestamp}] ${message}\n`;
+            debugOutput.scrollTop = debugOutput.scrollHeight;
+            console.log(message);
+        }
+        
+        function setStatus(message, type = 'info') {
+            testStatus.textContent = message;
+            testStatus.className = `status ${type}`;
+        }
+        
+        function testPluginLoaded() {
+            log('🔍 检查插件是否加载...');
+            
+            // 检查工具栏是否存在
+            const toolbar = document.querySelector('.pta-helper-toolbar');
+            if (toolbar) {
+                log('✅ 找到浮动工具栏');
+                setStatus('插件已正确加载！', 'success');
+                
+                // 检查工具栏内容
+                const buttons = toolbar.querySelectorAll('button');
+                log(`📋 工具栏包含 ${buttons.length} 个按钮`);
+                
+                buttons.forEach((btn, index) => {
+                    log(`  按钮 ${index + 1}: ${btn.textContent.trim()}`);
+                });
+            } else {
+                log('❌ 未找到浮动工具栏');
+                setStatus('插件未加载或URL不正确', 'error');
+                log('💡 请确保：');
+                log('  1. URL包含 "pintia.cn"');
+                log('  2. 插件已在Chrome中启用');
+                log('  3. 页面已完全加载');
+            }
+        }
+        
+        function testDetection() {
+            log('🔍 测试题目检测功能...');
+            
+            const toolbar = document.querySelector('.pta-helper-toolbar');
+            if (!toolbar) {
+                log('❌ 工具栏未找到，请先确保插件已加载');
+                setStatus('请先确保插件已加载', 'error');
+                return;
+            }
+            
+            const detectBtn = toolbar.querySelector('.detect-btn');
+            if (detectBtn) {
+                log('📋 找到检测按钮，模拟点击...');
+                detectBtn.click();
+                
+                // 等待检测完成
+                setTimeout(() => {
+                    const highlightedQuestions = document.querySelectorAll('.pta-helper-highlight');
+                    log(`📊 检测结果：找到 ${highlightedQuestions.length} 个高亮题目`);
+                    
+                    if (highlightedQuestions.length > 0) {
+                        setStatus(`检测成功！找到 ${highlightedQuestions.length} 道题目`, 'success');
+                    } else {
+                        setStatus('检测完成，但未找到题目', 'info');
+                    }
+                }, 2000);
+            } else {
+                log('❌ 未找到检测按钮');
+                setStatus('检测按钮未找到', 'error');
+            }
+        }
+        
+        function testAutoFill() {
+            log('✨ 测试自动填充功能...');
+            
+            const toolbar = document.querySelector('.pta-helper-toolbar');
+            if (!toolbar) {
+                log('❌ 工具栏未找到');
+                setStatus('请先确保插件已加载', 'error');
+                return;
+            }
+            
+            const fillBtn = toolbar.querySelector('.fill-btn');
+            if (fillBtn) {
+                log('📋 找到填充按钮，模拟点击...');
+                fillBtn.click();
+                
+                // 等待填充完成
+                setTimeout(() => {
+                    const filledElements = document.querySelectorAll('.pta-helper-filled');
+                    log(`📊 填充结果：${filledElements.length} 个元素被标记为已填充`);
+                    
+                    // 检查实际填充情况
+                    const checkedInputs = document.querySelectorAll('input:checked');
+                    const filledTextInputs = document.querySelectorAll('input[type="text"]:not([value=""]), textarea:not(:empty)');
+                    
+                    log(`📝 实际填充情况：`);
+                    log(`  选择题选中：${checkedInputs.length} 个`);
+                    log(`  文本框填充：${filledTextInputs.length} 个`);
+                    
+                    if (checkedInputs.length > 0 || filledTextInputs.length > 0) {
+                        setStatus('自动填充测试成功！', 'success');
+                    } else {
+                        setStatus('自动填充未生效，可能需要先检测题目', 'info');
+                    }
+                }, 3000);
+            } else {
+                log('❌ 未找到填充按钮');
+                setStatus('填充按钮未找到', 'error');
+            }
+        }
+        
+        function clearDebug() {
+            debugOutput.textContent = '调试信息已清空...\n';
+            setStatus('调试信息已清空', 'info');
+        }
+        
+        // 页面加载时自动检查
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                log('🚀 页面加载完成，开始自动检查...');
+                log(`📍 当前URL: ${window.location.href}`);
+                
+                if (window.location.href.includes('pintia.cn')) {
+                    log('✅ URL包含 pintia.cn，插件应该会激活');
+                } else {
+                    log('⚠️ URL不包含 pintia.cn，插件可能不会激活');
+                    log('💡 请将地址栏URL修改为包含 "pintia.cn" 的地址');
+                }
+                
+                testPluginLoaded();
+            }, 1000);
+        });
+        
+        // 监听控制台消息
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            if (args[0] && typeof args[0] === 'string' && args[0].includes('PTA')) {
+                log(`🔍 控制台: ${args.join(' ')}`);
+            }
+        };
+    </script>
+</body>
+</html>
