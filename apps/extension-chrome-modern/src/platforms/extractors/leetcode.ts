@@ -1,6 +1,7 @@
 import type { PlatformExtractor } from '../types'
 import { collectTexts, firstNonEmptyText, isLikelyProblemPage, readableContentText } from '../dom'
 import { isLikelyProblemUrl } from '../detect'
+import { inferQuestionType, normalizeOptions } from '../typeInfer'
 
 export const leetcodeExtractor: PlatformExtractor = {
   id: 'leetcode',
@@ -26,10 +27,13 @@ export const leetcodeExtractor: PlatformExtractor = {
     if (!isLikelyProblemPage(title || document.title || '', content)) return []
 
     // LeetCode choice options are uncommon; keep best-effort
-    const options = Array.from(new Set([
+    const optionsRaw = Array.from(new Set([
       ...collectTexts('label', 30),
       ...collectTexts('.option', 30)
     ])).filter(Boolean)
+
+    const options = normalizeOptions(optionsRaw)
+    const type = inferQuestionType({ title, content, options })
 
     return [
       {
@@ -38,10 +42,10 @@ export const leetcodeExtractor: PlatformExtractor = {
         url: location.href,
         source: 'public-page',
         title: title || document.title,
-        type: options.length > 0 ? 'choice' : 'programming',
+        type,
         difficulty: 'medium',
         content,
-        options: options.length > 0 ? options : undefined
+        options
       }
     ]
   }

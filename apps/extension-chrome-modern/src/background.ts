@@ -37,7 +37,8 @@ function toBackendQuestion(p: CapturedProblem): QuestionDto | null {
   const questionText = (p.content || p.title || '').trim()
   if (!questionText) return null
 
-  const type = (p.type || 'programming').toString()
+  const rawType = String(p.type || '').trim()
+  const type = rawType || 'programming'
 
   const options: ConsoleOptionDto[] | undefined = Array.isArray(p.options)
     ? p.options

@@ -1,6 +1,7 @@
 import type { PlatformExtractor } from '../types'
 import { collectTexts, firstNonEmptyText, isLikelyProblemPage, readableContentText } from '../dom'
 import { isLikelyProblemUrl } from '../detect'
+import { inferQuestionType, normalizeOptions } from '../typeInfer'
 
 // 粉笔（spa.fenbi.com）：优先只在 /ti/exam/exercise/... 这类答题页抽取
 export const fenbiExtractor: PlatformExtractor = {
@@ -32,11 +33,14 @@ export const fenbiExtractor: PlatformExtractor = {
 
     if (!isLikelyProblemPage(title || document.title || '', content)) return []
 
-    const options = Array.from(new Set([
+    const optionsRaw = Array.from(new Set([
       ...collectTexts('.option', 30),
       ...collectTexts('.options .item', 30),
       ...collectTexts('label', 30)
     ])).filter(Boolean)
+
+    const options = normalizeOptions(optionsRaw)
+    const type = inferQuestionType({ title, content, options })
 
     return [
       {
@@ -45,10 +49,10 @@ export const fenbiExtractor: PlatformExtractor = {
         url: location.href,
         source: 'public-page',
         title: title || document.title,
-        type: options.length > 0 ? 'choice' : 'programming',
+        type,
         difficulty: 'medium',
         content,
-        options: options.length > 0 ? options : undefined
+        options
       }
     ]
   }

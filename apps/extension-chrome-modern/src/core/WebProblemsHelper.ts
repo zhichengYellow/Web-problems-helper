@@ -11,7 +11,17 @@ export interface WebProblemsHelperConfig {
 export interface ProblemInfo {
   id: string;
   title: string;
-  type: 'programming' | 'choice' | 'fill' | 'judge';
+  type:
+    | 'single_choice'
+    | 'multiple_choice'
+    | 'true_false'
+    | 'fill_blank'
+    | 'function'
+    | 'programming'
+    // legacy values (kept for compatibility)
+    | 'choice'
+    | 'fill'
+    | 'judge';
   difficulty: 'easy' | 'medium' | 'hard';
   content: string;
   options?: string[];

@@ -1,6 +1,7 @@
 import type { PlatformExtractor } from '../types'
 import { firstNonEmptyText, isLikelyProblemPage, readableContentText } from '../dom'
 import { isLikelyProblemUrl } from '../detect'
+import { inferQuestionType } from '../typeInfer'
 
 export const luoguExtractor: PlatformExtractor = {
   id: 'luogu',
@@ -32,7 +33,7 @@ export const luoguExtractor: PlatformExtractor = {
         url: location.href,
         source: 'public-page',
         title: title || document.title,
-        type: 'programming',
+        type: inferQuestionType({ title, content }),
         difficulty: 'medium',
         content
       }

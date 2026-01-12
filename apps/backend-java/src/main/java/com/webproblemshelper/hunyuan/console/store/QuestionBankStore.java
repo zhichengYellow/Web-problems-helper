@@ -1,9 +1,12 @@
 package com.webproblemshelper.hunyuan.console.store;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.cache.annotation.CacheEvict;
@@ -12,16 +15,37 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.webproblemshelper.hunyuan.console.persistence.entity.QuestionEntity;
+import com.webproblemshelper.hunyuan.console.persistence.entity.ChoiceQuestionEntity;
+import com.webproblemshelper.hunyuan.console.persistence.entity.FillBlankQuestionEntity;
+import com.webproblemshelper.hunyuan.console.persistence.entity.ProgrammingQuestionEntity;
+import com.webproblemshelper.hunyuan.console.persistence.entity.TrueFalseQuestionEntity;
 import com.webproblemshelper.hunyuan.console.persistence.repo.QuestionRepository;
+import com.webproblemshelper.hunyuan.console.persistence.repo.ChoiceQuestionRepository;
+import com.webproblemshelper.hunyuan.console.persistence.repo.FillBlankQuestionRepository;
+import com.webproblemshelper.hunyuan.console.persistence.repo.ProgrammingQuestionRepository;
+import com.webproblemshelper.hunyuan.console.persistence.repo.TrueFalseQuestionRepository;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.webproblemshelper.hunyuan.console.web.dto.QuestionDto;
 
 @Service
 public class QuestionBankStore {
     private final QuestionRepository questionRepository;
+    private final ChoiceQuestionRepository choiceQuestionRepository;
+    private final TrueFalseQuestionRepository trueFalseQuestionRepository;
+    private final FillBlankQuestionRepository fillBlankQuestionRepository;
+    private final ProgrammingQuestionRepository programmingQuestionRepository;
 
-    public QuestionBankStore(QuestionRepository questionRepository) {
+    public QuestionBankStore(
+            QuestionRepository questionRepository,
+            ChoiceQuestionRepository choiceQuestionRepository,
+            TrueFalseQuestionRepository trueFalseQuestionRepository,
+            FillBlankQuestionRepository fillBlankQuestionRepository,
+            ProgrammingQuestionRepository programmingQuestionRepository) {
         this.questionRepository = questionRepository;
+        this.choiceQuestionRepository = choiceQuestionRepository;
+        this.trueFalseQuestionRepository = trueFalseQuestionRepository;
+        this.fillBlankQuestionRepository = fillBlankQuestionRepository;
+        this.programmingQuestionRepository = programmingQuestionRepository;
     }
 
     public List<QuestionDto> list(String query) {
@@ -71,6 +95,9 @@ public class QuestionBankStore {
         entity.setUpdatedAt(now);
 
         questionRepository.insert(entity);
+
+        // Write into per-type table (best-effort, based on normalized type)
+        syncSubtypeTables(entity.getId(), q, now);
         return toDto(entity);
     }
 
@@ -114,6 +141,9 @@ public class QuestionBankStore {
         } else {
             questionRepository.updateById(entity);
         }
+
+        // Sync into per-type table
+        syncSubtypeTables(entity.getId(), normalized, now);
         return toDto(entity);
     }
 
@@ -176,6 +206,8 @@ public class QuestionBankStore {
         existing.setTags(merged.getTags());
         existing.setUpdatedAt(LocalDateTime.now());
         questionRepository.updateById(existing);
+
+        syncSubtypeTables(existing.getId(), merged, existing.getUpdatedAt());
         return Optional.of(toDto(existing));
     }
 
@@ -185,7 +217,16 @@ public class QuestionBankStore {
         if (id == null || id.isBlank()) {
             return false;
         }
-        return questionRepository.deleteById(id) > 0;
+        int removed = questionRepository.deleteById(id);
+        if (removed <= 0) {
+            return false;
+        }
+        // Clean subtype rows
+        choiceQuestionRepository.deleteById(id);
+        trueFalseQuestionRepository.deleteById(id);
+        fillBlankQuestionRepository.deleteById(id);
+        programmingQuestionRepository.deleteById(id);
+        return true;
     }
 
     private static QuestionDto normalize(QuestionDto input) {
@@ -193,7 +234,7 @@ public class QuestionBankStore {
         q.setExternalId(safeTrim(input == null ? null : input.getExternalId()));
         q.setPlatform(safeTrim(input == null ? null : input.getPlatform()));
         q.setUrl(safeTrim(input == null ? null : input.getUrl()));
-        q.setType(safeTrim(input == null ? null : input.getType()));
+        q.setType(normalizeType(input == null ? null : input.getType()));
         q.setQuestionText(safeTrim(input == null ? null : input.getQuestionText()));
         q.setAnswer(safeTrim(input == null ? null : input.getAnswer()));
         q.setSource(safeTrim(input == null ? null : input.getSource()));
@@ -201,6 +242,189 @@ public class QuestionBankStore {
         q.setKnowledgePoints(input == null ? List.of() : input.getKnowledgePoints());
         q.setTags(input == null ? List.of() : input.getTags());
         return q;
+    }
+
+    /**
+     * Classic question type names (recommended):
+     * single_choice / multiple_choice / true_false / fill_blank / function / programming
+     *
+     * Also accepts legacy values from extension: choice / judge / fill / programming.
+     */
+    private static String normalizeType(String raw) {
+        String s = safeTrim(raw);
+        if (s == null || s.isBlank()) {
+            return "programming";
+        }
+        s = s.toLowerCase(Locale.ROOT);
+        return switch (s) {
+            case "single", "single_choice", "single-choice", "radio", "choice" -> "single_choice";
+            case "multiple", "multi", "multiple_choice", "multiple-choice", "checkbox" -> "multiple_choice";
+            case "judge", "true_false", "true-false", "tf", "boolean" -> "true_false";
+            case "fill", "fill_blank", "fill-blank", "blank" -> "fill_blank";
+            case "function", "function_design", "func" -> "function";
+            case "programming", "coding", "code" -> "programming";
+            default -> s;
+        };
+    }
+
+    private void syncSubtypeTables(String questionId, QuestionDto q, LocalDateTime now) {
+        if (questionId == null || questionId.isBlank() || q == null) {
+            return;
+        }
+
+        String type = normalizeType(q.getType());
+
+        // Clean non-matching subtype rows to keep consistency
+        // (This is conservative; if you want to keep historical subtype data, remove these deletes.)
+        if (!type.equals("single_choice") && !type.equals("multiple_choice")) {
+            choiceQuestionRepository.deleteById(questionId);
+        }
+        if (!type.equals("true_false")) {
+            trueFalseQuestionRepository.deleteById(questionId);
+        }
+        if (!type.equals("fill_blank")) {
+            fillBlankQuestionRepository.deleteById(questionId);
+        }
+        if (!type.equals("programming") && !type.equals("function")) {
+            programmingQuestionRepository.deleteById(questionId);
+        }
+
+        if (type.equals("single_choice") || type.equals("multiple_choice")) {
+            ChoiceQuestionEntity e = choiceQuestionRepository.selectById(questionId);
+            boolean isCreate = false;
+            if (e == null) {
+                isCreate = true;
+                e = new ChoiceQuestionEntity();
+                e.setQuestionId(questionId);
+                e.setCreatedAt(now);
+            }
+            e.setMode(type);
+            e.setOptions(q.getOptions());
+            e.setCorrectOptions(parseChoiceCorrectOptions(q.getAnswer()));
+            e.setExplanation(null);
+            e.setUpdatedAt(now);
+            if (isCreate) {
+                choiceQuestionRepository.insert(e);
+            } else {
+                choiceQuestionRepository.updateById(e);
+            }
+            return;
+        }
+
+        if (type.equals("true_false")) {
+            TrueFalseQuestionEntity e = trueFalseQuestionRepository.selectById(questionId);
+            boolean isCreate = false;
+            if (e == null) {
+                isCreate = true;
+                e = new TrueFalseQuestionEntity();
+                e.setQuestionId(questionId);
+                e.setCreatedAt(now);
+            }
+            e.setCorrect(parseTrueFalse(q.getAnswer()));
+            e.setExplanation(null);
+            e.setUpdatedAt(now);
+            if (isCreate) {
+                trueFalseQuestionRepository.insert(e);
+            } else {
+                trueFalseQuestionRepository.updateById(e);
+            }
+            return;
+        }
+
+        if (type.equals("fill_blank")) {
+            FillBlankQuestionEntity e = fillBlankQuestionRepository.selectById(questionId);
+            boolean isCreate = false;
+            if (e == null) {
+                isCreate = true;
+                e = new FillBlankQuestionEntity();
+                e.setQuestionId(questionId);
+                e.setCreatedAt(now);
+            }
+            e.setAnswers(parseFillBlankAnswers(q.getAnswer()));
+            e.setExplanation(null);
+            e.setUpdatedAt(now);
+            if (isCreate) {
+                fillBlankQuestionRepository.insert(e);
+            } else {
+                fillBlankQuestionRepository.updateById(e);
+            }
+            return;
+        }
+
+        if (type.equals("programming") || type.equals("function")) {
+            ProgrammingQuestionEntity e = programmingQuestionRepository.selectById(questionId);
+            boolean isCreate = false;
+            if (e == null) {
+                isCreate = true;
+                e = new ProgrammingQuestionEntity();
+                e.setQuestionId(questionId);
+                e.setCreatedAt(now);
+            }
+            e.setSubtype(type);
+            e.setLanguage(null);
+            e.setStarterCode(null);
+            e.setReferenceAnswer(q.getAnswer());
+            e.setExplanation(null);
+            e.setUpdatedAt(now);
+            if (isCreate) {
+                programmingQuestionRepository.insert(e);
+            } else {
+                programmingQuestionRepository.updateById(e);
+            }
+        }
+    }
+
+    private static List<String> parseChoiceCorrectOptions(String answer) {
+        String s = safeTrim(answer);
+        if (s == null || s.isBlank()) {
+            return List.of();
+        }
+        // Extract option keys like A/B/C/D from text such as "A", "AC", "A,C", "答案：B"
+        Set<String> keys = new LinkedHashSet<>();
+        for (int i = 0; i < s.length(); i++) {
+            char c = Character.toUpperCase(s.charAt(i));
+            if (c >= 'A' && c <= 'H') {
+                keys.add(String.valueOf(c));
+            }
+        }
+        return new ArrayList<>(keys);
+    }
+
+    private static Boolean parseTrueFalse(String answer) {
+        String s = safeTrim(answer);
+        if (s == null || s.isBlank()) {
+            return null;
+        }
+        s = s.toLowerCase(Locale.ROOT);
+        // true-ish
+        if (s.contains("true") || s.contains("正确") || s.contains("对") || s.equals("1") || s.contains("yes") || s.contains("是")) {
+            return true;
+        }
+        // false-ish
+        if (s.contains("false") || s.contains("错误") || s.contains("错") || s.equals("0") || s.contains("no") || s.contains("否") || s.contains("不是")) {
+            return false;
+        }
+        return null;
+    }
+
+    private static List<String> parseFillBlankAnswers(String answer) {
+        String s = safeTrim(answer);
+        if (s == null || s.isBlank()) {
+            return List.of();
+        }
+        // Split by common separators; keep non-empty
+        String[] parts = s.split("[\n\r;；|，,]");
+        List<String> out = new ArrayList<>();
+        for (String p : parts) {
+            String t = safeTrim(p);
+            if (t != null && !t.isBlank()) {
+                out.add(t);
+            }
+        }
+        if (out.isEmpty()) {
+            return List.of(s);
+        }
+        return out;
     }
 
     public record ImportResult(int created, int updated) {
