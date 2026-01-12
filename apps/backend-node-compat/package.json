@@ -1,0 +1,27 @@
+{
+  "name": "web-problems-helper-backend-node-compat",
+  "version": "1.0.0",
+  "description": "Java 后端的 Node 兼容转发代理（不再实现腾讯云签名）",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "tencentcloud",
+    "hunyuan",
+    "api",
+    "proxy",
+    "cors"
+  ],
+  "author": "binyellow",
+  "license": "MIT"
+}

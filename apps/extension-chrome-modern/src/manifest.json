@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+  "name": "Web 题目助手（Modern）",
+  "version": "2.0.0",
+  "description": "基于现代前端技术栈的多平台题目助手（Modern 扩展）",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://pintia.cn/*",
+    "https://*.pintia.cn/*",
+    "https://api.sh-api.com/*",
+    "https://*.sh-api.com/*",
+    "https://api.openedu.org/*",
+    "https://community-api.education/*",
+    "https://api.academic-free.org/*"
+  ],
+  "action": {
+    "default_popup": "src/popup.html",
+    "default_title": "Web 题目助手"
+  },
+  "options_page": "src/options.html",
+  "background": {
+    "service_worker": "src/background.ts",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://pintia.cn/*",
+        "https://*.pintia.cn/*"
+      ],
+      "js": ["src/content.ts"],
+      "css": ["src/content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [{
+    "resources": [
+      "assets/**/*.json"
+    ],
+    "matches": ["<all_urls>"]
+  }]
+}
