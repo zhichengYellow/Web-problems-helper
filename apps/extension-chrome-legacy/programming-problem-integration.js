@@ -1,6 +1,6 @@
 /**
  * 编程题检测功能集成模块
- * 将专业的编程题检测器集成到现有的PTA助手中
+ * 将专业的编程题检测器集成到现有的 Web 题目助手 中
  */
 
 // 扩展现有的content.js功能
@@ -8,13 +8,13 @@
     'use strict';
     
     // 确保编程题检测器已加载
-    if (typeof PTAProgrammingProblemDetector === 'undefined') {
+    if (typeof PintiaProgrammingProblemDetector === 'undefined') {
         console.warn('编程题检测器未加载，请先加载 programming-problem-detector.js');
         return;
     }
     
     // 创建全局检测器实例
-    window.programmingDetector = new PTAProgrammingProblemDetector();
+    window.programmingDetector = new PintiaProgrammingProblemDetector();
     
     /**
      * 增强现有的detectProgrammingProblemMeta函数
@@ -162,7 +162,7 @@
     function parseProgrammingQuestion(element, index) {
         try {
             // 使用专业检测器解析
-            const detector = new PTAProgrammingProblemDetector();
+            const detector = new PintiaProgrammingProblemDetector();
             
             // 临时设置检测范围为当前元素
             const originalDocument = document;
@@ -413,21 +413,21 @@
      * 添加编程题专用的工具栏按钮
      */
     function addProgrammingToolbarButtons() {
-        const toolbar = document.querySelector('.pta-helper-toolbar');
+        const toolbar = document.querySelector('.wph-toolbar');
         if (!toolbar) return;
         
-        const buttonsContainer = toolbar.querySelector('.pta-helper-buttons');
+        const buttonsContainer = toolbar.querySelector('.wph-buttons');
         if (!buttonsContainer) return;
         
         // 添加编程题检测按钮
         const progDetectBtn = document.createElement('button');
-        progDetectBtn.className = 'pta-helper-btn secondary prog-detect-btn';
+        progDetectBtn.className = 'wph-btn secondary prog-detect-btn';
         progDetectBtn.innerHTML = '🔍 检测编程题 (Ctrl+Shift+P)';
         progDetectBtn.addEventListener('click', handleProgrammingDetection);
         
         // 添加代码模板按钮
         const templateBtn = document.createElement('button');
-        templateBtn.className = 'pta-helper-btn secondary template-btn';
+        templateBtn.className = 'wph-btn secondary template-btn';
         templateBtn.innerHTML = '📝 插入模板';
         templateBtn.addEventListener('click', handleInsertTemplate);
         
@@ -471,9 +471,9 @@
                 // 尝试直接插入
                 let inserted = false;
                 
-                // 1. 使用 PTA 专用填充器
-                if (typeof window.ptaCodeMirrorFiller !== 'undefined') {
-                    const res = await window.ptaCodeMirrorFiller.fillCode(code, { autoSave: true });
+                // 1. 使用平台专用填充器
+                if (typeof window.wphCodeMirrorFiller !== 'undefined') {
+                    const res = await window.wphCodeMirrorFiller.fillCode(code, { autoSave: true });
                     if (res && res.success) inserted = true;
                 }
                 
@@ -500,6 +500,44 @@
             showNotification('插入失败', error.message, 'error');
         }
     }
+
+    /**
+     * 显示编程题检测结果弹窗
+     */
+    function showProgrammingDetectionResult(result) {
+        // 移除现有弹窗
+        const existing = document.querySelector('.wph-programming-result-modal');
+        if (existing) existing.remove();
+
+        // 创建弹窗
+        const modal = document.createElement('div');
+        modal.className = 'wph-programming-result-modal';
+        
+        modal.innerHTML = `
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>💻 编程题检测结果</h3>
+                    <button class="close-btn" title="关闭">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="result-section">
+                        <h4>📌 基本信息</h4>
+                        <p><strong>标题:</strong> ${result?.metadata?.title || result?.title || '未知'}</p>
+                        ${result?.metadata?.id ? `<p><strong>ID:</strong> ${result.metadata.id}</p>` : ''}
+                        ${result?.metadata?.language ? `<p><strong>语言:</strong> ${result.metadata.language}</p>` : ''}
+                    </div>
+
+                    ${result.codeTemplate ? `
+                    <div class="result-section">
+                        <h4>🧩 代码模板</h4>
+                        <pre><code>${result.codeTemplate}</code></pre>
+                    </div>
+                    ` : ''}
+
+                    ${result.ioFormats && (result.ioFormats.input || result.ioFormats.output) ? `
+                    <div class="result-section">
+                        <h4>🧾 输入输出格式</h4>
                         ${result.ioFormats.input ? `<p><strong>输入:</strong> ${result.ioFormats.input}</p>` : ''}
                         ${result.ioFormats.output ? `<p><strong>输出:</strong> ${result.ioFormats.output}</p>` : ''}
                     </div>
@@ -568,10 +606,10 @@
                     console.log('尝试插入模板到编辑器, 长度=', (code||'').length);
 
                     // 优先使用已集成的填充器
-                    if (typeof window.ptaCodeMirrorFiller !== 'undefined' && window.ptaCodeMirrorFiller.fillCode) {
-                        const res = await window.ptaCodeMirrorFiller.fillCode(code, { autoSave: true });
+                    if (typeof window.wphCodeMirrorFiller !== 'undefined' && window.wphCodeMirrorFiller.fillCode) {
+                        const res = await window.wphCodeMirrorFiller.fillCode(code, { autoSave: true });
                         if (res && res.success) {
-                            showNotification('插入成功', '代码模板已插入到编辑器（PTA填充器）', 'success');
+                            showNotification('插入成功', '代码模板已插入到编辑器（WPH填充器）', 'success');
                             closeModal();
                             return;
                         }

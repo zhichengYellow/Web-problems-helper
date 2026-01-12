@@ -1,4 +1,4 @@
-package com.ptahelper.hunyuan.console.web;
+package com.webproblemshelper.hunyuan.console.web;
 
 import java.util.List;
 import java.util.Map;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ptahelper.hunyuan.console.store.QuestionBankStore;
-import com.ptahelper.hunyuan.console.web.dto.QuestionDto;
+import com.webproblemshelper.hunyuan.console.store.QuestionBankStore;
+import com.webproblemshelper.hunyuan.console.web.dto.QuestionDto;
 
 import jakarta.validation.Valid;
 
@@ -56,6 +56,17 @@ public class ConsoleQuestionController {
         return Map.of(
                 "success", true,
                 "item", created
+        );
+    }
+
+    @PostMapping("/questions/import")
+    public Map<String, Object> bulkImport(@RequestBody List<QuestionDto> items) {
+        QuestionBankStore.ImportResult result = questionBankStore.bulkUpsert(items);
+        return Map.of(
+                "success", true,
+                "created", result.created(),
+                "updated", result.updated(),
+                "count", (items == null ? 0 : items.size())
         );
     }
 

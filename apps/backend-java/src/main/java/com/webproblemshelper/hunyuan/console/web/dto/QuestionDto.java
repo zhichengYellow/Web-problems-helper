@@ -1,4 +1,4 @@
-package com.ptahelper.hunyuan.console.web.dto;
+package com.webproblemshelper.hunyuan.console.web.dto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,15 @@ import jakarta.validation.constraints.NotBlank;
 
 public class QuestionDto {
     private String id;
+
+    /** stable id from source platform (e.g. leetcode:slug:two-sum) */
+    private String externalId;
+
+    /** platform id (pintia/leetcode/luogu/fenbi/chaoxing/unknown) */
+    private String platform;
+
+    /** source page url */
+    private String url;
 
     @NotBlank
     private String type;
@@ -28,6 +37,30 @@ public class QuestionDto {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
+    }
+
+    public String getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(String platform) {
+        this.platform = platform;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getType() {

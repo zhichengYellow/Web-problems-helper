@@ -1,4 +1,4 @@
-package com.ptahelper.hunyuan.config;
+package com.webproblemshelper.hunyuan.config;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

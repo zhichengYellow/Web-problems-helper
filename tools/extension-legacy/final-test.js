@@ -1,14 +1,14 @@
-// PTA答题助手最终测试脚本
-console.log('🚀 PTA答题助手最终测试开始');
+// Web 题目助手最终测试脚本
+console.log('🚀 Web 题目助手最终测试开始');
 
-// 测试PTA选项识别功能
+// 测试 Pintia 选项识别功能
 async function runFinalTest() {
     console.log('🧪 开始最终功能测试...');
     
     try {
         // 1. 测试选项识别
         console.log('\n1. 📋 测试选项识别功能...');
-        const testResults = await testPTAOptionRecognition();
+        const testResults = await testPintiaOptionRecognition();
         
         console.log(`📊 测试结果: ${testResults.length} 个题目容器`);
         const successCount = testResults.filter(r => r.success).length;
@@ -40,8 +40,8 @@ async function runFinalTest() {
         // 4. 总体评估
         console.log('\n4. 📈 总体评估:');
         if (successCount > 0 && questions.length > 0) {
-            console.log('🎉 测试通过！PTA答题助手功能正常');
-            console.log('💡 建议: 在真实的PTA网站上进一步测试');
+            console.log('🎉 测试通过！Web 题目助手功能正常');
+            console.log('💡 建议: 在真实的 Pintia 网站上进一步测试');
         } else {
             console.log('⚠️  测试未完全通过，需要进一步优化');
             if (successCount === 0) {
@@ -101,7 +101,7 @@ document.addEventListener('keydown', function(e) {
     if (e.ctrlKey && e.shiftKey && e.key === 'O') {
         e.preventDefault();
         console.clear();
-        testPTAOptionRecognition().then(results => {
+        testPintiaOptionRecognition().then(results => {
             console.log('🎯 选项识别测试完成:', results);
         });
     }
@@ -116,7 +116,7 @@ console.log('   Ctrl+Shift+F - 自动填充');
 // 自动运行基础测试
 setTimeout(() => {
     console.log('\n🔍 自动运行基础测试...');
-    testPTAOptionRecognition().then(results => {
+    testPintiaOptionRecognition().then(results => {
         const successCount = results.filter(r => r.success).length;
         console.log(`✅ 自动测试完成: ${successCount}/${results.length} 成功`);
     });

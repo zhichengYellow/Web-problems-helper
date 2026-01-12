@@ -1,4 +1,4 @@
-package com.ptahelper.hunyuan.agent.web.dto;
+package com.webproblemshelper.hunyuan.agent.web.dto;
 
 public record OptionDto(String text, String value) {
 }

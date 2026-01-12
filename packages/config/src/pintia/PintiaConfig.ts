@@ -1,8 +1,8 @@
 /**
- * PTA平台配置
+ * Pintia 平台配置
  */
-export const PTAConfig = {
-  // PTA域名配置
+export const PintiaConfig = {
+  // Pintia 域名配置
   domains: {
     main: 'pintia.cn',
     subdomains: ['www.pintia.cn', 'pintia.cn']

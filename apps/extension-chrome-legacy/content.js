@@ -1,5 +1,5 @@
-// PTA答题助手内容脚本
-console.log('🚀 PTA答题助手已加载');
+// Web 题目助手内容脚本
+console.log('🚀 Web 题目助手已加载');
 
 // 全局状态
 let toolbarElement = null;
@@ -648,25 +648,25 @@ function detectQuestionType(element) {
     return 'unknown';
 }
 
-// 获取题目选项（PTA专用增强版）
+// 获取题目选项（Pintia增强版）
 function getQuestionOptions(element) {
     const options = [];
     const elementText = element.textContent;
     
-    console.log(`🔍 开始解析PTA题目选项，元素文本长度: ${elementText.length}`);
+    console.log(`🔍 开始解析 Pintia 题目选项，元素文本长度: ${elementText.length}`);
     
-    // 1. 查找所有可能的选项输入元素（针对PTA的扩展选择器）
+    // 1. 查找所有可能的选项输入元素（针对 Pintia 的扩展选择器）
     const optionInputs = element.querySelectorAll([
         'input[type="radio"]', 
         'input[type="checkbox"]',
         '[role="radio"]', 
         '[role="checkbox"]',
-        // PTA特定选择器
+        // Pintia 特定选择器
         '.pc-radio input',
         '.pc-checkbox input',
         '.ant-radio-input',
         '.ant-checkbox-input',
-        // 新增PTA选择器
+        // 新增 Pintia 选择器
         '[data-option]',
         '.option-item input',
         '.choice-item input',
@@ -675,7 +675,7 @@ function getQuestionOptions(element) {
     
     console.log(`📊 找到 ${optionInputs.length} 个输入元素`);
 
-    // 如果找到输入元素，按PTA结构处理
+    // 如果找到输入元素，按 Pintia 结构处理
     if (optionInputs.length > 0) {
         optionInputs.forEach((input, index) => {
             console.log(`🔧 处理输入元素 ${index + 1}:`, input);
@@ -685,10 +685,10 @@ function getQuestionOptions(element) {
             let optionValue = String.fromCharCode(65 + index); // A, B, C, D
             const inputName = input.name || input.getAttribute('name') || '';
             
-            // 方式1: 查找PTA结构的label（label包裹input）
+            // 方式1: 查找 Pintia 结构的 label（label 包裹 input）
             const parentLabel = input.closest('label');
             if (parentLabel) {
-                // 针对 PTA 结构：label.w-full.inline-flex 内部包含“字母span + markdown文本”
+                // 针对 Pintia 结构：label.w-full.inline-flex 内部包含“字母span + markdown文本”
                 const letterSpan = parentLabel.querySelector('span');
                 const letterRaw = (letterSpan && letterSpan.textContent) ? letterSpan.textContent.trim() : '';
                 // 规范化字母（如 "D." -> "D"）
@@ -701,25 +701,25 @@ function getQuestionOptions(element) {
                 if (mdEl && mdEl.textContent) {
                     optionText = mdEl.textContent.trim();
                 } else {
-                    optionText = extractPTAOptionText(parentLabel, optionValue);
+                    optionText = extractPintiaOptionText(parentLabel, optionValue);
                 }
-                console.log(`🏷️ PTA父级label解析: [${optionValue}] ${optionText}`);
+                console.log(`🏷️ Pintia 父级label解析: [${optionValue}] ${optionText}`);
             }
             
             // 方式2: 查找关联的label标签（for属性）
             if (!optionText && input.id) {
                 const label = document.querySelector(`label[for="${input.id}"]`);
                 if (label) {
-                    optionText = extractPTAOptionText(label, optionValue);
+                    optionText = extractPintiaOptionText(label, optionValue);
                     console.log(`🏷️ 通过for属性找到label: ${optionText}`);
                 }
             }
             
-            // 方式3: 查找PTA特定的markdown内容
+            // 方式3: 查找 Pintia 特定的 markdown 内容
             if (!optionText) {
                 const markdownContent = input.closest('.markdownBlock_tErSz');
                 if (markdownContent) {
-                    optionText = extractPTAOptionText(markdownContent, optionValue);
+                    optionText = extractPintiaOptionText(markdownContent, optionValue);
                     console.log(`📖 通过markdown内容找到: ${optionText}`);
                 }
             }
@@ -728,7 +728,7 @@ function getQuestionOptions(element) {
             if (!optionText) {
                 const textContainer = input.closest('[class*="flex"],[class*="item"],[class*="option"],[class*="choice"]');
                 if (textContainer) {
-                    optionText = extractPTAOptionText(textContainer, optionValue);
+                    optionText = extractPintiaOptionText(textContainer, optionValue);
                     console.log(`📦 通过flex容器找到: ${optionText}`);
                 }
             }
@@ -754,7 +754,7 @@ function getQuestionOptions(element) {
             
             // 最终清理和验证
             if (optionText) {
-                optionText = cleanPTAOptionText(optionText, optionValue);
+                optionText = cleanPintiaOptionText(optionText, optionValue);
                 
                 // 验证选项文本的有效性
                 if (isValidOptionText(optionText)) {
@@ -784,14 +784,14 @@ function getQuestionOptions(element) {
         });
     }
     
-    // 2. 如果没有找到输入元素，尝试从PTA文本结构中解析选项
+    // 2. 如果没有找到输入元素，尝试从 Pintia 文本结构中解析选项
     if (options.length < 2) {
-        console.log(`📝 输入元素不足(${options.length})，尝试PTA文本解析...`);
-        const textOptions = extractOptionsFromPTAText(element);
+        console.log(`📝 输入元素不足(${options.length})，尝试 Pintia 文本解析...`);
+        const textOptions = extractOptionsFromPintiaText(element);
         textOptions.forEach(opt => {
             if (!options.some(existing => existing.text === opt.text)) {
                 options.push(opt);
-                console.log(`📄 从PTA文本添加选项: ${opt.text}`);
+                console.log(`📄 从 Pintia 文本添加选项: ${opt.text}`);
             }
         });
     }
@@ -801,7 +801,7 @@ function getQuestionOptions(element) {
     
     console.log(`🎯 最终识别到 ${finalOptions.length} 个选项`);
     if (finalOptions.length > 0) {
-        console.log('📋 PTA选项列表:', finalOptions.map((opt, i) => `${opt.value}. ${opt.text}`).join('\n'));
+        console.log('📋 Pintia 选项列表:', finalOptions.map((opt, i) => `${opt.value}. ${opt.text}`).join('\n'));
     }
     
     return finalOptions;
@@ -830,8 +830,8 @@ function findSiblingOptionText(inputElement) {
     return null;
 }
 
-// PTA专用选项文本提取
-function extractPTAOptionText(element, optionValue) {
+// Pintia 专用选项文本提取
+function extractPintiaOptionText(element, optionValue) {
     let text = element.textContent.trim();
     
     // 移除input元素本身的内容
@@ -840,13 +840,13 @@ function extractPTAOptionText(element, optionValue) {
         text = text.replace(input.outerHTML, '');
     });
     
-    // 查找markdown内容（PTA特定结构）
+    // 查找 markdown 内容（Pintia 特定结构）
     const markdownBlock = element.querySelector('.markdownBlock_tErSz');
     if (markdownBlock) {
         text = markdownBlock.textContent.trim();
     }
     
-    // 清理PTA特定的格式
+    // 清理 Pintia 特定的格式
     text = text
         .replace(/<[^>]*>/g, '') // 移除HTML标签
         .replace(/[\n\r\t]/g, ' ') // 替换换行和制表符
@@ -873,18 +873,18 @@ function extractPTAOptionText(element, optionValue) {
     return text || element.textContent.trim();
 }
 
-// PTA文本结构选项提取
-function extractOptionsFromPTAText(element) {
+// Pintia 文本结构选项提取
+function extractOptionsFromPintiaText(element) {
     const options = [];
     
-    // 方法1: 直接查找PTA的选项span结构
+    // 方法1: 直接查找 Pintia 的选项 span 结构
     const optionSpans = element.querySelectorAll('span.block.p-0\\.5');
     if (optionSpans.length >= 2) {
-        console.log('🎯 找到PTA选项span结构');
+        console.log('🎯 找到 Pintia 选项span结构');
         optionSpans.forEach((span, index) => {
             const label = span.querySelector('label');
             if (label) {
-                const optionText = extractPTAOptionText(label, String.fromCharCode(65 + index));
+                const optionText = extractPintiaOptionText(label, String.fromCharCode(65 + index));
                 const optionValue = String.fromCharCode(65 + index); // A, B, C, D
                 
                 if (optionText && isValidOptionText(optionText)) {
@@ -894,7 +894,7 @@ function extractOptionsFromPTAText(element) {
                         type: 'radio',
                         element: span
                     });
-                    console.log(`✅ 添加PTA选项 ${optionValue}: ${optionText}`);
+                    console.log(`✅ 添加 Pintia 选项 ${optionValue}: ${optionText}`);
                 }
             }
         });
@@ -904,12 +904,12 @@ function extractOptionsFromPTAText(element) {
         }
     }
     
-    // 方法2: 查找PTA的label结构
-    const ptaLabels = element.querySelectorAll('label.w-full.inline-flex');
-    if (ptaLabels.length >= 2) {
-        console.log('🎯 找到PTA label结构');
-        ptaLabels.forEach((label, index) => {
-            const optionText = extractPTAOptionText(label, String.fromCharCode(65 + index));
+    // 方法2: 查找 Pintia 的 label 结构
+    const pintiaLabels = element.querySelectorAll('label.w-full.inline-flex');
+    if (pintiaLabels.length >= 2) {
+        console.log('🎯 找到 Pintia label结构');
+        pintiaLabels.forEach((label, index) => {
+            const optionText = extractPintiaOptionText(label, String.fromCharCode(65 + index));
             const optionValue = String.fromCharCode(65 + index); // A, B, C, D
             
             if (optionText && isValidOptionText(optionText)) {
@@ -919,7 +919,7 @@ function extractOptionsFromPTAText(element) {
                     type: 'radio',
                     element: label
                 });
-                console.log(`✅ 添加PTA label选项 ${optionValue}: ${optionText}`);
+                console.log(`✅ 添加 Pintia label选项 ${optionValue}: ${optionText}`);
             }
         });
         
@@ -931,12 +931,12 @@ function extractOptionsFromPTAText(element) {
     // 方法3: 查找input和对应的文本
     const optionInputs = element.querySelectorAll('input[type="radio"], input[type="checkbox"]');
     if (optionInputs.length >= 2) {
-        console.log('🎯 找到PTA input结构');
+        console.log('🎯 找到 Pintia input结构');
         optionInputs.forEach((input, index) => {
             // 查找对应的文本内容
             const container = input.closest('label') || input.closest('span') || input.parentElement;
             if (container) {
-                const optionText = extractPTAOptionText(container, String.fromCharCode(65 + index));
+                const optionText = extractPintiaOptionText(container, String.fromCharCode(65 + index));
                 const optionValue = String.fromCharCode(65 + index); // A, B, C, D
                 
                 if (optionText && isValidOptionText(optionText)) {
@@ -946,7 +946,7 @@ function extractOptionsFromPTAText(element) {
                         type: input.type,
                         element: input
                     });
-                    console.log(`✅ 添加PTA input选项 ${optionValue}: ${optionText}`);
+                    console.log(`✅ 添加 Pintia input选项 ${optionValue}: ${optionText}`);
                 }
             }
         });
@@ -958,7 +958,7 @@ function extractOptionsFromPTAText(element) {
     
     // 方法4: 备用文本解析（原始方法）
     const text = element.textContent;
-    const ptaPatterns = [
+    const pintiaPatterns = [
         // 标准选项格式: A. 内容
         /[A-Da-d][\.\)]\s*([^\n]+?)(?=\s*(?:[A-Da-d][\.\)]|\d+[\.\)]|$))/g,
         // 数字选项格式: 1. 内容
@@ -967,7 +967,7 @@ function extractOptionsFromPTAText(element) {
         /[A-Da-d]\)\s*([^\n]+)/g
     ];
     
-    ptaPatterns.forEach(pattern => {
+    pintiaPatterns.forEach(pattern => {
         let match;
         while ((match = pattern.exec(text)) !== null) {
             let optionText = match[1] ? match[1].trim() : match[0].trim();
@@ -977,7 +977,7 @@ function extractOptionsFromPTAText(element) {
                 const optionValue = optionMatch ? optionMatch[1].toUpperCase() : 
                     String.fromCharCode(65 + options.length);
                 
-                optionText = cleanPTAOptionText(optionText, optionValue);
+                optionText = cleanPintiaOptionText(optionText, optionValue);
                 
                 if (isValidOptionText(optionText)) {
                     options.push({
@@ -993,8 +993,8 @@ function extractOptionsFromPTAText(element) {
     return options;
 }
 
-// PTA专用文本清理（增强版）
-function cleanPTAOptionText(text, optionValue) {
+// Pintia 专用文本清理（增强版）
+function cleanPintiaOptionText(text, optionValue) {
     if (!text) return '';
     
     // 首先移除HTML标签和特殊字符
@@ -1035,12 +1035,12 @@ function cleanPTAOptionText(text, optionValue) {
     return cleanedText;
 }
 
-// PTA专用选项识别测试函数
-function testPTAOptionRecognition() {
-    console.log('🧪 开始PTA选项识别测试...');
+// Pintia 专用选项识别测试函数
+function testPintiaOptionRecognition() {
+    console.log('🧪 开始 Pintia 选项识别测试...');
     
-    // 查找PTA题目容器
-    const ptaContainers = document.querySelectorAll([
+    // 查找 Pintia 题目容器
+    const pintiaContainers = document.querySelectorAll([
         '.pc-x',
         '.problem-container',
         '.question-wrapper',
@@ -1049,12 +1049,12 @@ function testPTAOptionRecognition() {
         '.markdownBlock_tErSz'
     ].join(', '));
     
-    console.log(`📊 找到 ${ptaContainers.length} 个PTA题目容器`);
+    console.log(`📊 找到 ${pintiaContainers.length} 个Pintia题目容器`);
     
     const results = [];
     
-    ptaContainers.forEach((container, index) => {
-        console.log(`\n🔍 测试第 ${index + 1} 个PTA容器...`);
+    pintiaContainers.forEach((container, index) => {
+        console.log(`\n🔍 测试第 ${index + 1} 个Pintia容器...`);
         
         try {
             const options = getQuestionOptions(container);
@@ -1068,7 +1068,7 @@ function testPTAOptionRecognition() {
                 });
                 
                 // 高亮成功的容器
-                container.classList.add('pta-test-success');
+                container.classList.add('wph-test-success');
                 
                 // 在控制台输出详细结果
                 console.log('📋 识别结果:');
@@ -1077,7 +1077,7 @@ function testPTAOptionRecognition() {
                 });
             } else {
                 console.log('⚠️ 未识别到选项');
-                container.classList.add('pta-test-failed');
+                container.classList.add('wph-test-failed');
                 results.push({
                     container: container,
                     options: [],
@@ -1087,7 +1087,7 @@ function testPTAOptionRecognition() {
             }
         } catch (error) {
             console.error(`❌ 测试失败:`, error);
-            container.classList.add('pta-test-error');
+            container.classList.add('wph-test-error');
             results.push({
                 container: container,
                 options: [],
@@ -1098,7 +1098,7 @@ function testPTAOptionRecognition() {
     });
     
     // 输出总体测试结果
-    console.log('\n📊 PTA选项识别测试完成:');
+    console.log('\n📊 Pintia 选项识别测试完成:');
     console.log(`✅ 成功: ${results.filter(r => r.success).length}`);
     console.log(`❌ 失败: ${results.filter(r => !r.success).length}`);
     console.log(`📋 总共识别: ${results.reduce((sum, r) => sum + r.options.length, 0)} 个选项`);
@@ -1178,7 +1178,7 @@ function setupFinalTesting() {
         if (e.ctrlKey && e.shiftKey && e.key === 'O') {
             e.preventDefault();
             console.clear();
-            testPTAOptionRecognition().then(results => {
+            testPintiaOptionRecognition().then(results => {
                 const successCount = results.filter(r => r.success).length;
                 console.log('🎯 选项识别测试完成:', results);
                 showNotification('选项测试', `成功识别 ${successCount} 个题目`, 'info');
@@ -1196,7 +1196,7 @@ async function runFinalTest() {
     try {
         // 1. 测试选项识别
         console.log('\n1. 📋 测试选项识别功能...');
-        const testResults = await testPTAOptionRecognition();
+        const testResults = await testPintiaOptionRecognition();
         
         console.log(`📊 测试结果: ${testResults.length} 个题目容器`);
         const successCount = testResults.filter(r => r.success).length;
@@ -1228,8 +1228,8 @@ async function runFinalTest() {
         // 4. 总体评估
         console.log('\n4. 📈 总体评估:');
         if (successCount > 0 && questions.length > 0) {
-            console.log('🎉 测试通过！PTA答题助手功能正常');
-            console.log('💡 建议: 在真实的PTA网站上进一步测试');
+            console.log('🎉 测试通过！Web 题目助手功能正常');
+            console.log('💡 建议: 在真实的 Pintia 网站上进一步测试');
         } else {
             console.log('⚠️  测试未完全通过，需要进一步优化');
             if (successCount === 0) {
@@ -1276,87 +1276,6 @@ function getAPIStatusSync() {
 
 // 初始化时设置测试功能
 setTimeout(setupFinalTesting, 3000);
-
-// PTA专用选项文本提取
-function extractPTAOptionText(element, optionValue) {
-    let text = element.textContent.trim();
-    
-    // 移除input元素本身的内容
-    const inputs = element.querySelectorAll('input');
-    inputs.forEach(input => {
-        text = text.replace(input.outerHTML, '');
-    });
-    
-    // 清理PTA特定的格式
-    text = text
-        .replace(/<[^>]*>/g, '') // 移除HTML标签
-        .replace(/[\n\r\t]/g, ' ') // 替换换行和制表符
-        .replace(/\s{2,}/g, ' ') // 合并多个空格
-        .replace(/^[A-Da-d][\.\)]\s*/, '') // 移除选项前缀如"A."
-        .replace(/^\d+[\.\)]\s*/, '') // 移除数字前缀如"1."
-        .replace(new RegExp(`^\\s*${optionValue}\\s*`), '') // 移除input value
-        .trim();
-    
-    return text || element.textContent.trim();
-}
-
-// PTA文本结构选项提取
-function extractOptionsFromPTAText(element) {
-    const options = [];
-    const text = element.textContent;
-    
-    // PTA特定的选项模式
-    const ptaPatterns = [
-        // 标准选项格式: A. 内容
-        /[A-Da-d][\.\)]\s*([^\n]+?)(?=\s*(?:[A-Da-d][\.\)]|\d+[\.\)]|$))/g,
-        // 数字选项格式: 1. 内容
-        /\d+[\.\)]\s*([^\n]+?)(?=\s*(?:[A-Da-d][\.\)]|\d+[\.\)]|$))/g,
-        // 中文选项格式: A) 内容
-        /[A-Da-d]\)\s*([^\n]+)/g,
-        // PTA markdown内容
-        /<div class="markdownBlock_tErSz"[^>]*>([\s\S]*?)<\/div>/g
-    ];
-    
-    ptaPatterns.forEach(pattern => {
-        let match;
-        while ((match = pattern.exec(text)) !== null) {
-            let optionText = match[1] ? match[1].trim() : match[0].trim();
-            if (optionText && optionText.length > 1) {
-                // 提取选项标识符
-                const optionMatch = match[0].match(/^([A-Da-d])/);
-                const optionValue = optionMatch ? optionMatch[1].toUpperCase() : 
-                    String.fromCharCode(65 + options.length);
-                
-                optionText = cleanPTAOptionText(optionText, optionValue);
-                
-                if (isValidOptionText(optionText)) {
-                    options.push({
-                        value: optionValue,
-                        text: optionText,
-                        type: 'text'
-                    });
-                }
-            }
-        }
-    });
-    
-    return options;
-}
-
-// PTA专用文本清理
-function cleanPTAOptionText(text, optionValue) {
-    if (!text) return '';
-    
-    return text
-        .replace(/<[^>]*>/g, '') // 移除HTML标签
-        .replace(/[\n\r\t]/g, ' ') // 替换换行和制表符
-        .replace(/\s{2,}/g, ' ') // 合并多个空格
-        .replace(/^[A-Da-d][\.\)]\s*/, '') // 移除选项前缀
-        .replace(/^\d+[\.\)]\s*/, '') // 移除数字前缀
-        .replace(new RegExp(`^\\s*${optionValue}\\s*`), '') // 移除input value
-        .replace(/^\.\s*/, '') // 移除开头的点
-        .trim();
-}
 
 // 从label提取选项文本
 function extractOptionTextFromLabel(label, optionValue) {
@@ -1446,15 +1365,6 @@ function cleanOptionText(text, optionValue) {
         .trim();
 }
 
-// 验证选项文本有效性
-function isValidOptionText(text) {
-    if (!text || text.length < 1) return false;
-    if (text.length > 100) return false; // 太长的文本可能不是选项
-    if (/^\d+$/.test(text)) return false; // 纯数字可能不是选项文本
-    if (/^[A-Da-d]$/.test(text)) return false; // 单个字母可能不是选项文本
-    return true;
-}
-
 // 从文本中提取选项
 function extractOptionsFromText(text) {
     const options = [];
@@ -1499,41 +1409,6 @@ function extractOptionsFromText(text) {
     return options;
 }
 
-// 去重和排序选项
-function deduplicateAndSortOptions(options) {
-    // 稳定排序：按元素位置（top/left）
-    const sortedOptions = [...options].sort((a, b) => {
-        const ra = a.element?.getBoundingClientRect?.() || { top: 0, left: 0 };
-        const rb = b.element?.getBoundingClientRect?.() || { top: 0, left: 0 };
-        if (ra.top !== rb.top) return ra.top - rb.top;
-        return ra.left - rb.left;
-    });
-
-    const uniqueOptions = [];
-    const seenElems = new Set();
-    const seenKeys = new Set();
-
-    for (const opt of sortedOptions) {
-        if (opt.element) {
-            if (seenElems.has(opt.element)) continue;
-            seenElems.add(opt.element);
-            uniqueOptions.push(opt);
-            continue;
-        }
-        const key = [
-            (opt.text || '').toLowerCase().trim(),
-            (opt.displayValue || opt.value || '').toString(),
-            (opt.name || '').toString(),
-            (opt.type || '').toString()
-        ].join('::');
-
-        if (seenKeys.has(key)) continue;
-        seenKeys.add(key);
-        uniqueOptions.push(opt);
-    }
-
-    return uniqueOptions;
-}
 
 // 获取题目输入框
 function getQuestionInputs(element) {
@@ -1632,7 +1507,7 @@ async function autoFillAnswers(sendResponse) {
                         
                         if (fillSuccess) {
                             filledCount++;
-                            question.element.classList.add('pta-helper-filled');
+                            question.element.classList.add('wph-filled');
                             console.log(`✅ 第 ${fillAttempt} 次填充成功`);
                             
                             // 提交用户答案反馈到API（如果启用）
@@ -1943,13 +1818,13 @@ async function fillQuestionAnswer(question, answer) {
         try {
             console.log(`🔄 自动填充尝试 ${attempt}/${maxRetries}: ${question.title.substring(0, 30)}...`);
             
-            // 在PTA平台上使用专用自动填充
-            const isPTAPlatform = window.location.hostname.includes('pintia.cn') || 
+            // 在 Pintia 平台上使用专用自动填充
+            const isPintiaPlatform = window.location.hostname.includes('pintia.cn') || 
                                  document.querySelector('span.block.p-0\\.5, label.w-full.inline-flex');
             
-            if (isPTAPlatform && (question.type === QUESTION_TYPES.SINGLE_CHOICE || question.type === QUESTION_TYPES.TRUE_FALSE)) {
-                console.log('🎯 检测到PTA平台，使用专用自动填充');
-                const result = await fillPTAChoiceAnswer(question, answer);
+            if (isPintiaPlatform && (question.type === QUESTION_TYPES.SINGLE_CHOICE || question.type === QUESTION_TYPES.TRUE_FALSE)) {
+                console.log('🎯 检测到 Pintia 平台，使用专用自动填充');
+                const result = await fillPintiaChoiceAnswer(question, answer);
                 if (result) return true;
                 continue; // 如果失败，继续重试
             }
@@ -2046,7 +1921,7 @@ async function fillChoiceAnswer(question, answer) {
             else if (normalizedText.includes(normalizedAnswer) || normalizedAnswer.includes(normalizedText)) {
                 similarity = 0.8;
             }
-            // 3. 关键词匹配（PTA常见模式）
+            // 3. 关键词匹配（Pintia 常见模式）
             else {
                 // 提取主要关键词进行比较
                 const answerKeywords = extractKeywords(normalizedAnswer);
@@ -2130,7 +2005,7 @@ async function fillChoiceAnswer(question, answer) {
                 // 设置选中状态
                 targetOption.input.checked = true;
                 
-                // 触发所有可能的事件（PTA平台可能需要特定的事件）
+                // 触发所有可能的事件（Pintia 平台可能需要特定的事件）
                 const events = ['change', 'input', 'click', 'focus', 'blur'];
                 
                 events.forEach(eventType => {
@@ -2142,7 +2017,7 @@ async function fillChoiceAnswer(question, answer) {
                     }
                 });
                 
-                // PTA平台特殊处理：可能需要触发父元素的事件
+                // Pintia 平台特殊处理：可能需要触发父元素的事件
                 try {
                     const parentElement = targetOption.input.closest('label, span, div, li, .option-item, .choice-item');
                     if (parentElement) {
@@ -2258,13 +2133,13 @@ function calculateKeywordSimilarity(keywords1, keywords2) {
     return intersection.size / union.size;
 }
 
-// PTA平台专用自动填充（处理PTA特有的DOM结构和事件）
-async function fillPTAChoiceAnswer(question, answer) {
-    console.log('🎯 使用PTA专用自动填充');
+// Pintia 平台专用自动填充（处理 Pintia 特有的 DOM 结构和事件）
+async function fillPintiaChoiceAnswer(question, answer) {
+    console.log('🎯 使用 Pintia 专用自动填充');
     
     try {
-        // 扩展PTA选项元素选择器（覆盖更多PTA平台变体）
-        const ptaOptionSelectors = [
+        // 扩展 Pintia 选项元素选择器（覆盖更多 Pintia 平台变体）
+        const pintiaOptionSelectors = [
             'span.block.p-0\\.5', 
             'label.w-full.inline-flex',
             '.option-item',
@@ -2277,15 +2152,15 @@ async function fillPTAChoiceAnswer(question, answer) {
             '.pc-checkbox',
             '.radio-item',
             '.checkbox-item',
-            // 新增PTA常见选择器
+            // 新增 Pintia 常见选择器
             '[class*="option"]',
             '[class*="choice"]',
             '[class*="radio"]',
             '[class*="checkbox"]'
         ];
         
-        const optionElements = (question.element || document).querySelectorAll(ptaOptionSelectors.join(', '));
-        console.log(`🔍 找到 ${optionElements.length} 个PTA选项元素`);
+        const optionElements = (question.element || document).querySelectorAll(pintiaOptionSelectors.join(', '));
+        console.log(`🔍 找到 ${optionElements.length} 个Pintia选项元素`);
         
         // 方法1: 精确文本匹配
         const normalizedAnswer = answer.toString().toLowerCase().trim();
@@ -2296,10 +2171,10 @@ async function fillPTAChoiceAnswer(question, answer) {
             // 精确匹配检查
             if (elementText.includes(normalizedAnswer) || 
                 normalizedAnswer.includes(elementText)) {
-                console.log(`✅ 找到文本匹配的PTA选项: ${elementText}`);
+                console.log(`✅ 找到文本匹配的Pintia选项: ${elementText}`);
                 
-                // 执行PTA专用点击操作
-                if (await clickPTAOption(element, answer)) {
+                // 执行 Pintia 专用点击操作
+                if (await clickPintiaOption(element, answer)) {
                     return true;
                 }
             }
@@ -2313,7 +2188,7 @@ async function fillPTAChoiceAnswer(question, answer) {
             const targetElement = optionElements[answerIndex];
             console.log(`✅ 按选项字母匹配: ${answer} -> 第${answerIndex + 1}个选项`);
             
-            if (await clickPTAOption(targetElement, answer)) {
+            if (await clickPintiaOption(targetElement, answer)) {
                 return true;
             }
         }
@@ -2325,7 +2200,7 @@ async function fillPTAChoiceAnswer(question, answer) {
                 const targetElement = optionElements[numericIndex];
                 console.log(`✅ 按数字索引匹配: ${answer} -> 第${numericIndex + 1}个选项`);
                 
-                if (await clickPTAOption(targetElement, answer)) {
+                if (await clickPintiaOption(targetElement, answer)) {
                     return true;
                 }
             }
@@ -2338,27 +2213,27 @@ async function fillPTAChoiceAnswer(question, answer) {
                     console.log(`🤖 使用question选项匹配: ${option.text}`);
                     
                     // 尝试找到对应的DOM元素
-                    const matchingElement = findPTAOptionByText(option.text, optionElements);
-                    if (matchingElement && await clickPTAOption(matchingElement, answer)) {
+                    const matchingElement = findPintiaOptionByText(option.text, optionElements);
+                    if (matchingElement && await clickPintiaOption(matchingElement, answer)) {
                         return true;
                     }
                 }
             }
         }
         
-        console.warn('❌ PTA专用自动填充未找到匹配选项');
+        console.warn('❌ Pintia 专用自动填充未找到匹配选项');
         return false;
         
     } catch (error) {
-        console.error('PTA自动填充失败:', error);
+        console.error('Pintia 自动填充失败:', error);
         return false;
     }
 }
 
-// PTA选项点击专用函数
-async function clickPTAOption(element, answer) {
+// Pintia 选项点击专用函数
+async function clickPintiaOption(element, answer) {
     try {
-        console.log(`🖱️ 点击PTA选项: ${element.textContent.trim()}`);
+        console.log(`🖱️ 点击 Pintia 选项: ${element.textContent.trim()}`);
         
         // 1. 首先尝试标准的点击事件
         const clickEvent = new MouseEvent('click', { 
@@ -2368,7 +2243,7 @@ async function clickPTAOption(element, answer) {
             detail: 1 // 重要：设置detail为1表示单击
         });
         
-        // 2. 触发多次点击确保生效（PTA可能需要多次触发）
+        // 2. 触发多次点击确保生效（Pintia 可能需要多次触发）
         for (let i = 0; i < 3; i++) {
             element.dispatchEvent(clickEvent);
             
@@ -2387,7 +2262,7 @@ async function clickPTAOption(element, answer) {
                 console.log(`✅ 设置input选中状态: ${input.checked}`);
             }
             
-            // 4. 触发父元素事件（PTA可能监听父元素）
+            // 4. 触发父元素事件（Pintia 可能监听父元素）
             const parentElement = element.closest('label, div, span, li');
             if (parentElement && parentElement !== element) {
                 parentElement.dispatchEvent(clickEvent);
@@ -2410,7 +2285,7 @@ async function clickPTAOption(element, answer) {
                 input.checked = true;
                 input.dispatchEvent(new Event('change', { bubbles: true }));
                 
-                // 额外触发PTA可能需要的其他事件
+                // 额外触发 Pintia 可能需要的其他事件
                 const extraEvents = ['input', 'click', 'focus', 'blur'];
                 extraEvents.forEach(eventType => {
                     try {
@@ -2450,7 +2325,7 @@ async function clickPTAOption(element, answer) {
             element.classList.add('selected', 'active');
             
             // 方法C: 触发自定义事件
-            const customEvent = new CustomEvent('pta-helper-selected', { 
+            const customEvent = new CustomEvent('wph-selected', { 
                 bubbles: true, 
                 detail: { answer: answer } 
             });
@@ -2459,17 +2334,17 @@ async function clickPTAOption(element, answer) {
             isSuccess = true;
         }
         
-        console.log(`🎉 PTA选项点击完成: ${answer} (成功: ${isSuccess})`);
+        console.log(`🎉 Pintia 选项点击完成: ${answer} (成功: ${isSuccess})`);
         return isSuccess;
         
     } catch (error) {
-        console.error('PTA选项点击失败:', error);
+        console.error('Pintia 选项点击失败:', error);
         return false;
     }
 }
 
-// 根据文本内容查找PTA选项元素
-function findPTAOptionByText(text, optionElements) {
+// 根据文本内容查找 Pintia 选项元素
+function findPintiaOptionByText(text, optionElements) {
     const normalizedText = text.toLowerCase().trim();
     
     for (const element of optionElements) {
@@ -2663,11 +2538,11 @@ function buildProgrammingPrompt(question) {
 function showProgrammingSolutionUI(question, codeText) {
     try {
         // 清理可能已存在的 UI
-        const existing = question.element.querySelector('.pta-programming-solution');
+        const existing = question.element.querySelector('.wph-programming-solution');
         if (existing) existing.remove();
 
         const container = document.createElement('div');
-        container.className = 'pta-programming-solution';
+        container.className = 'wph-programming-solution';
         container.style.cssText = 'border:1px solid #e6eef8;padding:8px;margin-top:8px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.06);font-family:monospace;max-width:100%;overflow:auto;';
 
         const btnRow = document.createElement('div');
@@ -2675,7 +2550,7 @@ function showProgrammingSolutionUI(question, codeText) {
 
         const copyBtn = document.createElement('button');
         copyBtn.textContent = '复制代码';
-        copyBtn.className = 'pta-btn-ghost';
+        copyBtn.className = 'wph-btn-ghost';
         copyBtn.onclick = () => {
             navigator.clipboard.writeText(codeText).then(() => {
                 copyBtn.textContent = '已复制';
@@ -2685,7 +2560,7 @@ function showProgrammingSolutionUI(question, codeText) {
 
         const fillBtn = document.createElement('button');
         fillBtn.textContent = '自动填充到编辑器';
-        fillBtn.className = 'pta-btn-primary';
+        fillBtn.className = 'wph-btn-primary';
         fillBtn.onclick = async () => {
             const ok = fillProgrammingAnswer(question, codeText);
             if (!ok) alert('自动填充未生效，请查看控制台日志以获取更多信息');
@@ -2717,7 +2592,7 @@ function showProgrammingSolutionUI(question, codeText) {
 
         // 为调试添加数据属性
         try {
-            container.dataset.ptaGenerated = '1';
+            container.dataset.wphGenerated = '1';
             container.dataset.codeLength = String((codeText || '').length);
             container.dataset.questionTitle = (question.title || '').substring(0, 80);
         } catch (e) {}
@@ -2767,7 +2642,7 @@ async function submitAnswers(sendResponse) {
         
         if (submitButton) {
             // 添加提交前的视觉反馈
-            submitButton.classList.add('pta-helper-processing');
+            submitButton.classList.add('wph-processing');
             
             // 模拟点击提交
             submitButton.click();
@@ -2873,15 +2748,6 @@ async function clearAPICache(sendResponse) {
     }
 }
 
-// 工具函数
-function detectQuestionsSync() {
-    return new Promise((resolve) => {
-        detectQuestions((response) => {
-            resolve(response.success ? response.questions : []);
-        });
-    });
-}
-
 function groupQuestionsByName(inputs) {
     const groups = {};
     inputs.forEach(input => {
@@ -2896,13 +2762,13 @@ function groupQuestionsByName(inputs) {
 
 function highlightQuestions(elements) {
     elements.forEach(element => {
-        element.classList.add('pta-helper-highlight');
+        element.classList.add('wph-highlight');
     });
     
     // 3秒后移除高亮
     setTimeout(() => {
         elements.forEach(element => {
-            element.classList.remove('pta-helper-highlight');
+            element.classList.remove('wph-highlight');
         });
     }, 3000);
 }
@@ -2968,13 +2834,13 @@ function isPageReady() {
 function performInitialization() {
     if (isInitialized) return;
     
-    console.log('✅ PTA答题助手初始化完成');
+    console.log('✅ Web 题目助手初始化完成');
     isInitialized = true;
     
     // 延迟创建工具栏，确保页面完全稳定
     setTimeout(() => {
         createFloatingToolbar();
-        showNotification('PTA答题助手已启动', '插件已成功加载，可以开始使用了！', 'success');
+        showNotification('Web 题目助手已启动', '插件已成功加载，可以开始使用了！', 'success');
     }, 500);
     
     // 添加快捷键支持
@@ -3088,44 +2954,44 @@ function createFloatingToolbar() {
     }
     
     toolbarElement = document.createElement('div');
-    toolbarElement.className = 'pta-helper-toolbar';
+    toolbarElement.className = 'wph-toolbar';
     toolbarElement.innerHTML = `
-        <div class="pta-helper-toolbar-header">
-            <h3 class="pta-helper-title">
-                <div class="pta-helper-logo">P</div>
-                PTA助手
+        <div class="wph-toolbar-header">
+            <h3 class="wph-title">
+                <div class="wph-logo">W</div>
+                Web 题目助手
             </h3>
-            <button class="pta-helper-minimize" title="最小化">−</button>
+            <button class="wph-minimize" title="最小化">−</button>
         </div>
-        <div class="pta-helper-content">
-            <div class="pta-helper-status ready">
-                <div class="pta-helper-status-icon">✓</div>
-                <span class="pta-helper-status-text">就绪</span>
+        <div class="wph-content">
+            <div class="wph-status ready">
+                <div class="wph-status-icon">✓</div>
+                <span class="wph-status-text">就绪</span>
             </div>
-            <div class="pta-helper-buttons">
-                <button class="pta-helper-btn detect-btn">
+            <div class="wph-buttons">
+                <button class="wph-btn detect-btn">
                     🔍 检测题目 (Ctrl+Shift+D)
                 </button>
-                <button class="pta-helper-btn primary fill-btn">
+                <button class="wph-btn primary fill-btn">
                     ✨ 自动填充 (Ctrl+Shift+F)
                 </button>
-                <button class="pta-helper-btn secondary show-answers-btn">
+                <button class="wph-btn secondary show-answers-btn">
                     📋 显示答案 (Ctrl+Shift+A)
                 </button>
-                <button class="pta-helper-btn danger submit-btn">
+                <button class="wph-btn danger submit-btn">
                     📤 提交答案
                 </button>
             </div>
-            <div class="pta-helper-stats">
-                <div class="pta-helper-stats-item">
+            <div class="wph-stats">
+                <div class="wph-stats-item">
                     <span>检测到:</span>
                     <span id="detected-count">0</span>
                 </div>
-                <div class="pta-helper-stats-item">
+                <div class="wph-stats-item">
                     <span>已填充:</span>
                     <span id="filled-count">0</span>
                 </div>
-                <div class="pta-helper-stats-item">
+                <div class="wph-stats-item">
                     <span>成功率:</span>
                     <span id="success-rate">0%</span>
                 </div>
@@ -3136,7 +3002,7 @@ function createFloatingToolbar() {
     document.body.appendChild(toolbarElement);
     
     // 添加事件监听器（而不是使用onclick属性）
-    const minimizeBtn = toolbarElement.querySelector('.pta-helper-minimize');
+    const minimizeBtn = toolbarElement.querySelector('.wph-minimize');
     const detectBtn = toolbarElement.querySelector('.detect-btn');
     const fillBtn = toolbarElement.querySelector('.fill-btn');
     const showAnswersBtn = toolbarElement.querySelector('.show-answers-btn');
@@ -3155,14 +3021,14 @@ function createFloatingToolbar() {
 // 显示通知
 function showNotification(title, message, type = 'success') {
     // 移除现有通知
-    const existingNotifications = document.querySelectorAll('.pta-helper-notification');
+    const existingNotifications = document.querySelectorAll('.wph-notification');
     existingNotifications.forEach(n => n.remove());
     
     const notification = document.createElement('div');
-    notification.className = `pta-helper-notification ${type}`;
+    notification.className = `wph-notification ${type}`;
     notification.innerHTML = `
-        <div class="pta-helper-notification-title">${title}</div>
-        <div class="pta-helper-notification-message">${message}</div>
+        <div class="wph-notification-title">${title}</div>
+        <div class="wph-notification-message">${message}</div>
     `;
     
     document.body.appendChild(notification);
@@ -3185,10 +3051,10 @@ function showNotification(title, message, type = 'success') {
 function updateToolbarStatus(status = 'ready', text = '就绪') {
     if (!toolbarElement) return;
     
-    const statusElement = toolbarElement.querySelector('.pta-helper-status');
-    const statusText = toolbarElement.querySelector('.pta-helper-status-text');
+    const statusElement = toolbarElement.querySelector('.wph-status');
+    const statusText = toolbarElement.querySelector('.wph-status-text');
     
-    statusElement.className = `pta-helper-status ${status}`;
+    statusElement.className = `wph-status ${status}`;
     statusText.textContent = text;
     
     // 更新统计信息
@@ -3247,13 +3113,13 @@ async function performQuestionDetection() {
         console.log('🔍 开始高效题目检测...');
         const questions = [];
         
-        // 分阶段检测，专注于PTA题目结构
+        // 分阶段检测，专注于 Pintia 题目结构
         const detectionStages = [
-            // 第一阶段：PTA特定容器
+            // 第一阶段：Pintia 特定容器
             {
-                name: 'PTA容器',
+                name: 'Pintia容器',
                 selectors: [
-                    '.pc-x', // PTA题目容器
+                    '.pc-x', // Pintia 题目容器
                     '[class*="problem"]', 
                     '[class*="question"]',
                     '.problem-container',
@@ -3271,8 +3137,8 @@ async function performQuestionDetection() {
             {
                 name: '选项容器',
                 selectors: [
-                    'label', // PTA使用label包裹选项
-                    '.markdownBlock_tErSz', // PTA markdown容器
+                    'label', // Pintia 使用 label 包裹选项
+                    '.markdownBlock_tErSz', // Pintia markdown容器
                     '[class*="option"]',
                     '[class*="choice"]',
                     '.answer-item'
@@ -3524,7 +3390,7 @@ async function performAutoFill() {
                         const success = await fillQuestionAnswer(question, answer);
                         if (success) {
                             // 添加视觉反馈
-                            question.element.classList.add('pta-helper-filled');
+                            question.element.classList.add('wph-filled');
                             console.log(`✅ 第 ${globalIndex + 1} 道题目填充成功`);
                             return true;
                         }
@@ -3575,7 +3441,7 @@ async function getDetectedQuestions() {
     }
     
     // 如果没有缓存的题目，尝试从已高亮的元素获取
-    const highlightedElements = document.querySelectorAll('.pta-helper-highlight');
+    const highlightedElements = document.querySelectorAll('.wph-highlight');
     if (highlightedElements.length > 0) {
         console.log(`📋 从已高亮元素获取 ${highlightedElements.length} 道题目`);
         const questions = Array.from(highlightedElements).map((element, index) => 
@@ -3657,7 +3523,7 @@ async function handleSubmit() {
         
         if (submitButton) {
             // 添加提交前的视觉反馈
-            submitButton.classList.add('pta-helper-processing');
+            submitButton.classList.add('wph-processing');
             
             // 模拟点击提交
             submitButton.click();
@@ -3680,7 +3546,7 @@ function toggleMinimize() {
     if (!toolbarElement) return;
     
     toolbarElement.classList.toggle('minimized');
-    const minimizeBtn = toolbarElement.querySelector('.pta-helper-minimize');
+    const minimizeBtn = toolbarElement.querySelector('.wph-minimize');
     minimizeBtn.textContent = toolbarElement.classList.contains('minimized') ? '+' : '−';
 }
 
@@ -3688,7 +3554,7 @@ function toggleMinimize() {
 function toggleToolbar() {
     if (!toolbarElement) return;
     
-    toolbarElement.classList.toggle('pta-helper-hidden');
+    toolbarElement.classList.toggle('wph-hidden');
 }
 
 // 使元素可拖拽
@@ -3701,7 +3567,7 @@ function makeDraggable(element) {
     let xOffset = 0;
     let yOffset = 0;
 
-    const header = element.querySelector('.pta-helper-toolbar-header');
+    const header = element.querySelector('.wph-toolbar-header');
     
     header.addEventListener('mousedown', dragStart);
     document.addEventListener('mousemove', drag);
@@ -4007,14 +3873,14 @@ async function performGetAnswersOnly() {
     }
 }
 
-// 获取答案显示文本（将选项值映射到选项文本，PTA平台优化版）
+// 获取答案显示文本（将选项值映射到选项文本，Pintia 平台优化版）
 function getAnswerDisplayText(answer) {
     if (!answer.hasAnswer || !answer.answer) {
-        return '<span class="pta-helper-answer-text no-answer">未找到答案</span>';
+        return '<span class="wph-answer-text no-answer">未找到答案</span>';
     }
     // 新增兜底：无选项时统一以代码块展示，避免误判为选择题
     if (!answer.options || answer.options.length === 0) {
-        return `<pre class="pta-code-block"><code>${answer.answer}</code></pre>`;
+        return `<pre class="wph-code-block"><code>${answer.answer}</code></pre>`;
     }
     
     // 如果是选择题且有选项，尝试将答案值映射到选项文本
@@ -4035,26 +3901,26 @@ function getAnswerDisplayText(answer) {
                 const optionLetter = getOptionLetter(matchingOption.value, answer.options);
                 
                 // 清理选项文本（移除可能的HTML标签和多余空格）
-                const cleanOptionText = cleanPTAOptionText(matchingOption.text, optionLetter);
+                const cleanOptionText = cleanPintiaOptionText(matchingOption.text, optionLetter);
                 
                 // 创建带样式的选项显示
                 const optionClass = answer.type === 'multiple_choice' ? 
-                    'pta-helper-multiple-option' : 'pta-helper-option-letter';
+                    'wph-multiple-option' : 'wph-option-letter';
                 
                 displayTexts.push(
                     `<span class="${optionClass}" title="${cleanOptionText}">${optionLetter}</span>` +
-                    `<span class="pta-helper-option-text">${cleanOptionText}</span>`
+                    `<span class="wph-option-text">${cleanOptionText}</span>`
                 );
             } else {
                 // 如果没有找到匹配的选项，尝试将值转换为选项字母
                 const optionLetter = getOptionLetter(value, answer.options);
-                displayTexts.push(`<span class="pta-helper-option-letter">${optionLetter}</span>`);
+                displayTexts.push(`<span class="wph-option-letter">${optionLetter}</span>`);
             }
         }
         
         // 对于多选题，使用特殊的样式类
         if (answer.type === 'multiple_choice') {
-            return `<div class="pta-helper-multiple-answers">${displayTexts.join(' ')}</div>`;
+            return `<div class="wph-multiple-answers">${displayTexts.join(' ')}</div>`;
         }
         
         return displayTexts.join(', ');
@@ -4063,24 +3929,24 @@ function getAnswerDisplayText(answer) {
     // 对于判断题，使用专门的样式
     if (answer.type === 'true_false') {
         if (answer.answer === '正确' || answer.answer === 'true') {
-            return '<span class="pta-helper-answer-text pta-helper-true-false pta-helper-true">✅ 正确</span>';
+            return '<span class="wph-answer-text wph-true-false wph-true">✅ 正确</span>';
         } else if (answer.answer === '错误' || answer.answer === 'false') {
-            return '<span class="pta-helper-answer-text pta-helper-true-false pta-helper-false">❌ 错误</span>';
+            return '<span class="wph-answer-text wph-true-false wph-false">❌ 错误</span>';
         }
     }
     
     // 对于填空题，使用可复制代码块显示
     if (answer.type === 'fill_blank') {
-        return `<pre class="pta-code-block"><code>${answer.answer}</code></pre>`;
+        return `<pre class="wph-code-block"><code>${answer.answer}</code></pre>`;
     }
     
     // 对于编程题，使用可复制代码块显示
     if (answer.type === 'programming') {
-        return `<pre class="pta-code-block"><code>${answer.answer}</code></pre>`;
+        return `<pre class="wph-code-block"><code>${answer.answer}</code></pre>`;
     }
     
     // 对于其他类型的题目，使用通用答案样式
-    return `<span class="pta-helper-answer-text has-answer">${answer.answer}</span>`;
+    return `<span class="wph-answer-text has-answer">${answer.answer}</span>`;
 }
 
 // 获取选项字母（A、B、C、D）
@@ -4120,14 +3986,14 @@ function getOptionLetter(value, options) {
 // 显示答案模态框
 function showAnswersModal(answers) {
     // 移除现有的模态框
-    const existingModal = document.querySelector('.pta-helper-answers-modal');
+    const existingModal = document.querySelector('.wph-answers-modal');
     if (existingModal) {
         existingModal.remove();
     }
     
     // 创建模态框
     const modal = document.createElement('div');
-    modal.className = 'pta-helper-answers-modal';
+    modal.className = 'wph-answers-modal';
     
     // 生成答案列表HTML
     let answersHtml = '';
@@ -4137,7 +4003,7 @@ function showAnswersModal(answers) {
         const statusIcon = answer.hasAnswer ? '✅' : '❌';
         const statusClass = answer.hasAnswer ? 'success' : 'error';
         
-        // 格式化选项显示（PTA平台优化）
+        // 格式化选项显示（Pintia 平台优化）
         const formattedOptions = formatOptionsForDisplay(answer.options);
         
         answersHtml += `
@@ -4187,7 +4053,7 @@ function showAnswersModal(answers) {
         <div class="modal-overlay"></div>
         <div class="modal-content">
             <div class="modal-header">
-                <h3>📋 题目答案列表 - PTA助手</h3>
+                <h3>📋 题目答案列表 - Web 题目助手</h3>
                 <div class="modal-actions">
                     <button class="auto-fill-all-btn" title="自动填充所有答案">🔄 全部填充</button>
                     <button class="copy-all-btn" title="复制所有答案">📋 复制全部</button>
@@ -4356,14 +4222,14 @@ function showAnswersModal(answers) {
     setTimeout(() => modal.classList.add('show'), 100);
 }
 
-// 格式化选项显示（PTA平台优化）
+// 格式化选项显示（Pintia 平台优化）
 function formatOptionsForDisplay(options) {
     if (!options || options.length === 0) return '';
     
     return options.map((opt, idx) => {
         // 优先使用 displayValue（A/B/C/D），否则按索引计算字母
         const optionLetter = opt.displayValue || String.fromCharCode(65 + idx);
-        const cleanText = cleanPTAOptionText(opt.text, optionLetter);
+        const cleanText = cleanPintiaOptionText(opt.text, optionLetter);
         
         return `
             <div class="option-item">
@@ -4693,7 +4559,7 @@ function injectOptionStyles() {
     const style = document.createElement('style');
     style.textContent = `
         /* 选项字母样式优化 - 确保A、B、C、D格式清晰显示 */
-        .pta-helper-option-letter {
+        .wph-option-letter {
             display: inline-block;
             min-width: 24px;
             height: 24px;
@@ -4709,7 +4575,7 @@ function injectOptionStyles() {
         }
         
         /* 选项文本样式 */
-        .pta-helper-option-text {
+        .wph-option-text {
             display: inline-block;
             vertical-align: middle;
             max-width: 300px;
@@ -4719,7 +4585,7 @@ function injectOptionStyles() {
         }
         
         /* 多选题选项样式 */
-        .pta-helper-multiple-option {
+        .wph-multiple-option {
             display: inline-block;
             min-width: 24px;
             height: 24px;
@@ -4735,7 +4601,7 @@ function injectOptionStyles() {
         }
         
         /* 多选题答案容器 */
-        .pta-helper-multiple-answers {
+        .wph-multiple-answers {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
@@ -4743,7 +4609,7 @@ function injectOptionStyles() {
         }
         
         /* 答案文本基础样式 */
-        .pta-helper-answer-text {
+        .wph-answer-text {
             font-weight: bold;
             color: #4caf50;
             background: #e8f5e8;
@@ -4752,18 +4618,18 @@ function injectOptionStyles() {
             border: 1px solid #4caf50;
         }
         
-        .pta-helper-answer-text.has-answer {
+        .wph-answer-text.has-answer {
             color: #4caf50;
             background: #e8f5e8;
         }
         
-        .pta-helper-answer-text.no-answer {
+        .wph-answer-text.no-answer {
             color: #f44336;
             background: #ffebee;
         }
         
         /* 判断题样式 */
-        .pta-helper-true-false {
+        .wph-true-false {
             display: inline-block;
             padding: 4px 12px;
             border-radius: 6px;
@@ -4771,20 +4637,20 @@ function injectOptionStyles() {
             font-size: 14px;
         }
         
-        .pta-helper-true {
+        .wph-true {
             background: #4caf50;
             color: white;
             border: 1px solid #388e3c;
         }
         
-        .pta-helper-false {
+        .wph-false {
             background: #f44336;
             color: white;
             border: 1px solid #d32f2f;
         }
         
         /* 填空题答案样式 */
-        .pta-helper-blank-answer {
+        .wph-blank-answer {
             background: #e3f2fd;
             color: #1976d2;
             padding: 4px 8px;
@@ -4795,7 +4661,7 @@ function injectOptionStyles() {
         }
         
         /* 编程题代码样式 */
-        .pta-helper-code-answer {
+        .wph-code-answer {
             background: #f5f5f5;
             color: #333;
             padding: 4px 8px;
@@ -4977,23 +4843,23 @@ function injectOptionStyles() {
         }
         
         /* 悬停效果 */
-        .pta-helper-option-letter:hover,
-        .pta-helper-multiple-option:hover {
+        .wph-option-letter:hover,
+        .wph-multiple-option:hover {
             transform: scale(1.1);
             transition: transform 0.2s ease;
         }
         
         /* 移动端适配 */
         @media (max-width: 768px) {
-            .pta-helper-option-letter,
-            .pta-helper-multiple-option {
+            .wph-option-letter,
+            .wph-multiple-option {
                 min-width: 20px;
                 height: 20px;
                 line-height: 20px;
                 font-size: 12px;
             }
             
-            .pta-helper-option-text {
+            .wph-option-text {
                 max-width: 200px;
             }
             
@@ -5166,7 +5032,7 @@ function composeQuestionWithContext(question, ctxSnippets) {
 }
 
 /**
- * PTA 编程题页面元数据检测（针对“7-1 线性表逆置”等结构）
+ * Pintia 编程题页面元数据检测（针对“7-1 线性表逆置”等结构）
  * 返回 { success: true, meta: { id, title, type, language, io, examples, raw } }
  */
 async function detectProgrammingProblemMeta(sendResponse) {
@@ -5175,7 +5041,7 @@ async function detectProgrammingProblemMeta(sendResponse) {
         let title = '';
         const titleCandidates = [
             '.space-y-4 .text-darkest.font-bold.text-lg',
-            '.space-y-4 .pc-text-raw',                 // 新增：PTA标题文本碎片
+            '.space-y-4 .pc-text-raw',                 // 新增：Pintia 标题文本碎片
             '.problem-title, .exam-title, .question-title',
             'h1, h2, h3'
         ];
@@ -5296,11 +5162,11 @@ async function detectProgrammingProblemMeta(sendResponse) {
 
         // 5) 构造返回元数据
         const meta = {
-            id: (title || 'pta-programming').replace(/\s+/g, '-'),
+            id: (title || 'pintia-programming').replace(/\s+/g, '-'),
             title,
             type: 'programming',
             language: 'C/C++',
-            tags: ['PTA', '编程题'],
+            tags: ['Pintia', '编程题'],
             io: { input: inputDesc, output: outputDesc },
             examples: { in: sampleIn, out: sampleOut },
             raw: { url: window.location.href, hasMarkdown: !!markdownBlock }
@@ -5383,8 +5249,8 @@ async function detectProgrammingProblemMeta(sendResponse) {
 // 注入选项样式
 injectOptionStyles();
 
-// 兼容入口：提供 initializePTAHelper 接口，调用现有初始化流程
-function initializePTAHelper() {
+// 兼容入口：提供 initializeWebProblemsHelper 接口，调用现有初始化流程
+function initializeWebProblemsHelper() {
     try {
         if (typeof smartInitialize === 'function') {
             smartInitialize();
@@ -5396,19 +5262,19 @@ function initializePTAHelper() {
             initAIService();
         }
     } catch (e) {
-        console.warn('initializePTAHelper 执行出错:', e);
+        console.warn('initializeWebProblemsHelper 执行出错:', e);
     }
 }
 
 // 页面加载完成后初始化
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializePTAHelper);
+    document.addEventListener('DOMContentLoaded', initializeWebProblemsHelper);
 } else {
-    initializePTAHelper();
+    initializeWebProblemsHelper();
 }
 
 // 导出主要函数供其他脚本使用
-window.PTAHelper = {
+window.WebProblemsHelper = {
     detectQuestions,
     autoFillAnswers,
     showAnswers,
@@ -5418,4 +5284,4 @@ window.PTAHelper = {
     getCurrentStats
 };
 
-console.log('✅ PTA答题助手初始化完成');
+console.log('✅ Web 题目助手初始化完成');

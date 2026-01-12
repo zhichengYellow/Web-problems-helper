@@ -1,4 +1,4 @@
-// PTA答题助手 - API服务模块（修复版）
+// Web 题目助手 - API服务模块（修复版）
 // 支持免费稳定的外部API和本地存档
 
 class APIService {
@@ -542,7 +542,7 @@ class APIService {
         let url = `${apiConfig.baseURL}${endpoint}`;
         const headers = {
             'Content-Type': 'application/json',
-            'X-Platform': 'pta-helper'
+            'X-Platform': 'web-problems-helper'
         };
 
         // 添加认证信息
@@ -815,7 +815,7 @@ class APIService {
         let url = `${this.baseURL}${endpoint}`;
         const headers = {
             'Content-Type': 'application/json',
-            'X-Platform': 'pta-helper'
+            'X-Platform': 'web-problems-helper'
         };
 
         // 添加认证信息
@@ -877,8 +877,8 @@ class APIService {
             
             // 使用localStorage作为备用
             if (typeof localStorage !== 'undefined') {
-                localStorage.setItem('pta_local_archive', JSON.stringify(Array.from(this.localArchive.entries())));
-                localStorage.setItem('pta_usage_stats', JSON.stringify(this.usageStats));
+                localStorage.setItem('wph_local_archive', JSON.stringify(Array.from(this.localArchive.entries())));
+                localStorage.setItem('wph_usage_stats', JSON.stringify(this.usageStats));
             } else {
                 // 如果localStorage也不可用，使用内存存储
                 console.log('⚠️ 使用内存存储（无持久化）');
@@ -892,8 +892,8 @@ class APIService {
 
     saveToLocalStorage() {
         try {
-            localStorage.setItem('pta_local_archive', JSON.stringify(Array.from(this.localArchive.entries())));
-            localStorage.setItem('pta_usage_stats', JSON.stringify(this.usageStats));
+            localStorage.setItem('wph_local_archive', JSON.stringify(Array.from(this.localArchive.entries())));
+            localStorage.setItem('wph_usage_stats', JSON.stringify(this.usageStats));
         } catch (error) {
             console.error('localStorage存储失败:', error);
         }
@@ -903,8 +903,8 @@ class APIService {
         try {
             // 检查是否在浏览器环境中
             if (typeof localStorage !== 'undefined') {
-                const archiveData = localStorage.getItem('pta_local_archive');
-                const statsData = localStorage.getItem('pta_usage_stats');
+                const archiveData = localStorage.getItem('wph_local_archive');
+                const statsData = localStorage.getItem('wph_usage_stats');
                 
                 if (archiveData) {
                     this.localArchive = new Map(JSON.parse(archiveData));
@@ -1001,7 +1001,7 @@ class APIService {
                 await chrome.storage.local.set({ apiConfig: config });
                 console.log('✅ 配置已保存到Chrome存储');
             } else if (typeof localStorage !== 'undefined') {
-                localStorage.setItem('pta_api_config', JSON.stringify(config));
+                localStorage.setItem('wph_api_config', JSON.stringify(config));
                 console.log('✅ 配置已保存到localStorage');
             }
         } catch (error) {

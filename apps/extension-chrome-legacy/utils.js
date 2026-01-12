@@ -1,4 +1,4 @@
-// PTA答题助手 - 工具函数库
+// Web 题目助手 - 工具函数库
 
 // 延迟函数
 function sleep(ms) {
@@ -426,7 +426,7 @@ function logAction(action, details = {}) {
         url: window.location.href
     };
     
-    console.log('[PTA助手]', logEntry);
+    console.log('[Web 题目助手]', logEntry);
     
     // 保存到本地存储
     chrome.storage.local.get(['actionLogs'], (result) => {
@@ -444,7 +444,7 @@ function logAction(action, details = {}) {
 
 // 错误处理
 function handleError(error, context = '') {
-    console.error(`[PTA助手错误] ${context}:`, error);
+    console.error(`[Web 题目助手错误] ${context}:`, error);
     
     // 记录错误日志
     logAction('error', {
@@ -461,7 +461,7 @@ function handleError(error, context = '') {
 function showNotification(message, type = 'info', duration = 3000) {
     // 创建通知元素
     const notification = document.createElement('div');
-    notification.className = `pta-helper-notification ${type}`;
+    notification.className = `wph-notification ${type}`;
     notification.textContent = message;
     
     // 样式
@@ -516,7 +516,7 @@ function showNotification(message, type = 'info', duration = 3000) {
 
 // 导出函数
 if (typeof window !== 'undefined') {
-    window.PTAUtils = {
+    window.WPHUtils = {
         sleep,
         randomDelay,
         textSimilarity,

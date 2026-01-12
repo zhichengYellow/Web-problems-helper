@@ -1,4 +1,4 @@
-package com.ptahelper.hunyuan.web.dto;
+package com.webproblemshelper.hunyuan.web.dto;
 
 import java.util.Map;
 

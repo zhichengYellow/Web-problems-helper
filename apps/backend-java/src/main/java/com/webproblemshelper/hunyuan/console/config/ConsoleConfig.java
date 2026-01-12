@@ -1,4 +1,4 @@
-package com.ptahelper.hunyuan.console.config;
+package com.webproblemshelper.hunyuan.console.config;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

@@ -1,7 +1,7 @@
 {
   "name": "@web-problems-helper/extension-chrome-modern",
   "version": "0.0.1",
-  "description": "PTA Helper Core Extension",
+  "description": "Web Problems Helper Chrome Extension",
   "private": true,
   "type": "module",
   "scripts": {

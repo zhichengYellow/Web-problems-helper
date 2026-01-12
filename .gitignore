@@ -6,7 +6,7 @@
 # Build outputs
 backend/target/
 backend/.mvn/wrapper/maven-wrapper.jar
-# PTA答题助手 - Git忽略文件
+# Web 题目助手 - Git忽略文件
 
 # 操作系统生成的文件
 .DS_Store

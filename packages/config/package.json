@@ -1,9 +1,9 @@
 {
   "name": "@web-problems-helper/config",
   "version": "0.0.1",
-  "description": "PTA Helper Configuration",
+  "description": "Web Problems Helper Configuration",
   "keywords": [
-    "pta",
+    "web-problems-helper",
     "config",
     "constants"
   ],

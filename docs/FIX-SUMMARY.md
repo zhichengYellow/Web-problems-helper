@@ -1,4 +1,4 @@
-# PTA答题助手 - 修复总结报告
+# Web 题目助手 - 修复总结报告
 
 ## 📋 问题概述
 
@@ -96,7 +96,7 @@ node final-config-test.js
 ### 4. Chrome扩展使用
 1. 打开Chrome扩展管理页面 (chrome://extensions/)
 2. 加载已解压的扩展程序（选择 apps/extension-chrome-legacy 目录）
-3. 在PTA答题页面使用扩展功能
+3. 在 Pintia 答题页面使用扩展功能
 
 ## ✅ 验证的修复
 
@@ -139,7 +139,7 @@ node final-config-test.js
 
 ## 🎉 完成状态
 
-所有报告的问题均已修复，PTA答题助手配置系统现已完全可用，特别针对腾讯云hunyuan-lite进行了深度优化。
+所有报告的问题均已修复，Web 题目助手配置系统现已完全可用，特别针对腾讯云hunyuan-lite进行了深度优化。
 
 **最后测试时间**: 2025年9月21日
 **测试环境**: Chrome浏览器 + Node.js v16.17.0

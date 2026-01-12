@@ -1,8 +1,8 @@
-package com.ptahelper.hunyuan.config;
+package com.webproblemshelper.hunyuan.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "pta.tencent")
+@ConfigurationProperties(prefix = "wph.tencent")
 public record TencentProperties(
         String secretId,
         String secretKey,

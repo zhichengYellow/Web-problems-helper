@@ -1,4 +1,4 @@
-// PTA助手API服务测试脚本（Node.js环境优化版）
+// Web 题目助手API服务测试脚本（Node.js环境优化版）
 const { APIService } = require('./api-service');
 
 // 创建测试实例 - 禁用API调用，强制使用本地智能答案
@@ -50,7 +50,7 @@ const testQuestions = [
 
 // 测试函数
 async function runTests() {
-    console.log('🧪 开始测试PTA助手API服务...\n');
+    console.log('🧪 开始测试Web 题目助手API服务...\n');
     
     for (let i = 0; i < testQuestions.length; i++) {
         const question = testQuestions[i];

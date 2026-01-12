@@ -1,4 +1,4 @@
-package com.ptahelper.hunyuan.console.web.dto;
+package com.webproblemshelper.hunyuan.console.web.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

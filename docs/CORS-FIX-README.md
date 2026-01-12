@@ -1,7 +1,7 @@
-# PTA答题助手 - CORS问题修复方案
+# Web 题目助手 - CORS问题修复方案
 
 ## 问题描述
-PTA答题助手遇到了以下CORS（跨域资源共享）问题：
+Web 题目助手遇到了以下CORS（跨域资源共享）问题：
 
 1. **知寻题库API CORS限制**：`api.wkexam.com` 阻止了来自 `pintia.cn` 的跨域请求
 2. **腾讯云混元API CORS限制**：`hunyuan.tencentcloudapi.com` 需要服务器端调用

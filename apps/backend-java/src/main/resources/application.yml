@@ -1,7 +1,7 @@
 server:
-  port: ${PORT:3001}
+  port: ${PORT:8080}
 
-pta:
+wph:
   tencent:
     secret-id: ${TENCENT_SECRET_ID:}
     secret-key: ${TENCENT_SECRET_KEY:}
@@ -10,9 +10,31 @@ pta:
     base-url: ${TENCENT_BASE_URL:https://hunyuan.tencentcloudapi.com}
     service: hunyuan
   console:
-    data-dir: ${PTA_CONSOLE_DATA_DIR:./data}
+    data-dir: ${WPH_CONSOLE_DATA_DIR:./data}
 
 spring:
   jackson:
     serialization:
       write-dates-as-timestamps: false
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/wph?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${SPRING_DATASOURCE_USERNAME:wph}
+    password: ${SPRING_DATASOURCE_PASSWORD:wph}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    redis:
+      host: ${SPRING_REDIS_HOST:localhost}
+      port: ${SPRING_REDIS_PORT:6379}
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 10m
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    banner: false

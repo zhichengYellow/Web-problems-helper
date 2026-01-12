@@ -1,11 +1,11 @@
-import { PTAHelper } from './core/PTAHelper';
+import { WebProblemsHelper } from './core/WebProblemsHelper';
 import { AnswerDatabase } from './services/AnswerDatabase';
 import { ProblemDetector } from './services/ProblemDetector';
 import { UIManager } from './ui/UIManager';
 
-// 初始化PTA助手
-class PTAContentScript {
-  private helper: PTAHelper;
+// 初始化 Web 题目助手
+class WebProblemsContentScript {
+  private helper: WebProblemsHelper;
   private detector: ProblemDetector;
   private uiManager: UIManager;
 
@@ -21,7 +21,7 @@ class PTAContentScript {
       this.uiManager = new UIManager();
       
       // 创建主助手实例
-      this.helper = new PTAHelper({
+      this.helper = new WebProblemsHelper({
         answerDatabase: answerDb,
         problemDetector: this.detector,
         uiManager: this.uiManager
@@ -30,9 +30,9 @@ class PTAContentScript {
       // 启动助手
       await this.helper.start();
       
-      console.log('PTA助手初始化成功');
+      console.log('Web 题目助手初始化成功');
     } catch (error) {
-      console.error('PTA助手初始化失败:', error);
+      console.error('Web 题目助手初始化失败:', error);
     }
   }
 }
@@ -40,8 +40,8 @@ class PTAContentScript {
 // 页面加载完成后启动
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
-    new PTAContentScript();
+    new WebProblemsContentScript();
   });
 } else {
-  new PTAContentScript();
+  new WebProblemsContentScript();
 }

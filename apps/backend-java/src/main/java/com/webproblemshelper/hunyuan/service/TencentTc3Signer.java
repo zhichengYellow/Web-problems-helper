@@ -1,4 +1,4 @@
-package com.ptahelper.hunyuan.service;
+package com.webproblemshelper.hunyuan.service;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

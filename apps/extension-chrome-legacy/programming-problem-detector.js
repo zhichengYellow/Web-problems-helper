@@ -1,10 +1,10 @@
 /**
- * PTA编程题目专业检测模块
- * 专门针对PTA平台编程题的结构化信息提取
+ * Pintia 编程题目专业检测模块
+ * 专门针对 Pintia 平台编程题的结构化信息提取
  * 支持题目元数据、输入输出格式、样例数据等完整信息解析
  */
 
-class PTAProgrammingProblemDetector {
+class PintiaProgrammingProblemDetector {
     constructor() {
         this.detectionStrategies = [
             this.detectByMarkdownStructure.bind(this),
@@ -40,7 +40,7 @@ class PTAProgrammingProblemDetector {
      * @returns {Object} 检测结果
      */
     async detectProgrammingProblem() {
-        console.log('🔍 开始PTA编程题专业检测...');
+        console.log('🔍 开始 Pintia 编程题专业检测...');
         
         try {
             // 预检查：确认是编程题页面
@@ -319,7 +319,7 @@ class PTAProgrammingProblemDetector {
             author,
             organization,
             difficulty,
-            language: 'C/C++', // PTA默认语言
+            language: 'C/C++', // 默认语言
             tags: this.extractTags(title)
         };
     }
@@ -657,7 +657,7 @@ class PTAProgrammingProblemDetector {
      * 辅助方法：提取标签
      */
     extractTags(title) {
-        const tags = ['PTA', '编程题'];
+        const tags = ['Pintia', '编程题'];
         
         if (!title) return tags;
         
@@ -846,9 +846,9 @@ int main() {
 
 // 导出检测器类
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = PTAProgrammingProblemDetector;
+    module.exports = PintiaProgrammingProblemDetector;
 } else if (typeof window !== 'undefined') {
-    window.PTAProgrammingProblemDetector = PTAProgrammingProblemDetector;
+    window.PintiaProgrammingProblemDetector = PintiaProgrammingProblemDetector;
 }
 
 // 使用示例和测试函数
@@ -859,7 +859,7 @@ if (typeof window !== 'undefined') {
     window.testProgrammingDetection = async function() {
         console.log('🧪 开始编程题检测测试...');
         
-        const detector = new PTAProgrammingProblemDetector();
+        const detector = new PintiaProgrammingProblemDetector();
         const result = await detector.detectProgrammingProblem();
         
         console.log('📊 检测结果:', result);

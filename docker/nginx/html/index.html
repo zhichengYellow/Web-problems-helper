@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WPH 本地 Web</title>
+    <style>
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; margin: 40px; }
+      a { color: #2563eb; text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      .card { max-width: 720px; padding: 20px; border: 1px solid #e5e7eb; border-radius: 12px; }
+      code { background: #f3f4f6; padding: 2px 6px; border-radius: 6px; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>WPH 本地开发入口</h1>
+      <p>这里是 Nginx 挂载的静态前端目录：<code>docker/nginx/html</code></p>
+      <ul>
+        <li><a href="/console/">打开题库控制台（后端提供）</a></li>
+        <li><a href="/api/console/questions">查看题库 API</a></li>
+      </ul>
+      <p>如果后端未启动，/console 与 /api 会返回 502，先启动后端即可。</p>
+    </div>
+  </body>
+</html>

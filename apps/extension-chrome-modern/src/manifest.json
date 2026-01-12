@@ -10,8 +10,19 @@
     "tabs"
   ],
   "host_permissions": [
+    "http://localhost/*",
+    "http://127.0.0.1/*",
     "https://pintia.cn/*",
     "https://*.pintia.cn/*",
+    "https://leetcode.cn/*",
+    "https://*.leetcode.cn/*",
+    "https://www.luogu.com.cn/*",
+    "https://luogu.com.cn/*",
+    "https://*.luogu.com.cn/*",
+    "https://*.chaoxing.com/*",
+    "https://chaoxing.com/*",
+    "https://*.fenbi.com/*",
+    "https://fenbi.com/*",
     "https://api.sh-api.com/*",
     "https://*.sh-api.com/*",
     "https://api.openedu.org/*",
@@ -31,10 +42,19 @@
     {
       "matches": [
         "https://pintia.cn/*",
-        "https://*.pintia.cn/*"
+        "https://*.pintia.cn/*",
+        "https://leetcode.cn/*",
+        "https://*.leetcode.cn/*",
+        "https://www.luogu.com.cn/*",
+        "https://luogu.com.cn/*",
+        "https://*.luogu.com.cn/*",
+        "https://*.chaoxing.com/*",
+        "https://chaoxing.com/*",
+        "https://*.fenbi.com/*",
+        "https://fenbi.com/*"
       ],
       "js": ["src/content.ts"],
-      "css": ["src/content.css"],
+      "css": ["content.css"],
       "run_at": "document_idle"
     }
   ],

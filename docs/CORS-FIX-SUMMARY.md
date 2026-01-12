@@ -1,7 +1,7 @@
-# PTA助手CORS问题修复总结
+# Web 题目助手CORS问题修复总结
 
 ## 问题描述
-PTA助手在自动填充答题时遇到CORS（跨域资源共享）问题，具体表现为：
+Web 题目助手在自动填充答题时遇到CORS（跨域资源共享）问题，具体表现为：
 - 从 `https://pintia.cn` 向外部API（WolframAlpha）发起的请求被浏览器CORS策略阻止
 - API请求返回错误：`No 'Access-Control-Allow-Origin' header is present on the requested resource`
 - 备用API也出现同样问题

@@ -1,4 +1,4 @@
-package com.ptahelper.hunyuan.agent.web;
+package com.webproblemshelper.hunyuan.agent.web;
 
 import java.util.Map;
 
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ptahelper.hunyuan.agent.service.AgentAnswerService;
-import com.ptahelper.hunyuan.agent.web.dto.AgentAnswerRequest;
+import com.webproblemshelper.hunyuan.agent.service.AgentAnswerService;
+import com.webproblemshelper.hunyuan.agent.web.dto.AgentAnswerRequest;
 
 import jakarta.validation.Valid;
 

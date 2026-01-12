@@ -1,4 +1,4 @@
-// PTA答题助手弹出页面脚本
+// Web 题目助手弹出页面脚本
 document.addEventListener('DOMContentLoaded', function() {
     const detectBtn = document.getElementById('detectBtn');
     const autoFillBtn = document.getElementById('autoFillBtn');
@@ -197,15 +197,15 @@ async function detectQuestions() {
             // 获取当前标签页
             [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true });
             
-            // 检查是否在PTA页面
-            if (isPTAPage(currentTab.url)) {
-                pageStatus.textContent = '✅ 已检测到PTA页面';
+            // 检查是否在 Pintia 页面
+            if (isPintiaPage(currentTab.url)) {
+                pageStatus.textContent = '✅ 已检测到 Pintia 页面';
                 pageStatus.style.color = '#4caf50';
                 
                 // 检测页面状态
                 await detectPageStatus();
             } else {
-                pageStatus.textContent = '❌ 请在PTA页面使用此插件';
+                pageStatus.textContent = '❌ 请在 Pintia 页面使用此插件';
                 pageStatus.style.color = '#f44336';
                 disableButtons();
             }
@@ -348,7 +348,7 @@ async function detectQuestions() {
     }
 
     // 工具函数
-    function isPTAPage(url) {
+    function isPintiaPage(url) {
         return url && url.includes('pintia.cn');
     }
 
@@ -380,7 +380,7 @@ async function detectQuestions() {
                 statusIcon = '📄';
                 break;
             default:
-                statusText = 'PTA页面';
+                statusText = 'Pintia 页面';
                 statusIcon = '🌐';
         }
         
@@ -505,7 +505,7 @@ async function detectQuestions() {
             <div class="help-content">
                 <div class="help-header">
                     <h2>🚀 新手指南</h2>
-                    <p>快速上手PTA答题助手的AI服务</p>
+                    <p>快速上手Web 题目助手的AI服务</p>
                 </div>
                 
                 <div class="help-steps">
@@ -529,7 +529,7 @@ async function detectQuestions() {
                         <div class="step-number">3</div>
                         <div class="step-content">
                             <h4>开始使用</h4>
-                            <p>配置完成后，在PTA页面使用"检测题目"和"显示答案"功能，AI将为您提供更准确的答案。</p>
+                            <p>配置完成后，在 Pintia 页面使用"检测题目"和"显示答案"功能，AI将为您提供更准确的答案。</p>
                         </div>
                     </div>
                     

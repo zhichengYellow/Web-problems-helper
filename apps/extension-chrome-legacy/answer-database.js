@@ -1,7 +1,7 @@
-// PTA答题助手 - 答案数据库
+// Web 题目助手 - 答案数据库
 // 清理版：合并重复条目、统一匹配函数、保留浏览器/Node 导出
 
-const PTA_ANSWER_DATABASE = {
+const WPH_ANSWER_DATABASE = {
     // 计算机基础知识（扩展）
     computer_basics: {
         '计算机的基本组成包括': 'A',
@@ -507,7 +507,7 @@ async function findAnswer(questionText, questionType, options = []) {
     // 1. 精确/包含/关键词匹配本地数据库
     let bestMatch = null;
     let bestScore = 0;
-    for (const category of Object.values(PTA_ANSWER_DATABASE)) {
+    for (const category of Object.values(WPH_ANSWER_DATABASE)) {
         if (typeof category === 'object' && !Array.isArray(category)) {
             for (const [key, value] of Object.entries(category)) {
                 const keyLower = key.toLowerCase();
@@ -546,14 +546,14 @@ async function findAnswer(questionText, questionType, options = []) {
 
     // 3. 单选题启发式匹配
     if (questionType === 'single_choice' && options.length > 0) {
-        const patterns = PTA_ANSWER_DATABASE.choice_patterns.keywords_to_choice;
+        const patterns = WPH_ANSWER_DATABASE.choice_patterns.keywords_to_choice;
         for (const [keyword, choice] of Object.entries(patterns)) {
             if (text.includes(keyword.toLowerCase())) {
                 const targetOption = options.find(opt => opt.value === choice || (opt.text || '').startsWith(choice));
                 if (targetOption) return targetOption.value;
             }
         }
-        const optionPatterns = PTA_ANSWER_DATABASE.choice_patterns.option_patterns;
+        const optionPatterns = WPH_ANSWER_DATABASE.choice_patterns.option_patterns;
         for (const option of options) {
             for (const [pattern, choice] of Object.entries(optionPatterns)) {
                 const regex = new RegExp(pattern, 'i');
@@ -572,7 +572,7 @@ async function findAnswer(questionText, questionType, options = []) {
 
     // 4. 判断题启发式
     if (questionType === 'true_false') {
-        for (const [key, value] of Object.entries(PTA_ANSWER_DATABASE.true_false || {})) {
+        for (const [key, value] of Object.entries(WPH_ANSWER_DATABASE.true_false || {})) {
             if (text.includes(key.toLowerCase())) return value ? '正确' : '错误';
         }
         const positiveWords = ['是', '可以', '能够', '正确', '对的', 'true', 'yes'];
@@ -604,8 +604,8 @@ async function findAnswer(questionText, questionType, options = []) {
 
     // 6. 最后尝试使用宽松的相似度匹配（增强版）
     const processedText = questionText.toLowerCase().replace(/[^\w\u4e00-\u9fa5]/g, '').trim();
-    for (const category in PTA_ANSWER_DATABASE) {
-        const categoryData = PTA_ANSWER_DATABASE[category];
+    for (const category in WPH_ANSWER_DATABASE) {
+        const categoryData = WPH_ANSWER_DATABASE[category];
         for (const [question, answer] of Object.entries(categoryData)) {
             const processedQuestion = question.toLowerCase().replace(/[^\w\u4e00-\u9fa5]/g, '').trim();
             if (processedText.includes(processedQuestion) || processedQuestion.includes(processedText) || similarity(processedText, processedQuestion) > 0.75) {
@@ -621,8 +621,8 @@ async function findAnswer(questionText, questionType, options = []) {
 
 // 导出兼容浏览器与 Node 环境
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { PTA_ANSWER_DATABASE, findAnswer };
+    module.exports = { WPH_ANSWER_DATABASE, findAnswer };
 } else {
-    window.PTA_ANSWER_DATABASE = PTA_ANSWER_DATABASE;
+    window.WPH_ANSWER_DATABASE = WPH_ANSWER_DATABASE;
     window.findAnswer = findAnswer;
 }

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>PTA答题助手 - 配置界面</title>
+    <title>Web 题目助手 - 配置界面</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -161,7 +161,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>PTA答题助手配置</h1>
+        <h1>Web 题目助手配置</h1>
         
         <!-- API配置部分 -->
         <div class="section">
@@ -471,7 +471,7 @@
             
             const a = document.createElement('a');
             a.href = url;
-            a.download = `pta-archive-${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `wph-archive-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             
             URL.revokeObjectURL(url);

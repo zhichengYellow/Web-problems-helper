@@ -1,7 +1,7 @@
-// PTA答题助手 - 最终配置测试脚本
+// Web 题目助手 - 最终配置测试脚本
 // 验证所有修复是否正常工作
 
-console.log('🚀 开始PTA答题助手配置测试...\n');
+console.log('🚀 开始Web 题目助手配置测试...\n');
 
 // 检查API服务是否可用
 if (typeof apiService === 'undefined') {
@@ -107,4 +107,4 @@ console.log('   - ✅ API密钥配置不生效');
 console.log('   - ✅ hunyuan-lite专用配置优化');
 console.log('   - ✅ 异步响应错误处理');
 
-console.log('\n🚀 PTA答题助手配置系统已就绪！');
+console.log('\n🚀 Web 题目助手配置系统已就绪！');

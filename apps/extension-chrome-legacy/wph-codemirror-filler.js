@@ -1,9 +1,9 @@
 /**
- * PTA平台CodeMirror编辑器专用填充器
- * 针对PTA平台的现代化答题界面进行深度优化
+ * CodeMirror 编辑器专用填充器
+ * 针对 Pintia 等平台的现代化答题界面进行优化
  */
 
-class PTACodeMirrorFiller {
+class WPHCodeMirrorFiller {
     constructor() {
         this.editorSelectors = {
             // CodeMirror 6 编辑器选择器
@@ -39,7 +39,7 @@ class PTACodeMirrorFiller {
         // 检测编辑器类型
         this.editorType = this.detectEditorType();
         
-        console.log('🎯 PTA CodeMirror填充器已初始化，编辑器类型:', this.editorType);
+        console.log('🎯 CodeMirror填充器已初始化，编辑器类型:', this.editorType);
     }
 
     /**
@@ -62,7 +62,7 @@ class PTACodeMirrorFiller {
      * 主填充方法
      */
     async fillCode(code, options = {}) {
-        console.log('🔄 开始填充代码到PTA编辑器...');
+        console.log('🔄 开始填充代码到编辑器...');
         
         try {
             // 预处理代码
@@ -670,14 +670,14 @@ class PTACodeMirrorFiller {
 
 // 导出类
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = PTACodeMirrorFiller;
+    module.exports = WPHCodeMirrorFiller;
 } else if (typeof window !== 'undefined') {
-    window.PTACodeMirrorFiller = PTACodeMirrorFiller;
+    window.WPHCodeMirrorFiller = WPHCodeMirrorFiller;
 }
 
 // 创建全局实例
 if (typeof window !== 'undefined') {
-    window.ptaCodeMirrorFiller = new PTACodeMirrorFiller();
+    window.wphCodeMirrorFiller = new WPHCodeMirrorFiller();
     
     // 如果页面未提供通用的 fillProgrammingQuestionAnswer，则注入一个尽量通用的实现
     if (typeof window.fillProgrammingQuestionAnswer !== 'function') {
@@ -855,33 +855,33 @@ if (typeof window !== 'undefined') {
         };
     }
 
-    // 添加到现有的编程题填充功能中（如果已有实现，则基于 ptaCodeMirrorFiller 做一次包装以优先使用本模块）
+    // 添加到现有的编程题填充功能中（如果已有实现，则基于 wphCodeMirrorFiller 做一次包装以优先使用本模块）
     if (typeof window.fillProgrammingQuestionAnswer === 'function') {
         const originalFillProgrammingQuestionAnswer = window.fillProgrammingQuestionAnswer;
         
         window.fillProgrammingQuestionAnswer = async function(question, code) {
             try {
-                console.log('🎯 使用PTA专用CodeMirror填充器...');
+                console.log('🎯 使用专用CodeMirror填充器...');
                 
-                const result = await window.ptaCodeMirrorFiller.fillCode(code, {
+                const result = await window.wphCodeMirrorFiller.fillCode(code, {
                     autoSave: true,
                     setCursor: true,
                     cursorPosition: 'end'
                 });
                 
                 if (result.success) {
-                    console.log('✅ PTA专用填充成功');
+                    console.log('✅ 专用填充成功');
                     return true;
                 } else {
-                    console.log('⚠️ PTA专用填充失败，回退到通用方法');
+                    console.log('⚠️ 专用填充失败，回退到通用方法');
                     return await originalFillProgrammingQuestionAnswer(question, code);
                 }
             } catch (error) {
-                console.error('PTA专用填充器失败:', error);
+                console.error('专用填充器失败:', error);
                 return await originalFillProgrammingQuestionAnswer(question, code);
             }
         };
     }
     
-    console.log('✅ PTA CodeMirror填充器已加载并集成');
+    console.log('✅ CodeMirror填充器已加载并集成');
 }

@@ -1,7 +1,7 @@
-// PTA插件WebSocket连接优化器
-// 优化wss://live.pintia.cn/event连接
+// Web 题目助手 WebSocket 连接优化器
+// 优化 wss://live.pintia.cn/event 连接
 
-class PTAWebSocketOptimizer {
+class WPHWebSocketOptimizer {
     constructor() {
         this.originalWebSocket = null;
         this.optimizedConnections = new Map();
@@ -18,9 +18,9 @@ class PTAWebSocketOptimizer {
         window.WebSocket = function(url, protocols) {
             const ws = new self.originalWebSocket(url, protocols);
             
-            // 如果是PTA的特定WebSocket连接
+            // 如果是 Pintia 的特定 WebSocket 连接
             if (url === 'wss://live.pintia.cn/event') {
-                console.log('[PTA WebSocket优化器] 优化PTA WebSocket连接:', url);
+                console.log('[Web 题目助手 WebSocket优化器] 优化 WebSocket 连接:', url);
                 
                 // 存储连接信息
                 const connectionId = self.connectionAttempts++;
@@ -50,10 +50,10 @@ class PTAWebSocketOptimizer {
         // 优化open事件
         ws.addEventListener('open', (event) => {
             connection.status = 'connected';
-            console.log('[PTA WebSocket优化器] WebSocket连接成功');
+            console.log('[Web 题目助手 WebSocket优化器] WebSocket连接成功');
             
             // 发送连接成功事件
-            window.dispatchEvent(new CustomEvent('pta-websocket-connected', {
+            window.dispatchEvent(new CustomEvent('wph-websocket-connected', {
                 detail: { connectionId, url: connection.url }
             }));
         });
@@ -61,10 +61,10 @@ class PTAWebSocketOptimizer {
         // 优化error事件
         ws.addEventListener('error', (error) => {
             connection.status = 'error';
-            console.warn('[PTA WebSocket优化器] WebSocket连接错误:', error);
+            console.warn('[Web 题目助手 WebSocket优化器] WebSocket连接错误:', error);
             
             // 发送连接错误事件
-            window.dispatchEvent(new CustomEvent('pta-websocket-error-optimized', {
+            window.dispatchEvent(new CustomEvent('wph-websocket-error-optimized', {
                 detail: { 
                     connectionId, 
                     url: connection.url, 
@@ -79,7 +79,7 @@ class PTAWebSocketOptimizer {
         // 优化close事件
         ws.addEventListener('close', (event) => {
             connection.status = 'closed';
-            console.log('[PTA WebSocket优化器] WebSocket连接关闭:', event.code, event.reason);
+            console.log('[Web 题目助手 WebSocket优化器] WebSocket连接关闭:', event.code, event.reason);
             
             // 清理连接记录
             setTimeout(() => {
@@ -102,7 +102,7 @@ class PTAWebSocketOptimizer {
                     try {
                         ws.send(JSON.stringify({ type: 'ping', timestamp: Date.now() }));
                     } catch (error) {
-                        console.warn('[PTA WebSocket优化器] 心跳发送失败:', error);
+                        console.warn('[Web 题目助手 WebSocket优化器] 心跳发送失败:', error);
                         clearInterval(heartbeatInterval);
                     }
                 }
@@ -123,12 +123,12 @@ class PTAWebSocketOptimizer {
         
         connection.recoveryAttempts = (connection.recoveryAttempts || 0) + 1;
         
-        console.log(`[PTA WebSocket优化器] 尝试恢复连接 (${connection.recoveryAttempts}/${this.maxAttempts})`);
+        console.log(`[Web 题目助手 WebSocket优化器] 尝试恢复连接 (${connection.recoveryAttempts}/${this.maxAttempts})`);
         
         // 延迟重连
         setTimeout(() => {
             if (connection.ws.readyState === WebSocket.CLOSED) {
-                console.log('[PTA WebSocket优化器] 执行重连...');
+                console.log('[Web 题目助手 WebSocket优化器] 执行重连...');
                 // 这里可以添加重连逻辑
             }
         }, connection.recoveryAttempts * 2000); // 指数退避
@@ -153,7 +153,7 @@ class PTAWebSocketOptimizer {
 
     // 初始化优化器
     init() {
-        console.log('[PTA WebSocket优化器] 初始化WebSocket连接优化器');
+        console.log('[Web 题目助手 WebSocket优化器] 初始化WebSocket连接优化器');
         
         this.optimizeWebSocketConstructor();
         
@@ -161,7 +161,7 @@ class PTAWebSocketOptimizer {
         setInterval(() => {
             const status = this.getConnectionStatus();
             if (status.totalConnections > 0) {
-                console.log('[PTA WebSocket优化器] 连接状态报告:', status);
+                console.log('[Web 题目助手 WebSocket优化器] 连接状态报告:', status);
             }
         }, 60000); // 每分钟报告一次
         
@@ -174,5 +174,5 @@ class PTAWebSocketOptimizer {
 
 // 导出优化器
 if (typeof window !== 'undefined') {
-    window.PTAWebSocketOptimizer = PTAWebSocketOptimizer;
+    window.WPHWebSocketOptimizer = WPHWebSocketOptimizer;
 }

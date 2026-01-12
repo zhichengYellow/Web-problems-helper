@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>PTA选项识别全面测试</title>
+    <title>Pintia 选项识别全面测试</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
         .test-case { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 8px; }
@@ -15,7 +15,7 @@
         button.success { background: #4CAF50; }
         button.danger { background: #f44336; }
         
-        /* PTA样式模拟 */
+        /* Pintia 样式模拟 */
         .pc-x { margin: 10px 0; }
         .pc-button { margin: 5px; }
         .markdownBlock_tErSz { margin: 5px 0; }
@@ -44,8 +44,8 @@
     </style>
 </head>
 <body>
-    <h1>PTA选项识别全面测试</h1>
-    <p>测试各种PTA题目结构的选项识别能力</p>
+    <h1>Pintia 选项识别全面测试</h1>
+    <p>测试各种 Pintia 题目结构的选项识别能力</p>
     
     <div style="margin: 20px 0;">
         <button onclick="testAll()" class="success">✅ 测试所有用例</button>
@@ -53,9 +53,9 @@
         <button onclick="window.location.reload()">🔄 刷新页面</button>
     </div>
 
-    <!-- 测试用例1: 标准PTA结构 -->
+    <!-- 测试用例1: 标准 Pintia 结构 -->
     <div class="test-case" id="testCase1">
-        <h3>测试用例1: 标准PTA题目结构</h3>
+        <h3>测试用例1: 标准 Pintia 题目结构</h3>
         <div class="options">
             <div class="pc-x pt-2 pl-4 scroll-mt-0">
                 <div class="flex flex-wrap gap-2">
@@ -92,7 +92,7 @@
                         <span class="flex flex-wrap -m-0.5">
                             <span class="block p-0.5" style="width: 100%;">
                                 <label class="w-full inline-flex cursor-pointer m-0 min-w-0 items-baseline px-2 py-1 rounded hover:bg-bg-light focus:bg-bg-light focus-within:bg-bg-light focus-within:ring focus-within:ring-blue-300">
-                                    <input name="ptaQuestion" type="radio" class="mr-2 mt-1 flex-none focus:outline-none" aria-label="undefined">
+                                    <input name="pintiaQuestion" type="radio" class="mr-2 mt-1 flex-none focus:outline-none" aria-label="undefined">
                                     <div class="flex gap-2 items-baseline min-w-0">
                                         <span>A.</span>
                                         <div class="min-w-0 break-normal shrink">
@@ -107,7 +107,7 @@
                             </span>
                             <span class="block p-0.5" style="width: 100%;">
                                 <label class="w-full inline-flex cursor-pointer m-0 min-w-0 items-baseline px-2 py-1 rounded hover:bg-bg-light focus:bg-bg-light focus-within:bg-bg-light focus-within:ring focus-within:ring-blue-300">
-                                    <input name="ptaQuestion" type="radio" class="mr-2 mt-1 flex-none focus:outline-none" aria-label="undefined">
+                                    <input name="pintiaQuestion" type="radio" class="mr-2 mt-1 flex-none focus:outline-none" aria-label="undefined">
                                     <div class="flex gap-2 items-baseline min-w-0">
                                         <span>B.</span>
                                         <div class="min-w-0 break-normal shrink">
@@ -122,7 +122,7 @@
                             </span>
                             <span class="block p-0.5" style="width: 100%;">
                                 <label class="w-full inline-flex cursor-pointer m-0 min-w-0 items-baseline px-2 py-1 rounded hover:bg-bg-light focus:bg-bg-light focus-within:bg-bg-light focus-within:ring focus-within:ring-blue-300">
-                                    <input name="ptaQuestion" type="radio" class="mr-2 mt-1 flex-none focus:outline-none" aria-label="undefined">
+                                    <input name="pintiaQuestion" type="radio" class="mr-2 mt-1 flex-none focus:outline-none" aria-label="undefined">
                                     <div class="flex gap-2 items-baseline min-w-0">
                                         <span>C.</span>
                                         <div class="min-w-0 break-normal shrink">
@@ -137,7 +137,7 @@
                             </span>
                             <span class="block p-0.5" style="width: 100%;">
                                 <label class="w-full inline-flex cursor-pointer m-0 min-w-0 items-baseline px-2 py-1 rounded hover:bg-bg-light focus:bg-bg-light focus-within:bg-bg-light focus-within:ring focus-within:ring-blue-300">
-                                    <input name="ptaQuestion" type="radio" class="mr-2 mt-1 flex-none focus:outline-none" aria-label="undefined">
+                                    <input name="pintiaQuestion" type="radio" class="mr-2 mt-1 flex-none focus:outline-none" aria-label="undefined">
                                     <div class="flex gap-2 items-baseline min-w-0">
                                         <span>D.</span>
                                         <div class="min-w-0 break-normal shrink">
@@ -159,9 +159,9 @@
         <div id="result1"></div>
     </div>
 
-    <!-- 测试用例2: 简化PTA结构 -->
+    <!-- 测试用例2: 简化 Pintia 结构 -->
     <div class="test-case" id="testCase2">
-        <h3>测试用例2: 简化PTA结构（无markdown）</h3>
+        <h3>测试用例2: 简化 Pintia 结构（无markdown）</h3>
         <div class="options">
             <div class="pc-x">
                 <div class="markdownBlock_tErSz">
@@ -311,7 +311,7 @@
             setTimeout(() => {
                 try {
                     const optionsContainer = testCase.querySelector('.options');
-                    const options = getPTAQuestionOptions(optionsContainer);
+                    const options = getPintiaQuestionOptions(optionsContainer);
                     
                     if (options.length > 0) {
                         resultDiv.className = 'result';
@@ -373,14 +373,14 @@
         }
 
         // 使用content.js中的函数
-        function getPTAQuestionOptions(element) {
+        function getPintiaQuestionOptions(element) {
             // 这里应该调用content.js中的实际函数
             // 为了测试，我们使用简化版本
-            return simulatePTAOptionRecognition(element);
+            return simulatePintiaOptionRecognition(element);
         }
 
         // 模拟选项识别（简化版）
-        function simulatePTAOptionRecognition(element) {
+        function simulatePintiaOptionRecognition(element) {
             const options = [];
             
             // 1. 查找输入元素

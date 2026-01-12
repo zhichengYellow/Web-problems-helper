@@ -1,6 +1,6 @@
 /**
  * 编程题功能完整集成模块
- * 将所有编程题相关功能整合到PTA助手中
+ * 将所有编程题相关功能整合到 Web 题目助手 中
  */
 
 (function() {
@@ -12,9 +12,9 @@
     function waitForDependencies() {
         return new Promise((resolve) => {
             const checkDependencies = () => {
-                const hasDetector = typeof PTAProgrammingProblemDetector !== 'undefined';
+                const hasDetector = typeof PintiaProgrammingProblemDetector !== 'undefined';
                 const hasEnhancer = typeof ProgrammingAnswerEnhancer !== 'undefined';
-                const hasDatabase = typeof PTA_ANSWER_DATABASE !== 'undefined';
+                const hasDatabase = typeof WPH_ANSWER_DATABASE !== 'undefined';
                 
                 if (hasDetector && hasEnhancer && hasDatabase) {
                     resolve();
@@ -37,7 +37,7 @@
             await waitForDependencies();
             
             // 创建全局实例
-            window.programmingDetector = new PTAProgrammingProblemDetector();
+            window.programmingDetector = new PintiaProgrammingProblemDetector();
             window.programmingAnswerEnhancer = new ProgrammingAnswerEnhancer();
             
             console.log('✅ 编程题检测器和答案增强器已初始化');
@@ -250,13 +250,13 @@
     function addProgrammingToolbarButtons() {
         // 等待工具栏加载
         const addButtons = () => {
-            const toolbar = document.querySelector('.pta-helper-toolbar');
+            const toolbar = document.querySelector('.wph-toolbar');
             if (!toolbar) {
                 setTimeout(addButtons, 1000);
                 return;
             }
             
-            const buttonsContainer = toolbar.querySelector('.pta-helper-buttons');
+            const buttonsContainer = toolbar.querySelector('.wph-buttons');
             if (!buttonsContainer) {
                 setTimeout(addButtons, 1000);
                 return;
@@ -269,21 +269,21 @@
             
             // 添加编程题检测按钮
             const progDetectBtn = document.createElement('button');
-            progDetectBtn.className = 'pta-helper-btn secondary prog-detect-btn';
+            progDetectBtn.className = 'wph-btn secondary prog-detect-btn';
             progDetectBtn.innerHTML = '🔍 检测编程题';
             progDetectBtn.title = '快捷键: Ctrl+Shift+P';
             progDetectBtn.addEventListener('click', handleProgrammingDetection);
             
             // 添加代码模板按钮
             const templateBtn = document.createElement('button');
-            templateBtn.className = 'pta-helper-btn secondary template-btn';
+            templateBtn.className = 'wph-btn secondary template-btn';
             templateBtn.innerHTML = '📝 插入答案';
             templateBtn.title = '快捷键: Ctrl+Shift+T';
             templateBtn.addEventListener('click', handleInsertTemplate);
             
             // 添加答案搜索按钮
             const searchBtn = document.createElement('button');
-            searchBtn.className = 'pta-helper-btn secondary search-btn';
+            searchBtn.className = 'wph-btn secondary search-btn';
             searchBtn.innerHTML = '🔎 搜索答案';
             searchBtn.title = '快捷键: Ctrl+Shift+S';
             searchBtn.addEventListener('click', handleSearchProgrammingAnswer);
@@ -307,13 +307,13 @@
             const questionElements = document.querySelectorAll('.markdownBlock_tErSz, .question-container, .problem-container');
             
             questionElements.forEach((element, index) => {
-                if (isProgrammingQuestionElement(element) && !element.classList.contains('pta-helper-programming-highlight')) {
-                    element.classList.add('pta-helper-programming-highlight');
+                if (isProgrammingQuestionElement(element) && !element.classList.contains('wph-programming-highlight')) {
+                    element.classList.add('wph-programming-highlight');
                     
                     // 检测代码编辑器
                     const hasCodeEditor = element.querySelector('textarea, .ace_editor, .CodeMirror');
                     if (hasCodeEditor) {
-                        element.classList.add('pta-helper-code-editor-detected');
+                        element.classList.add('wph-code-editor-detected');
                     }
                 }
             });
@@ -517,27 +517,27 @@
         try {
             console.log('💻 填充编程题答案...');
             
-            // 优先使用PTA专用CodeMirror填充器
-            if (typeof window.ptaCodeMirrorFiller !== 'undefined') {
-                console.log('🎯 使用PTA专用CodeMirror填充器...');
+            // 优先使用平台专用 CodeMirror 填充器
+            if (typeof window.wphCodeMirrorFiller !== 'undefined') {
+                console.log('🎯 使用平台专用 CodeMirror 填充器...');
                 
-                const result = await window.ptaCodeMirrorFiller.fillCode(code, {
+                const result = await window.wphCodeMirrorFiller.fillCode(code, {
                     autoSave: true,
                     setCursor: true,
                     cursorPosition: 'end'
                 });
                 
                 if (result.success) {
-                    console.log('✅ PTA专用填充成功');
+                    console.log('✅ 平台专用填充成功');
                     return true;
                 }
                 
-                console.log('⚠️ PTA专用填充失败，尝试传统方法...');
+                console.log('⚠️ 平台专用填充失败，尝试传统方法...');
             }
             
             const element = question.element;
             
-            // 1. 尝试填充CodeMirror 6 (PTA新版编辑器)
+            // 1. 尝试填充CodeMirror 6 (Pintia 新版编辑器)
             const cm6Editor = document.querySelector('.cm-editor');
             if (cm6Editor) {
                 try {
@@ -700,9 +700,9 @@
             let detectionResult = null;
 
             // 1. 优先检查是否有缓存的答案（来自"搜索答案"功能）
-            if (window.ptaLastProgrammingAnswer) {
+            if (window.wphLastProgrammingAnswer) {
                 console.log('✅ 检测到已有搜索结果，直接使用缓存答案');
-                codeToInsert = window.ptaLastProgrammingAnswer;
+                codeToInsert = window.wphLastProgrammingAnswer;
                 showNotification('准备插入', '正在插入上次搜索到的答案...', 'info');
             } else {
                 // 2. 没有缓存，执行完整的检测和搜索流程
@@ -760,7 +760,7 @@
     
                 if (searchResult.success && searchResult.answer) {
                     codeToInsert = searchResult.answer;
-                    window.ptaLastProgrammingAnswer = codeToInsert; // 缓存新找到的答案
+                    window.wphLastProgrammingAnswer = codeToInsert; // 缓存新找到的答案
                     console.log('✅ 找到答案，准备插入');
                 } else if (detectionResult.codeTemplate) {
                     codeToInsert = detectionResult.codeTemplate;
@@ -778,9 +778,9 @@
             // 尝试直接插入
             let inserted = false;
             
-            // 1. 使用 PTA 专用填充器
-            if (typeof window.ptaCodeMirrorFiller !== 'undefined') {
-                const res = await window.ptaCodeMirrorFiller.fillCode(codeToInsert, { autoSave: true });
+            // 1. 使用平台专用填充器
+            if (typeof window.wphCodeMirrorFiller !== 'undefined') {
+                const res = await window.wphCodeMirrorFiller.fillCode(codeToInsert, { autoSave: true });
                 if (res && res.success) inserted = true;
             }
             
@@ -888,7 +888,7 @@
             
             if (searchResult.success) {
                 // 缓存答案，供"插入答案"功能直接使用
-                window.ptaLastProgrammingAnswer = searchResult.answer;
+                window.wphLastProgrammingAnswer = searchResult.answer;
 
                 // 核心需求：在控制台打印答案
                 console.log('%c🔍 找到的编程题答案:', 'color: #2196F3; font-size: 14px; font-weight: bold;');
@@ -910,12 +910,12 @@
      * 切换编程题高亮
      */
     function toggleProgrammingHighlight() {
-        const highlightedElements = document.querySelectorAll('.pta-helper-programming-highlight');
+        const highlightedElements = document.querySelectorAll('.wph-programming-highlight');
         
         if (highlightedElements.length > 0) {
             highlightedElements.forEach(el => {
-                el.classList.remove('pta-helper-programming-highlight');
-                el.classList.remove('pta-helper-code-editor-detected');
+                el.classList.remove('wph-programming-highlight');
+                el.classList.remove('wph-code-editor-detected');
             });
             showNotification('高亮已关闭', '编程题高亮已关闭', 'info');
         } else {
@@ -924,11 +924,11 @@
             
             questionElements.forEach(element => {
                 if (isProgrammingQuestionElement(element)) {
-                    element.classList.add('pta-helper-programming-highlight');
+                    element.classList.add('wph-programming-highlight');
                     
                     const hasCodeEditor = element.querySelector('textarea, .ace_editor, .CodeMirror');
                     if (hasCodeEditor) {
-                        element.classList.add('pta-helper-code-editor-detected');
+                        element.classList.add('wph-code-editor-detected');
                     }
                     count++;
                 }
@@ -959,7 +959,7 @@
      */
     function showProgrammingAnswerResult(searchResult, detectionResult) {
         const modal = document.createElement('div');
-        modal.className = 'pta-helper-programming-answer-modal';
+        modal.className = 'wph-programming-answer-modal';
         
         modal.innerHTML = `
             <div class="modal-overlay"></div>
@@ -1026,13 +1026,13 @@
      */
     function showCodeTemplateMenu(x, y, target) {
         // 移除已存在的菜单
-        const existingMenu = document.querySelector('.pta-code-template-menu');
+        const existingMenu = document.querySelector('.wph-code-template-menu');
         if (existingMenu) {
             existingMenu.remove();
         }
         
         const menu = document.createElement('div');
-        menu.className = 'pta-code-template-menu';
+        menu.className = 'wph-code-template-menu';
         menu.style.cssText = `
             position: fixed;
             top: ${y}px;

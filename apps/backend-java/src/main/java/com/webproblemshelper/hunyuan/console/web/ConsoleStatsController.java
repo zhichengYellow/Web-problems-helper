@@ -1,4 +1,4 @@
-package com.ptahelper.hunyuan.console.web;
+package com.webproblemshelper.hunyuan.console.web;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ptahelper.hunyuan.console.store.QuestionBankStore;
-import com.ptahelper.hunyuan.console.store.WrongStatsStore;
-import com.ptahelper.hunyuan.console.web.dto.QuestionDto;
-import com.ptahelper.hunyuan.console.web.dto.WrongStatDto;
+import com.webproblemshelper.hunyuan.console.store.QuestionBankStore;
+import com.webproblemshelper.hunyuan.console.store.WrongStatsStore;
+import com.webproblemshelper.hunyuan.console.web.dto.QuestionDto;
+import com.webproblemshelper.hunyuan.console.web.dto.WrongStatDto;
 
 @RestController
 @RequestMapping("/api/console")

@@ -1,4 +1,4 @@
-import type { ProblemInfo } from '../core/PTAHelper'
+import type { ProblemInfo } from '../core/WebProblemsHelper'
 
 export class UIManager {
   async initialize(): Promise<void> {

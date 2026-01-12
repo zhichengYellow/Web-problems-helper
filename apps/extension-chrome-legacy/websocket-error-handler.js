@@ -1,7 +1,7 @@
-// PTA插件WebSocket错误处理器
+// Web 题目助手 WebSocket 错误处理器
 // 专门处理vendor.99c919eb3e087f5259a1.chunk.js中的WebSocket连接失败问题
 
-class PTAWebSocketErrorHandler {
+class WPHWebSocketErrorHandler {
     constructor() {
         this.errorCount = 0;
         this.maxErrorCount = 10;
@@ -22,10 +22,10 @@ class PTAWebSocketErrorHandler {
                 errorMessage.includes('WebSocket connection to') && 
                 errorMessage.includes('wss://live.pintia.cn/event')) {
                 
-                console.warn('[PTA WebSocket处理器] 检测到特定WebSocket错误:', errorMessage);
+                console.warn('[Web 题目助手 WebSocket处理器] 检测到特定WebSocket错误:', errorMessage);
                 
                 // 触发错误处理
-                window.dispatchEvent(new CustomEvent('pta-specific-websocket-error', {
+                window.dispatchEvent(new CustomEvent('wph-specific-websocket-error', {
                     detail: { 
                         error: errorMessage,
                         timestamp: Date.now(),
@@ -55,11 +55,11 @@ class PTAWebSocketErrorHandler {
         
         this.lastErrorTime = now;
         
-        console.log(`[PTA WebSocket处理器] WebSocket错误计数: ${this.errorCount}/${this.maxErrorCount}`);
+        console.log(`[Web 题目助手 WebSocket处理器] WebSocket错误计数: ${this.errorCount}/${this.maxErrorCount}`);
         
         // 如果错误过多，采取相应措施
         if (this.errorCount >= this.maxErrorCount) {
-            console.warn('[PTA WebSocket处理器] WebSocket错误过多，采取降级措施');
+            console.warn('[Web 题目助手 WebSocket处理器] WebSocket错误过多，采取降级措施');
             this.activateFallbackMode();
         }
         
@@ -68,7 +68,7 @@ class PTAWebSocketErrorHandler {
 
     // 激活降级模式
     activateFallbackMode() {
-        console.log('[PTA WebSocket处理器] 激活WebSocket降级模式');
+        console.log('[Web 题目助手 WebSocket处理器] 激活WebSocket降级模式');
         
         // 这里可以添加降级逻辑，比如：
         // - 禁用某些依赖WebSocket的功能
@@ -76,7 +76,7 @@ class PTAWebSocketErrorHandler {
         // - 显示用户提示
         
         // 发送降级通知
-        window.dispatchEvent(new CustomEvent('pta-websocket-fallback', {
+        window.dispatchEvent(new CustomEvent('wph-websocket-fallback', {
             detail: { 
                 reason: 'too_many_errors',
                 errorCount: this.errorCount
@@ -86,14 +86,14 @@ class PTAWebSocketErrorHandler {
 
     // 尝试修复WebSocket连接
     attemptWebSocketFix() {
-        console.log('[PTA WebSocket处理器] 尝试修复WebSocket连接...');
+        console.log('[Web 题目助手 WebSocket处理器] 尝试修复WebSocket连接...');
         
         // 这里可以添加修复逻辑，比如：
         // - 重新创建WebSocket连接
         // - 修改连接参数
         // - 使用备用服务器
         
-        // 由于这是PTA服务器的WebSocket，我们无法直接修复
+        // 由于这是目标站点的 WebSocket，我们无法直接修复
         // 但可以提供更好的用户体验
         this.showUserNotification();
     }
@@ -117,9 +117,9 @@ class PTAWebSocketErrorHandler {
         `;
         
         notification.innerHTML = `
-            <strong>PTA连接提示</strong><br>
+            <strong>连接提示</strong><br>
             WebSocket连接不稳定，但插件功能正常<br>
-            <small>这是PTA服务器的问题，不影响答题功能</small>
+            <small>这是网站服务器的问题，不影响答题功能</small>
         `;
         
         document.body.appendChild(notification);
@@ -134,26 +134,26 @@ class PTAWebSocketErrorHandler {
 
     // 初始化错误处理器
     init() {
-        console.log('[PTA WebSocket处理器] 初始化WebSocket错误处理器');
+        console.log('[Web 题目助手 WebSocket处理器] 初始化WebSocket错误处理器');
         
         this.monitorSpecificWebSocketErrors();
         
         // 监听特定WebSocket错误
-        window.addEventListener('pta-specific-websocket-error', (event) => {
+        window.addEventListener('wph-specific-websocket-error', (event) => {
             this.handleWebSocketError(event);
         });
         
         // 页面加载后开始监控
         window.addEventListener('load', () => {
             setTimeout(() => {
-                console.log('[PTA WebSocket处理器] 开始监控PTA WebSocket连接');
+                console.log('[Web 题目助手 WebSocket处理器] 开始监控 WebSocket 连接');
             }, 1000);
         });
         
         // 每30秒检查一次错误状态
         setInterval(() => {
             if (this.errorCount > 0) {
-                console.log(`[PTA WebSocket处理器] 当前错误状态: ${this.errorCount}次错误`);
+                console.log(`[Web 题目助手 WebSocket处理器] 当前错误状态: ${this.errorCount}次错误`);
             }
         }, 30000);
     }
@@ -161,5 +161,5 @@ class PTAWebSocketErrorHandler {
 
 // 导出错误处理器
 if (typeof window !== 'undefined') {
-    window.PTAWebSocketErrorHandler = PTAWebSocketErrorHandler;
+    window.WPHWebSocketErrorHandler = WPHWebSocketErrorHandler;
 }

@@ -194,8 +194,8 @@ class ProgrammingAnswerEnhancer {
         if (!normalizedQuestion) return null;
         
         // 从答案数据库中查找
-        if (typeof PTA_ANSWER_DATABASE !== 'undefined' && PTA_ANSWER_DATABASE.programming) {
-            for (const [key, value] of Object.entries(PTA_ANSWER_DATABASE.programming)) {
+        if (typeof WPH_ANSWER_DATABASE !== 'undefined' && WPH_ANSWER_DATABASE.programming) {
+            for (const [key, value] of Object.entries(WPH_ANSWER_DATABASE.programming)) {
                 const normalizedKey = this.normalizeText(key);
                 if (normalizedKey && (normalizedQuestion.includes(normalizedKey) || normalizedKey.includes(normalizedQuestion))) {
                     return value;

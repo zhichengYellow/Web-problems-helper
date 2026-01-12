@@ -1,7 +1,7 @@
-/* PTA答题助手样式 */
+/* Web 题目助手样式 */
 
 /* 答案模态框样式 */
-.pta-helper-answers-modal {
+.wph-answers-modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -13,17 +13,17 @@
     transition: all 0.3s ease;
 }
 
-.pta-helper-answers-modal.show {
+.wph-answers-modal.show {
     opacity: 1;
     visibility: visible;
 }
 
-.pta-helper-answers-modal.closing {
+.wph-answers-modal.closing {
     opacity: 0;
     visibility: hidden;
 }
 
-.pta-helper-answers-modal .modal-overlay {
+.wph-answers-modal .modal-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -33,7 +33,7 @@
     backdrop-filter: blur(2px);
 }
 
-.pta-helper-answers-modal .modal-content {
+.wph-answers-modal .modal-content {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -49,7 +49,7 @@
     flex-direction: column;
 }
 
-.pta-helper-answers-modal .modal-header {
+.wph-answers-modal .modal-header {
     padding: 20px 24px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -59,20 +59,20 @@
     flex-shrink: 0;
 }
 
-.pta-helper-answers-modal .modal-header h3 {
+.wph-answers-modal .modal-header h3 {
     margin: 0;
     font-size: 18px;
     font-weight: 600;
 }
 
-.pta-helper-answers-modal .modal-actions {
+.wph-answers-modal .modal-actions {
     display: flex;
     gap: 10px;
     align-items: center;
 }
 
-.pta-helper-answers-modal .copy-all-btn,
-.pta-helper-answers-modal .close-modal-btn {
+.wph-answers-modal .copy-all-btn,
+.wph-answers-modal .close-modal-btn {
     padding: 8px 12px;
     border: none;
     border-radius: 6px;
@@ -81,17 +81,17 @@
     transition: all 0.2s ease;
 }
 
-.pta-helper-answers-modal .copy-all-btn {
+.wph-answers-modal .copy-all-btn {
     background: rgba(255, 255, 255, 0.2);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.pta-helper-answers-modal .copy-all-btn:hover {
+.wph-answers-modal .copy-all-btn:hover {
     background: rgba(255, 255, 255, 0.3);
 }
 
-.pta-helper-answers-modal .close-modal-btn {
+.wph-answers-modal .close-modal-btn {
     background: rgba(255, 255, 255, 0.1);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -103,18 +103,18 @@
     padding: 0;
 }
 
-.pta-helper-answers-modal .close-modal-btn:hover {
+.wph-answers-modal .close-modal-btn:hover {
     background: rgba(255, 255, 255, 0.2);
 }
 
-.pta-helper-answers-modal .modal-body {
+.wph-answers-modal .modal-body {
     flex: 1;
     overflow: hidden;
     display: flex;
     flex-direction: column;
 }
 
-.pta-helper-answers-modal .answers-summary {
+.wph-answers-modal .answers-summary {
     padding: 16px 24px;
     background: #f8f9fa;
     border-bottom: 1px solid #e9ecef;
@@ -123,47 +123,47 @@
     flex-shrink: 0;
 }
 
-.pta-helper-answers-modal .answers-list {
+.wph-answers-modal .answers-list {
     flex: 1;
     overflow-y: auto;
     padding: 0;
 }
 
-.pta-helper-answers-modal .answer-item {
+.wph-answers-modal .answer-item {
     padding: 20px 24px;
     border-bottom: 1px solid #e9ecef;
     transition: background-color 0.2s ease;
 }
 
-.pta-helper-answers-modal .answer-item:hover {
+.wph-answers-modal .answer-item:hover {
     background: #f8f9fa;
 }
 
-.pta-helper-answers-modal .answer-item.success {
+.wph-answers-modal .answer-item.success {
     border-left: 4px solid #28a745;
 }
 
-.pta-helper-answers-modal .answer-item.error {
+.wph-answers-modal .answer-item.error {
     border-left: 4px solid #dc3545;
 }
 
-.pta-helper-answers-modal .answer-header {
+.wph-answers-modal .answer-header {
     display: flex;
     align-items: center;
     gap: 10px;
     margin-bottom: 8px;
 }
 
-.pta-helper-answers-modal .answer-status {
+.wph-answers-modal .answer-status {
     font-size: 16px;
 }
 
-.pta-helper-answers-modal .answer-index {
+.wph-answers-modal .answer-index {
     font-weight: 600;
     color: #495057;
 }
 
-.pta-helper-answers-modal .answer-type {
+.wph-answers-modal .answer-type {
     background: #e9ecef;
     color: #6c757d;
     padding: 2px 8px;
@@ -171,21 +171,21 @@
     font-size: 12px;
 }
 
-.pta-helper-answers-modal .answer-title {
+.wph-answers-modal .answer-title {
     font-size: 15px;
     color: #212529;
     margin-bottom: 12px;
     line-height: 1.4;
 }
 
-.pta-helper-answers-modal .answer-options {
+.wph-answers-modal .answer-options {
     margin-bottom: 12px;
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
 }
 
-.pta-helper-answers-modal .answer-options .option {
+.wph-answers-modal .answer-options .option {
     background: #f8f9fa;
     border: 1px solid #dee2e6;
     padding: 4px 8px;
@@ -194,19 +194,19 @@
     color: #495057;
 }
 
-.pta-helper-answers-modal .answer-result {
+.wph-answers-modal .answer-result {
     display: flex;
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
 }
 
-.pta-helper-answers-modal .answer-result strong {
+.wph-answers-modal .answer-result strong {
     color: #495057;
     font-size: 14px;
 }
 
-.pta-helper-answers-modal .answer-text {
+.wph-answers-modal .answer-text {
     font-size: 15px;
     font-weight: 500;
     padding: 6px 12px;
@@ -215,19 +215,19 @@
     min-width: 0;
 }
 
-.pta-helper-answers-modal .answer-text.has-answer {
+.wph-answers-modal .answer-text.has-answer {
     background: #d4edda;
     color: #155724;
     border: 1px solid #c3e6cb;
 }
 
-.pta-helper-answers-modal .answer-text.no-answer {
+.wph-answers-modal .answer-text.no-answer {
     background: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
 }
 
-.pta-helper-answers-modal .copy-single-btn {
+.wph-answers-modal .copy-single-btn {
     background: #007bff;
     color: white;
     border: none;
@@ -239,18 +239,18 @@
     flex-shrink: 0;
 }
 
-.pta-helper-answers-modal .copy-single-btn:hover {
+.wph-answers-modal .copy-single-btn:hover {
     background: #0056b3;
     transform: translateY(-1px);
 }
 
 /* 工具栏按钮样式更新 */
-.pta-helper-btn.secondary {
+.wph-btn.secondary {
     background: linear-gradient(135deg, #17a2b8, #138496);
     color: white;
 }
 
-.pta-helper-btn.secondary:hover {
+.wph-btn.secondary:hover {
     background: linear-gradient(135deg, #138496, #117a8b);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
@@ -258,40 +258,40 @@
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-    .pta-helper-answers-modal .modal-content {
+    .wph-answers-modal .modal-content {
         width: 95%;
         max-height: 90vh;
     }
     
-    .pta-helper-answers-modal .modal-header {
+    .wph-answers-modal .modal-header {
         padding: 16px 20px;
     }
     
-    .pta-helper-answers-modal .modal-header h3 {
+    .wph-answers-modal .modal-header h3 {
         font-size: 16px;
     }
     
-    .pta-helper-answers-modal .answer-item {
+    .wph-answers-modal .answer-item {
         padding: 16px 20px;
     }
     
-    .pta-helper-answers-modal .answer-options {
+    .wph-answers-modal .answer-options {
         flex-direction: column;
     }
     
-    .pta-helper-answers-modal .answer-result {
+    .wph-answers-modal .answer-result {
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
     }
     
-    .pta-helper-answers-modal .answer-text {
+    .wph-answers-modal .answer-text {
         width: 100%;
     }
 }
 
 /* 浮动工具栏 */
-.pta-helper-toolbar {
+.wph-toolbar {
     position: fixed;
     top: 20px;
     right: 20px;
@@ -307,12 +307,12 @@
     transition: all 0.3s ease;
 }
 
-.pta-helper-toolbar.minimized {
+.wph-toolbar.minimized {
     padding: 10px;
     min-width: auto;
 }
 
-.pta-helper-toolbar-header {
+.wph-toolbar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -320,7 +320,7 @@
     color: white;
 }
 
-.pta-helper-title {
+.wph-title {
     font-size: 16px;
     font-weight: 600;
     margin: 0;
@@ -329,7 +329,7 @@
     gap: 8px;
 }
 
-.pta-helper-logo {
+.wph-logo {
     width: 24px;
     height: 24px;
     background: white;
@@ -342,7 +342,7 @@
     color: #667eea;
 }
 
-.pta-helper-minimize {
+.wph-minimize {
     background: rgba(255, 255, 255, 0.2);
     border: none;
     color: white;
@@ -356,11 +356,11 @@
     transition: background 0.2s;
 }
 
-.pta-helper-minimize:hover {
+.wph-minimize:hover {
     background: rgba(255, 255, 255, 0.3);
 }
 
-.pta-helper-status {
+.wph-status {
     background: rgba(255, 255, 255, 0.15);
     border-radius: 8px;
     padding: 8px 12px;
@@ -372,7 +372,7 @@
     gap: 8px;
 }
 
-.pta-helper-status-icon {
+.wph-status-icon {
     width: 16px;
     height: 16px;
     border-radius: 50%;
@@ -382,26 +382,26 @@
     font-size: 10px;
 }
 
-.pta-helper-status.ready .pta-helper-status-icon {
+.wph-status.ready .wph-status-icon {
     background: #4caf50;
 }
 
-.pta-helper-status.working .pta-helper-status-icon {
+.wph-status.working .wph-status-icon {
     background: #ff9800;
     animation: pulse 1.5s infinite;
 }
 
-.pta-helper-status.error .pta-helper-status-icon {
+.wph-status.error .wph-status-icon {
     background: #f44336;
 }
 
-.pta-helper-buttons {
+.wph-buttons {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.pta-helper-btn {
+.wph-btn {
     background: rgba(255, 255, 255, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
@@ -417,40 +417,40 @@
     gap: 8px;
 }
 
-.pta-helper-btn:hover {
+.wph-btn:hover {
     background: rgba(255, 255, 255, 0.3);
     transform: translateY(-1px);
 }
 
-.pta-helper-btn:active {
+.wph-btn:active {
     transform: translateY(0);
 }
 
-.pta-helper-btn:disabled {
+.wph-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
-.pta-helper-btn.primary {
+.wph-btn.primary {
     background: rgba(76, 175, 80, 0.8);
     border-color: rgba(76, 175, 80, 1);
 }
 
-.pta-helper-btn.primary:hover {
+.wph-btn.primary:hover {
     background: rgba(76, 175, 80, 1);
 }
 
-.pta-helper-btn.danger {
+.wph-btn.danger {
     background: rgba(244, 67, 54, 0.8);
     border-color: rgba(244, 67, 54, 1);
 }
 
-.pta-helper-btn.danger:hover {
+.wph-btn.danger:hover {
     background: rgba(244, 67, 54, 1);
 }
 
 /* 题目高亮效果 */
-.pta-helper-highlight {
+.wph-highlight {
     position: relative;
     animation: highlightPulse 2s ease-in-out;
     border: 2px solid #4caf50 !important;
@@ -458,7 +458,7 @@
     background: rgba(76, 175, 80, 0.1) !important;
 }
 
-.pta-helper-highlight::before {
+.wph-highlight::before {
     content: '✓ 已检测';
     position: absolute;
     top: -12px;
@@ -473,14 +473,14 @@
 }
 
 /* 已填充题目样式 */
-.pta-helper-filled {
+.wph-filled {
     position: relative;
     border: 2px solid #2196f3 !important;
     border-radius: 8px !important;
     background: rgba(33, 150, 243, 0.1) !important;
 }
 
-.pta-helper-filled::before {
+.wph-filled::before {
     content: '✓ 已填充';
     position: absolute;
     top: -12px;
@@ -495,13 +495,13 @@
 }
 
 /* 处理中的按钮样式 */
-.pta-helper-processing {
+.wph-processing {
     position: relative;
     background: #ff9800 !important;
     animation: processingPulse 1s infinite;
 }
 
-.pta-helper-processing::after {
+.wph-processing::after {
     content: '处理中...';
     position: absolute;
     top: -30px;
@@ -516,7 +516,7 @@
 }
 
 /* 进度条 */
-.pta-helper-progress {
+.wph-progress {
     width: 100%;
     height: 4px;
     background: rgba(255, 255, 255, 0.2);
@@ -525,7 +525,7 @@
     overflow: hidden;
 }
 
-.pta-helper-progress-bar {
+.wph-progress-bar {
     height: 100%;
     background: linear-gradient(90deg, #4caf50, #8bc34a);
     border-radius: 2px;
@@ -534,7 +534,7 @@
 }
 
 /* 通知消息 */
-.pta-helper-notification {
+.wph-notification {
     position: fixed;
     top: 80px;
     right: 20px;
@@ -549,31 +549,31 @@
     transition: transform 0.3s ease;
 }
 
-.pta-helper-notification.show {
+.wph-notification.show {
     transform: translateX(0);
 }
 
-.pta-helper-notification.error {
+.wph-notification.error {
     border-left-color: #f44336;
 }
 
-.pta-helper-notification.warning {
+.wph-notification.warning {
     border-left-color: #ff9800;
 }
 
-.pta-helper-notification-title {
+.wph-notification-title {
     font-weight: 600;
     margin-bottom: 4px;
     color: #333;
 }
 
-.pta-helper-notification-message {
+.wph-notification-message {
     color: #666;
     font-size: 14px;
 }
 
 /* 统计信息 */
-.pta-helper-stats {
+.wph-stats {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 6px;
     padding: 8px;
@@ -582,13 +582,13 @@
     color: rgba(255, 255, 255, 0.9);
 }
 
-.pta-helper-stats-item {
+.wph-stats-item {
     display: flex;
     justify-content: space-between;
     margin-bottom: 4px;
 }
 
-.pta-helper-stats-item:last-child {
+.wph-stats-item:last-child {
     margin-bottom: 0;
 }
 
@@ -616,13 +616,13 @@
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-    .pta-helper-toolbar {
+    .wph-toolbar {
         right: 10px;
         top: 10px;
         min-width: 250px;
     }
     
-    .pta-helper-notification {
+    .wph-notification {
         right: 10px;
         top: 70px;
         max-width: 250px;
@@ -630,30 +630,30 @@
 }
 
 /* 隐藏状态 */
-.pta-helper-hidden {
+.wph-hidden {
     display: none !important;
 }
 
 /* 最小化状态 */
-.pta-helper-toolbar.minimized .pta-helper-content {
+.wph-toolbar.minimized .wph-content {
     display: none;
 }
 
-.pta-helper-toolbar.minimized .pta-helper-title {
+.wph-toolbar.minimized .wph-title {
     font-size: 14px;
 }
 
 /* 拖拽功能 */
-.pta-helper-toolbar.dragging {
+.wph-toolbar.dragging {
     cursor: move;
     user-select: none;
 }
 
 /* 主题切换 */
-.pta-helper-toolbar.dark {
+.wph-toolbar.dark {
     background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
 }
 
-.pta-helper-toolbar.light {
+.wph-toolbar.light {
     background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
 }

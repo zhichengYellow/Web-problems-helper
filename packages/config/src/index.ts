@@ -1,5 +1,5 @@
-// PTA平台配置
-export { PTAConfig } from './pta/PTAConfig';
+// Pintia 平台配置
+export { PintiaConfig } from './pintia/PintiaConfig';
 
 // 题目类型配置
 export { ProblemTypes } from './problem/ProblemTypes';

@@ -1,9 +1,9 @@
 /**
- * PTA平台UI增强器
- * 为PTA平台添加专用的编程题辅助UI组件
+ * Web 题目助手 UI 增强器
+ * 为题目平台添加专用的编程题辅助 UI 组件
  */
 
-class PTAUIEnhancer {
+class WPHUIEnhancer {
     constructor() {
         this.isInitialized = false;
         this.toolbarAdded = false;
@@ -22,7 +22,7 @@ class PTAUIEnhancer {
     async init() {
         if (this.isInitialized) return;
         
-        console.log('🎨 初始化PTA UI增强器...');
+        console.log('🎨 初始化 Web 题目助手 UI增强器...');
         
         // 等待页面加载完成
         await this.waitForPageLoad();
@@ -43,7 +43,7 @@ class PTAUIEnhancer {
         this.observePageChanges();
         
         this.isInitialized = true;
-        console.log('✅ PTA UI增强器初始化完成');
+        console.log('✅ Web 题目助手 UI增强器初始化完成');
     }
 
     /**
@@ -63,11 +63,11 @@ class PTAUIEnhancer {
      * 添加自定义样式
      */
     addCustomStyles() {
-        if (document.getElementById('pta-ui-enhancer-styles')) return;
+        if (document.getElementById('wph-ui-enhancer-styles')) return;
         
         const styles = `
-            /* PTA UI增强器样式 */
-            .pta-floating-toolbar {
+            /* Web 题目助手 UI增强器样式 */
+            .wph-floating-toolbar {
                 position: fixed;
                 top: 20px;
                 right: 20px;
@@ -86,23 +86,23 @@ class PTAUIEnhancer {
                 opacity: 0.9;
             }
             
-            .pta-floating-toolbar:hover {
+            .wph-floating-toolbar:hover {
                 opacity: 1;
                 transform: translateY(-2px);
                 box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
             }
             
-            .pta-floating-toolbar.collapsed {
+            .wph-floating-toolbar.collapsed {
                 width: 48px;
                 height: 48px;
                 padding: 8px;
             }
             
-            .pta-floating-toolbar.collapsed .toolbar-content {
+            .wph-floating-toolbar.collapsed .toolbar-content {
                 display: none;
             }
             
-            .pta-toolbar-header {
+            .wph-toolbar-header {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -111,14 +111,14 @@ class PTAUIEnhancer {
                 border-bottom: 1px solid #f0f0f0;
             }
             
-            .pta-toolbar-title {
+            .wph-toolbar-title {
                 font-size: 14px;
                 font-weight: 600;
                 color: #333;
                 margin: 0;
             }
             
-            .pta-toolbar-toggle {
+            .wph-toolbar-toggle {
                 background: none;
                 border: none;
                 cursor: pointer;
@@ -128,12 +128,12 @@ class PTAUIEnhancer {
                 transition: all 0.2s ease;
             }
             
-            .pta-toolbar-toggle:hover {
+            .wph-toolbar-toggle:hover {
                 background: #f0f0f0;
                 color: #333;
             }
             
-            .pta-toolbar-btn {
+            .wph-toolbar-btn {
                 display: flex;
                 align-items: center;
                 gap: 8px;
@@ -150,45 +150,45 @@ class PTAUIEnhancer {
                 width: 100%;
             }
             
-            .pta-toolbar-btn:hover {
+            .wph-toolbar-btn:hover {
                 transform: translateY(-1px);
                 box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
             }
             
-            .pta-toolbar-btn.secondary {
+            .wph-toolbar-btn.secondary {
                 background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
             }
             
-            .pta-toolbar-btn.secondary:hover {
+            .wph-toolbar-btn.secondary:hover {
                 box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
             }
             
-            .pta-toolbar-btn.danger {
+            .wph-toolbar-btn.danger {
                 background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
             }
             
-            .pta-toolbar-btn.danger:hover {
+            .wph-toolbar-btn.danger:hover {
                 box-shadow: 0 4px 12px rgba(245, 101, 101, 0.4);
             }
             
-            .pta-toolbar-btn:disabled {
+            .wph-toolbar-btn:disabled {
                 opacity: 0.6;
                 cursor: not-allowed;
                 transform: none;
             }
             
-            .pta-toolbar-btn:disabled:hover {
+            .wph-toolbar-btn:disabled:hover {
                 transform: none;
                 box-shadow: none;
             }
             
-            .pta-toolbar-shortcut {
+            .wph-toolbar-shortcut {
                 font-size: 11px;
                 opacity: 0.8;
                 margin-left: auto;
             }
             
-            .pta-status-indicator {
+            .wph-status-indicator {
                 display: flex;
                 align-items: center;
                 gap: 6px;
@@ -199,23 +199,23 @@ class PTAUIEnhancer {
                 color: #666;
             }
             
-            .pta-status-dot {
+            .wph-status-dot {
                 width: 8px;
                 height: 8px;
                 border-radius: 50%;
                 background: #28a745;
             }
             
-            .pta-status-dot.warning {
+            .wph-status-dot.warning {
                 background: #ffc107;
             }
             
-            .pta-status-dot.error {
+            .wph-status-dot.error {
                 background: #dc3545;
             }
             
             /* 上下文菜单样式 */
-            .pta-context-menu {
+            .wph-context-menu {
                 position: fixed;
                 background: white;
                 border: 1px solid #e0e0e0;
@@ -226,7 +226,7 @@ class PTAUIEnhancer {
                 min-width: 180px;
             }
             
-            .pta-context-menu-item {
+            .wph-context-menu-item {
                 display: flex;
                 align-items: center;
                 gap: 8px;
@@ -237,18 +237,18 @@ class PTAUIEnhancer {
                 transition: background 0.2s ease;
             }
             
-            .pta-context-menu-item:hover {
+            .wph-context-menu-item:hover {
                 background: #f8f9fa;
             }
             
-            .pta-context-menu-separator {
+            .wph-context-menu-separator {
                 height: 1px;
                 background: #e0e0e0;
                 margin: 4px 0;
             }
             
             /* 通知样式 */
-            .pta-notification {
+            .wph-notification {
                 position: fixed;
                 top: 20px;
                 left: 50%;
@@ -266,19 +266,19 @@ class PTAUIEnhancer {
                 animation: slideInDown 0.3s ease;
             }
             
-            .pta-notification.success {
+            .wph-notification.success {
                 border-left: 4px solid #28a745;
             }
             
-            .pta-notification.warning {
+            .wph-notification.warning {
                 border-left: 4px solid #ffc107;
             }
             
-            .pta-notification.error {
+            .wph-notification.error {
                 border-left: 4px solid #dc3545;
             }
             
-            .pta-notification.info {
+            .wph-notification.info {
                 border-left: 4px solid #17a2b8;
             }
             
@@ -294,14 +294,14 @@ class PTAUIEnhancer {
             }
             
             /* 编程题高亮样式 */
-            .pta-programming-highlight {
+            .wph-programming-highlight {
                 position: relative;
                 border: 2px solid #667eea !important;
                 border-radius: 8px !important;
                 background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%) !important;
             }
             
-            .pta-programming-highlight::before {
+            .wph-programming-highlight::before {
                 content: '💻 编程题';
                 position: absolute;
                 top: -12px;
@@ -317,18 +317,18 @@ class PTAUIEnhancer {
             
             /* 响应式设计 */
             @media (max-width: 768px) {
-                .pta-floating-toolbar {
+                .wph-floating-toolbar {
                     top: 10px;
                     right: 10px;
                     min-width: 160px;
                 }
                 
-                .pta-toolbar-btn {
+                .wph-toolbar-btn {
                     padding: 6px 10px;
                     font-size: 12px;
                 }
                 
-                .pta-notification {
+                .wph-notification {
                     max-width: 90vw;
                     left: 5vw;
                     transform: none;
@@ -337,43 +337,43 @@ class PTAUIEnhancer {
             
             /* 暗色主题支持 */
             @media (prefers-color-scheme: dark) {
-                .pta-floating-toolbar {
+                .wph-floating-toolbar {
                     background: rgba(30, 30, 30, 0.95);
                     border-color: #444;
                 }
                 
-                .pta-toolbar-title {
+                .wph-toolbar-title {
                     color: #e0e0e0;
                 }
                 
-                .pta-toolbar-toggle {
+                .wph-toolbar-toggle {
                     color: #ccc;
                 }
                 
-                .pta-toolbar-toggle:hover {
+                .wph-toolbar-toggle:hover {
                     background: #444;
                     color: #fff;
                 }
                 
-                .pta-status-indicator {
+                .wph-status-indicator {
                     background: #333;
                     color: #ccc;
                 }
                 
-                .pta-context-menu {
+                .wph-context-menu {
                     background: #2d2d2d;
                     border-color: #444;
                 }
                 
-                .pta-context-menu-item {
+                .wph-context-menu-item {
                     color: #e0e0e0;
                 }
                 
-                .pta-context-menu-item:hover {
+                .wph-context-menu-item:hover {
                     background: #444;
                 }
                 
-                .pta-notification {
+                .wph-notification {
                     background: #2d2d2d;
                     border-color: #444;
                     color: #e0e0e0;
@@ -382,7 +382,7 @@ class PTAUIEnhancer {
         `;
         
         const styleSheet = document.createElement('style');
-        styleSheet.id = 'pta-ui-enhancer-styles';
+        styleSheet.id = 'wph-ui-enhancer-styles';
         styleSheet.textContent = styles;
         document.head.appendChild(styleSheet);
         
@@ -417,7 +417,7 @@ class PTAUIEnhancer {
      * 添加浮动工具栏（仅在检测到编程题时显示）
      */
     addFloatingToolbar() {
-        if (this.toolbarAdded || document.getElementById('pta-floating-toolbar')) return;
+        if (this.toolbarAdded || document.getElementById('wph-floating-toolbar')) return;
         
         // 检查是否在编程题页面
         const isProgrammingPage = this.detectProgrammingPage();
@@ -427,13 +427,13 @@ class PTAUIEnhancer {
         }
         
         const toolbar = document.createElement('div');
-        toolbar.id = 'pta-floating-toolbar';
-        toolbar.className = 'pta-floating-toolbar';
+        toolbar.id = 'wph-floating-toolbar';
+        toolbar.className = 'wph-floating-toolbar';
         
         toolbar.innerHTML = `
-            <div class="pta-toolbar-header">
-                <h3 class="pta-toolbar-title">PTA助手</h3>
-                <button class="pta-toolbar-toggle" title="收起/展开">
+            <div class="wph-toolbar-header">
+                <h3 class="wph-toolbar-title">Web 题目助手</h3>
+                <button class="wph-toolbar-toggle" title="收起/展开">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                         <path d="M8 4l-4 4h8l-4-4z"/>
                     </svg>
@@ -441,39 +441,39 @@ class PTAUIEnhancer {
             </div>
             
             <div class="toolbar-content">
-                <div class="pta-status-indicator">
-                    <div class="pta-status-dot" id="pta-status-dot"></div>
-                    <span id="pta-status-text">就绪</span>
+                <div class="wph-status-indicator">
+                    <div class="wph-status-dot" id="wph-status-dot"></div>
+                    <span id="wph-status-text">就绪</span>
                 </div>
                 
-                <button class="pta-toolbar-btn" id="detect-programming-btn">
+                <button class="wph-toolbar-btn" id="detect-programming-btn">
                     <span>🔍</span>
                     <span>检测编程题</span>
-                    <span class="pta-toolbar-shortcut">Ctrl+Shift+P</span>
+                    <span class="wph-toolbar-shortcut">Ctrl+Shift+P</span>
                 </button>
                 
-                <button class="pta-toolbar-btn secondary" id="insert-template-btn">
+                <button class="wph-toolbar-btn secondary" id="insert-template-btn">
                     <span>📝</span>
                     <span>插入模板</span>
-                    <span class="pta-toolbar-shortcut">Ctrl+Shift+T</span>
+                    <span class="wph-toolbar-shortcut">Ctrl+Shift+T</span>
                 </button>
                 
-                <button class="pta-toolbar-btn secondary" id="search-answer-btn">
+                <button class="wph-toolbar-btn secondary" id="search-answer-btn">
                     <span>🔎</span>
                     <span>搜索答案</span>
-                    <span class="pta-toolbar-shortcut">Ctrl+Shift+S</span>
+                    <span class="wph-toolbar-shortcut">Ctrl+Shift+S</span>
                 </button>
                 
-                <button class="pta-toolbar-btn secondary" id="fill-answer-btn">
+                <button class="wph-toolbar-btn secondary" id="fill-answer-btn">
                     <span>🔄</span>
                     <span>填充答案</span>
-                    <span class="pta-toolbar-shortcut">Ctrl+Shift+F</span>
+                    <span class="wph-toolbar-shortcut">Ctrl+Shift+F</span>
                 </button>
                 
-                <button class="pta-toolbar-btn danger" id="clear-editor-btn">
+                <button class="wph-toolbar-btn danger" id="clear-editor-btn">
                     <span>🗑️</span>
                     <span>清空编辑器</span>
-                    <span class="pta-toolbar-shortcut">Ctrl+Shift+C</span>
+                    <span class="wph-toolbar-shortcut">Ctrl+Shift+C</span>
                 </button>
             </div>
         `;
@@ -495,7 +495,7 @@ class PTAUIEnhancer {
      */
     addToolbarEventListeners(toolbar) {
         // 收起/展开按钮
-        const toggleBtn = toolbar.querySelector('.pta-toolbar-toggle');
+        const toggleBtn = toolbar.querySelector('.wph-toolbar-toggle');
         toggleBtn.addEventListener('click', () => {
             toolbar.classList.toggle('collapsed');
         });
@@ -524,7 +524,7 @@ class PTAUIEnhancer {
         let isDragging = false;
         let startX, startY, startLeft, startTop;
         
-        const header = toolbar.querySelector('.pta-toolbar-header');
+        const header = toolbar.querySelector('.wph-toolbar-header');
         
         header.addEventListener('mousedown', (e) => {
             isDragging = true;
@@ -618,26 +618,26 @@ class PTAUIEnhancer {
         this.hideContextMenu(); // 先隐藏已存在的菜单
         
         const menu = document.createElement('div');
-        menu.id = 'pta-context-menu';
-        menu.className = 'pta-context-menu';
+        menu.id = 'wph-context-menu';
+        menu.className = 'wph-context-menu';
         menu.style.left = `${x}px`;
         menu.style.top = `${y}px`;
         
         menu.innerHTML = `
-            <div class="pta-context-menu-item" data-action="insertTemplate">
+            <div class="wph-context-menu-item" data-action="insertTemplate">
                 <span>📝</span>
                 <span>插入代码模板</span>
             </div>
-            <div class="pta-context-menu-item" data-action="searchAnswer">
+            <div class="wph-context-menu-item" data-action="searchAnswer">
                 <span>🔎</span>
                 <span>搜索答案</span>
             </div>
-            <div class="pta-context-menu-separator"></div>
-            <div class="pta-context-menu-item" data-action="clearEditor">
+            <div class="wph-context-menu-separator"></div>
+            <div class="wph-context-menu-item" data-action="clearEditor">
                 <span>🗑️</span>
                 <span>清空编辑器</span>
             </div>
-            <div class="pta-context-menu-item" data-action="formatCode">
+            <div class="wph-context-menu-item" data-action="formatCode">
                 <span>🎨</span>
                 <span>格式化代码</span>
             </div>
@@ -645,7 +645,7 @@ class PTAUIEnhancer {
         
         // 添加事件监听
         menu.addEventListener('click', (e) => {
-            const item = e.target.closest('.pta-context-menu-item');
+            const item = e.target.closest('.wph-context-menu-item');
             if (item) {
                 const action = item.dataset.action;
                 this.handleContextMenuAction(action);
@@ -669,7 +669,7 @@ class PTAUIEnhancer {
      * 隐藏右键菜单
      */
     hideContextMenu() {
-        const menu = document.getElementById('pta-context-menu');
+        const menu = document.getElementById('wph-context-menu');
         if (menu) {
             menu.remove();
         }
@@ -721,10 +721,10 @@ class PTAUIEnhancer {
         const programmingElements = document.querySelectorAll('.markdownBlock_tErSz, .CodingProblemAnswerForm_Qp8cD');
         
         programmingElements.forEach(element => {
-            if (!element.classList.contains('pta-programming-highlight')) {
+            if (!element.classList.contains('wph-programming-highlight')) {
                 const isProgramming = this.isProgrammingQuestion(element);
                 if (isProgramming) {
-                    element.classList.add('pta-programming-highlight');
+                    element.classList.add('wph-programming-highlight');
                 }
             }
         });
@@ -752,7 +752,7 @@ class PTAUIEnhancer {
      */
     showNotification(title, message, type = 'info', duration = 3000) {
         const notification = document.createElement('div');
-        notification.className = `pta-notification ${type}`;
+        notification.className = `wph-notification ${type}`;
         
         const icons = {
             success: '✅',
@@ -786,11 +786,11 @@ class PTAUIEnhancer {
      * 更新状态指示器
      */
     updateStatus(status, message) {
-        const dot = document.getElementById('pta-status-dot');
-        const text = document.getElementById('pta-status-text');
+        const dot = document.getElementById('wph-status-dot');
+        const text = document.getElementById('wph-status-text');
         
         if (dot && text) {
-            dot.className = `pta-status-dot ${status}`;
+            dot.className = `wph-status-dot ${status}`;
             text.textContent = message;
         }
     }
@@ -826,7 +826,7 @@ class PTAUIEnhancer {
     async handleInsertTemplate() {
         this.updateStatus('', '插入模板...');
         try {
-            if (typeof window.ptaCodeMirrorFiller !== 'undefined') {
+            if (typeof window.wphCodeMirrorFiller !== 'undefined') {
                 const template = `#include <stdio.h>
 
 int main() {
@@ -834,7 +834,7 @@ int main() {
     
     return 0;
 }`;
-                const result = await window.ptaCodeMirrorFiller.fillCode(template);
+                const result = await window.wphCodeMirrorFiller.fillCode(template);
                 if (result.success) {
                     this.showNotification('模板插入成功', '基础C++模板已插入', 'success');
                     this.updateStatus('', '就绪');
@@ -879,8 +879,8 @@ int main() {
     async handleClearEditor() {
         this.updateStatus('', '清空编辑器...');
         try {
-            if (typeof window.ptaCodeMirrorFiller !== 'undefined') {
-                const result = await window.ptaCodeMirrorFiller.clearEditor();
+            if (typeof window.wphCodeMirrorFiller !== 'undefined') {
+                const result = await window.wphCodeMirrorFiller.clearEditor();
                 if (result.success) {
                     this.showNotification('清空成功', '编辑器已清空', 'success');
                     this.updateStatus('', '就绪');
@@ -908,13 +908,13 @@ int main() {
     fillAnswer() { this.handleFillAnswer(); }
     clearEditor() { this.handleClearEditor(); }
     toggleHighlight() {
-        const highlighted = document.querySelectorAll('.pta-programming-highlight');
+        const highlighted = document.querySelectorAll('.wph-programming-highlight');
         if (highlighted.length > 0) {
-            highlighted.forEach(el => el.classList.remove('pta-programming-highlight'));
+            highlighted.forEach(el => el.classList.remove('wph-programming-highlight'));
             this.showNotification('高亮已关闭', '编程题高亮已关闭', 'info');
         } else {
             this.checkForProgrammingQuestions();
-            const newHighlighted = document.querySelectorAll('.pta-programming-highlight');
+            const newHighlighted = document.querySelectorAll('.wph-programming-highlight');
             this.showNotification('高亮已开启', `已高亮 ${newHighlighted.length} 个编程题`, 'success');
         }
     }
@@ -922,9 +922,9 @@ int main() {
 
 // 导出类
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = PTAUIEnhancer;
+    module.exports = WPHUIEnhancer;
 } else if (typeof window !== 'undefined') {
-    window.PTAUIEnhancer = PTAUIEnhancer;
+    window.WPHUIEnhancer = WPHUIEnhancer;
 }
 
 // 创建全局实例
@@ -932,11 +932,11 @@ if (typeof window !== 'undefined') {
     // 等待页面加载后初始化
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
-            window.ptaUIEnhancer = new PTAUIEnhancer();
+            window.wphUIEnhancer = new WPHUIEnhancer();
         });
     } else {
-        window.ptaUIEnhancer = new PTAUIEnhancer();
+        window.wphUIEnhancer = new WPHUIEnhancer();
     }
     
-    console.log('✅ PTA UI增强器已加载');
+    console.log('✅ Web 题目助手 UI增强器已加载');
 }

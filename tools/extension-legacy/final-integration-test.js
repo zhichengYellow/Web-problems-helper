@@ -1,7 +1,7 @@
-// PTA答题助手 - 最终集成测试
+// Web 题目助手 - 最终集成测试
 // 验证API服务集成和所有功能
 
-console.log('🎯 PTA答题助手 - 最终集成测试');
+console.log('🎯 Web 题目助手 - 最终集成测试');
 console.log('='.repeat(60));
 
 async function runIntegrationTest() {

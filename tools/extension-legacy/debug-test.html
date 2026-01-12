@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PTA答题助手 - 调试测试页面</title>
+    <title>Web 题目助手 - 调试测试页面</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -92,7 +92,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>🧪 PTA答题助手调试测试页面</h1>
+        <h1>🧪 Web 题目助手调试测试页面</h1>
         <p>用于测试插件功能是否正常工作</p>
     </div>
 
@@ -100,7 +100,7 @@
         <h2>📋 测试说明</h2>
         <ol>
             <li><strong>修改URL</strong>：将浏览器地址栏URL改为包含 "pintia.cn" 的地址（如：https://pintia.cn/test）</li>
-            <li><strong>重新加载插件</strong>：在Chrome扩展程序页面点击PTA答题助手的刷新按钮</li>
+            <li><strong>重新加载插件</strong>：在Chrome扩展程序页面点击Web 题目助手的刷新按钮</li>
             <li><strong>刷新页面</strong>：重新加载此测试页面</li>
             <li><strong>查看工具栏</strong>：应该在右上角看到紫色的浮动工具栏</li>
             <li><strong>测试功能</strong>：点击下方的测试按钮验证各项功能</li>
@@ -208,7 +208,7 @@
             log('🔍 检查插件是否加载...');
             
             // 检查工具栏是否存在
-            const toolbar = document.querySelector('.pta-helper-toolbar');
+            const toolbar = document.querySelector('.wph-toolbar');
             if (toolbar) {
                 log('✅ 找到浮动工具栏');
                 setStatus('插件已正确加载！', 'success');
@@ -233,7 +233,7 @@
         function testDetection() {
             log('🔍 测试题目检测功能...');
             
-            const toolbar = document.querySelector('.pta-helper-toolbar');
+            const toolbar = document.querySelector('.wph-toolbar');
             if (!toolbar) {
                 log('❌ 工具栏未找到，请先确保插件已加载');
                 setStatus('请先确保插件已加载', 'error');
@@ -247,7 +247,7 @@
                 
                 // 等待检测完成
                 setTimeout(() => {
-                    const highlightedQuestions = document.querySelectorAll('.pta-helper-highlight');
+                    const highlightedQuestions = document.querySelectorAll('.wph-highlight');
                     log(`📊 检测结果：找到 ${highlightedQuestions.length} 个高亮题目`);
                     
                     if (highlightedQuestions.length > 0) {
@@ -265,7 +265,7 @@
         function testAutoFill() {
             log('✨ 测试自动填充功能...');
             
-            const toolbar = document.querySelector('.pta-helper-toolbar');
+            const toolbar = document.querySelector('.wph-toolbar');
             if (!toolbar) {
                 log('❌ 工具栏未找到');
                 setStatus('请先确保插件已加载', 'error');
@@ -279,7 +279,7 @@
                 
                 // 等待填充完成
                 setTimeout(() => {
-                    const filledElements = document.querySelectorAll('.pta-helper-filled');
+                    const filledElements = document.querySelectorAll('.wph-filled');
                     log(`📊 填充结果：${filledElements.length} 个元素被标记为已填充`);
                     
                     // 检查实际填充情况
@@ -328,7 +328,7 @@
         const originalLog = console.log;
         console.log = function(...args) {
             originalLog.apply(console, args);
-            if (args[0] && typeof args[0] === 'string' && args[0].includes('PTA')) {
+            if (args[0] && typeof args[0] === 'string' && args[0].includes('Web 题目助手')) {
                 log(`🔍 控制台: ${args.join(' ')}`);
             }
         };

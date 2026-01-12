@@ -1,4 +1,4 @@
-package com.ptahelper.hunyuan.web;
+package com.webproblemshelper.hunyuan.web;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ptahelper.hunyuan.service.HunyuanProxyService;
-import com.ptahelper.hunyuan.web.dto.BatchRequest;
-import com.ptahelper.hunyuan.web.dto.ChatRequest;
+import com.webproblemshelper.hunyuan.service.HunyuanProxyService;
+import com.webproblemshelper.hunyuan.web.dto.BatchRequest;
+import com.webproblemshelper.hunyuan.web.dto.ChatRequest;
 
 import jakarta.validation.Valid;
 

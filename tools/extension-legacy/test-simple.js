@@ -1,12 +1,12 @@
-// 简化的PTA题目检测测试
-console.log('🔧 开始PTA题目检测测试...');
+// 简化的 Pintia 题目检测测试
+console.log('🔧 开始 Pintia 题目检测测试...');
 
 // 创建测试函数
-async function testPTADetection() {
+async function testPintiaDetection() {
     console.log('1. 测试容器检测...');
     
-    // 测试PTA特定选择器
-    const ptaSelectors = [
+    // 测试 Pintia 特定选择器
+    const pintiaSelectors = [
         '.pc-x',
         '[class*="problem"]',
         '[class*="question"]',
@@ -14,7 +14,7 @@ async function testPTADetection() {
         '.markdownBlock_tErSz'
     ];
     
-    for (const selector of ptaSelectors) {
+    for (const selector of pintiaSelectors) {
         const elements = document.querySelectorAll(selector);
         console.log(`选择器 "${selector}": 找到 ${elements.length} 个元素`);
         
@@ -39,6 +39,6 @@ async function testPTADetection() {
 }
 
 // 运行测试
-testPTADetection().then(result => {
+testPintiaDetection().then(result => {
     console.log(`测试结果: ${result ? '成功' : '失败'}`);
 });

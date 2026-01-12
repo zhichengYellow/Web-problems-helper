@@ -157,7 +157,7 @@ PORT=3001
 - 本地存储管理
 
 ### @web-problems-helper/config (配置包)
-- PTA平台配置
+- Pintia 平台配置
 - 题目类型定义
 - API接口配置
 - UI样式配置

@@ -2,7 +2,7 @@ import { AnswerDatabase } from '../services/AnswerDatabase';
 import { ProblemDetector } from '../services/ProblemDetector';
 import { UIManager } from '../ui/UIManager';
 
-export interface PTAHelperConfig {
+export interface WebProblemsHelperConfig {
   answerDatabase: AnswerDatabase;
   problemDetector: ProblemDetector;
   uiManager: UIManager;
@@ -15,22 +15,28 @@ export interface ProblemInfo {
   difficulty: 'easy' | 'medium' | 'hard';
   content: string;
   options?: string[];
+  platform?: string;
+  url?: string;
+  source?: string;
 }
 
-export class PTAHelper {
-  private config: PTAHelperConfig;
+export class WebProblemsHelper {
+  private config: WebProblemsHelperConfig;
   private isRunning: boolean = false;
+  private scanTimer: number | null = null;
+  private lastScanUrl: string = '';
+  private lastSeenFingerprints = new Set<string>();
 
-  constructor(config: PTAHelperConfig) {
+  constructor(config: WebProblemsHelperConfig) {
     this.config = config;
   }
 
   /**
-   * 启动PTA助手
+   * 启动Web 题目助手
    */
   async start(): Promise<void> {
     if (this.isRunning) {
-      console.warn('PTA助手已经在运行中');
+      console.warn('Web 题目助手已经在运行中');
       return;
     }
 
@@ -46,20 +52,20 @@ export class PTAHelper {
       // 初始扫描页面
       await this.scanCurrentPage();
       
-      console.log('PTA助手启动成功');
+      console.log('Web 题目助手启动成功');
     } catch (error) {
-      console.error('PTA助手启动失败:', error);
+      console.error('Web 题目助手启动失败:', error);
       this.isRunning = false;
     }
   }
 
   /**
-   * 停止PTA助手
+   * 停止Web 题目助手
    */
   stop(): void {
     this.isRunning = false;
     this.config.uiManager.cleanup();
-    console.log('PTA助手已停止');
+    console.log('Web 题目助手已停止');
   }
 
   /**
@@ -71,17 +77,43 @@ export class PTAHelper {
     try {
       const problems = await this.config.problemDetector.detectProblems();
       
-      if (problems.length > 0) {
-        console.log(`检测到 ${problems.length} 个题目`);
+      const fresh = problems.filter(p => {
+        const basis = `${p.id}|${p.title}|${(p.content || '').slice(0, 800)}`
+        // keep a simple fingerprint; avoid repeated processing caused by frequent DOM mutations
+        const fp = basis
+        if (this.lastSeenFingerprints.has(fp)) return false
+        this.lastSeenFingerprints.add(fp)
+        // prevent unbounded growth
+        if (this.lastSeenFingerprints.size > 300) {
+          this.lastSeenFingerprints = new Set(Array.from(this.lastSeenFingerprints).slice(-200))
+        }
+        return true
+      })
+
+      if (fresh.length > 0) {
+        console.log(`检测到 ${fresh.length} 个新题目`);
         
         // 为每个题目查找答案并显示UI
-        for (const problem of problems) {
+        for (const problem of fresh) {
           await this.handleProblem(problem);
         }
       }
     } catch (error) {
       console.error('扫描页面失败:', error);
     }
+  }
+
+  private scheduleScan(delayMs: number = 350): void {
+    if (!this.isRunning) return
+    if (this.scanTimer !== null) {
+      window.clearTimeout(this.scanTimer)
+    }
+    this.scanTimer = window.setTimeout(() => {
+      this.scanTimer = null
+      // Avoid redundant scans when URL didn't change and we just scanned very recently;
+      // the fingerprint dedupe above also protects us.
+      void this.scanCurrentPage()
+    }, delayMs)
   }
 
   /**
@@ -115,7 +147,8 @@ export class PTAHelper {
     const observer = new MutationObserver(() => {
       if (location.href !== lastUrl) {
         lastUrl = location.href;
-        setTimeout(() => this.scanCurrentPage(), 100);
+        this.lastScanUrl = lastUrl
+        this.scheduleScan(120);
       }
     });
 
@@ -131,7 +164,8 @@ export class PTAHelper {
       });
       
       if (shouldRescan) {
-        setTimeout(() => this.scanCurrentPage(), 200);
+        // DOM changes can be frequent in SPAs; debounce to avoid noisy rescans.
+        this.scheduleScan(450);
       }
     });
 

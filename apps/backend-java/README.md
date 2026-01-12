@@ -61,7 +61,7 @@ open http://localhost:3001/console
 控制台使用本地 JSON 文件落盘（默认目录：`./data`，相对启动进程工作目录）。可用环境变量覆盖：
 
 ```bash
-export PTA_CONSOLE_DATA_DIR=/abs/path/to/pta-console-data
+export WPH_CONSOLE_DATA_DIR=/abs/path/to/web-problems-helper-data
 ```
 
 默认会生成：

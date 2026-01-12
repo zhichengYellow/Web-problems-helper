@@ -1,4 +1,4 @@
-// PTA答题助手 - AI服务统一接口
+// Web 题目助手 - AI服务统一接口
 // 修复AIService未定义的问题
 
 class AIService {

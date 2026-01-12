@@ -1,4 +1,4 @@
-package com.ptahelper.hunyuan.agent.service;
+package com.webproblemshelper.hunyuan.agent.service;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -14,10 +14,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.stereotype.Service;
 
-import com.ptahelper.hunyuan.agent.web.dto.AgentAnswerRequest;
-import com.ptahelper.hunyuan.agent.web.dto.OptionDto;
-import com.ptahelper.hunyuan.service.HunyuanProxyService;
-import com.ptahelper.hunyuan.web.dto.ChatRequest;
+import com.webproblemshelper.hunyuan.agent.web.dto.AgentAnswerRequest;
+import com.webproblemshelper.hunyuan.agent.web.dto.OptionDto;
+import com.webproblemshelper.hunyuan.service.HunyuanProxyService;
+import com.webproblemshelper.hunyuan.web.dto.ChatRequest;
 
 @Service
 public class AgentAnswerService {

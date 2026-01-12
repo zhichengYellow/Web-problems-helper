@@ -1,4 +1,4 @@
-package com.ptahelper.hunyuan.console.web.dto;
+package com.webproblemshelper.hunyuan.console.web.dto;
 
 public class WrongStatDto {
     private String questionId;

@@ -1,4 +1,4 @@
-package com.ptahelper.hunyuan.agent.web.dto;
+package com.webproblemshelper.hunyuan.agent.web.dto;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
-// PTA答题助手修复测试脚本
+// Web 题目助手修复测试脚本
 // 用于验证CORS和配置问题的修复
 
-console.log('🚀 开始测试PTA答题助手修复...');
+console.log('🚀 开始测试Web 题目助手修复...');
 
 // 测试API服务初始化
 async function testAPIService() {
@@ -66,7 +66,7 @@ async function testHunyuanService() {
 // 运行所有测试
 async function runAllTests() {
     console.log('='.repeat(50));
-    console.log('📋 开始运行PTA答题助手修复测试');
+    console.log('📋 开始运行Web 题目助手修复测试');
     console.log('='.repeat(50));
     
     const results = [];

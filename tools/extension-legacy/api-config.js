@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 简单的加密/解密工具
     const CryptoUtils = {
-        key: 'pta-helper-secure-v1',
+        key: 'web-problems-helper-secure-v1',
         
         encrypt(text) {
             if (!text) return '';
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 
                 if (basicValidation.valid) {
-                    showTestResult('✅ 配置格式验证通过，请在PTA页面中测试实际功能', 'success');
+                    showTestResult('✅ 配置格式验证通过，请在 Pintia 页面中测试实际功能', 'success');
                 } else {
                     showTestResult('❌ ' + basicValidation.error, 'error');
                 }
@@ -303,8 +303,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // 保存到多个存储位置
             await saveConfigToMultipleStorages(config);
 
-            // 尝试通知PTA页面更新配置（如果可能）
-            await notifyPTAPages(config);
+            // 尝试通知 Pintia 页面更新配置（如果可能）
+            await notifyPintiaPages(config);
 
             showTestResult('✅ 混元AI配置保存成功', 'success');
             
@@ -350,26 +350,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 通知PTA页面更新配置
-    async function notifyPTAPages(config) {
+    // 通知 Pintia 页面更新配置
+    async function notifyPintiaPages(config) {
         try {
             if (typeof chrome !== 'undefined' && chrome.tabs) {
                 const tabs = await chrome.tabs.query({});
-                const ptaTabs = tabs.filter(tab => tab.url && tab.url.includes('pintia.cn'));
+                const pintiaTabs = tabs.filter(tab => tab.url && tab.url.includes('pintia.cn'));
                 
-                for (const tab of ptaTabs) {
+                for (const tab of pintiaTabs) {
                     try {
                         await chrome.tabs.sendMessage(tab.id, {
                             action: 'updateHunyuanConfig',
                             config: config
                         });
                     } catch (error) {
-                        console.log(`PTA页面 ${tab.id} 未就绪，配置将在下次加载时生效`);
+                        console.log(`Pintia 页面 ${tab.id} 未就绪，配置将在下次加载时生效`);
                     }
                 }
             }
         } catch (error) {
-            console.log('通知PTA页面时出错，但配置已保存:', error);
+            console.log('通知 Pintia 页面时出错，但配置已保存:', error);
         }
     }
 
@@ -401,8 +401,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.warn('localStorage缓存清理失败:', localError);
             }
 
-            // 尝试通知PTA页面清空内存缓存
-            await notifyPTAPagesClearCache();
+            // 尝试通知 Pintia 页面清空内存缓存
+            await notifyPintiaPagesClearCache();
 
             if (chromeSuccess || localSuccess) {
                 showTestResult('✅ 混元AI缓存已清空', 'success');
@@ -415,25 +415,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 通知PTA页面清空缓存
-    async function notifyPTAPagesClearCache() {
+    // 通知 Pintia 页面清空缓存
+    async function notifyPintiaPagesClearCache() {
         try {
             if (typeof chrome !== 'undefined' && chrome.tabs) {
                 const tabs = await chrome.tabs.query({});
-                const ptaTabs = tabs.filter(tab => tab.url && tab.url.includes('pintia.cn'));
+                const pintiaTabs = tabs.filter(tab => tab.url && tab.url.includes('pintia.cn'));
                 
-                for (const tab of ptaTabs) {
+                for (const tab of pintiaTabs) {
                     try {
                         await chrome.tabs.sendMessage(tab.id, {
                             action: 'clearHunyuanCache'
                         });
                     } catch (error) {
-                        console.log(`PTA页面 ${tab.id} 缓存清理跳过`);
+                        console.log(`Pintia 页面 ${tab.id} 缓存清理跳过`);
                     }
                 }
             }
         } catch (error) {
-            console.log('通知PTA页面清理缓存时出错:', error);
+            console.log('通知 Pintia 页面清理缓存时出错:', error);
         }
     }
 
@@ -467,8 +467,8 @@ document.addEventListener('DOMContentLoaded', function() {
             apiEnabledLabel.textContent = '禁用';
             updateFormState();
 
-            // 通知PTA页面重置配置
-            await notifyPTAPages({
+            // 通知 Pintia 页面重置配置
+            await notifyPintiaPages({
                 enabled: false,
                 secretId: '',
                 secretKey: '',

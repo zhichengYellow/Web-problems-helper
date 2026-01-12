@@ -1,4 +1,4 @@
-package com.ptahelper.hunyuan.service;
+package com.webproblemshelper.hunyuan.service;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -17,9 +17,9 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptahelper.hunyuan.config.TencentProperties;
-import com.ptahelper.hunyuan.web.dto.BatchRequest;
-import com.ptahelper.hunyuan.web.dto.ChatRequest;
+import com.webproblemshelper.hunyuan.config.TencentProperties;
+import com.webproblemshelper.hunyuan.web.dto.BatchRequest;
+import com.webproblemshelper.hunyuan.web.dto.ChatRequest;
 
 @Service
 public class HunyuanProxyService {

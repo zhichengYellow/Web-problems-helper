@@ -130,7 +130,7 @@
         <div class="info">
             <strong>💡 使用提示：</strong>
             <ul>
-                <li>配置完成后，在PTA答题助手中选择「腾讯云hunyuan-lite」作为API服务</li>
+                <li>配置完成后，在Web 题目助手中选择「腾讯云hunyuan-lite」作为API服务</li>
                 <li>密钥仅存储在本地浏览器中，不会上传到任何服务器</li>
                 <li>如需更换密钥，可重新访问此页面进行配置</li>
             </ul>
@@ -162,7 +162,7 @@
                     await hunyuanService.setConfig(secretId, secretKey);
                 }
 
-                showMessage('✅ 配置保存成功！现在可以在PTA答题助手中使用hunyuan-lite服务了', 'success');
+                showMessage('✅ 配置保存成功！现在可以在Web 题目助手中使用hunyuan-lite服务了', 'success');
                 
                 // 清空表单
                 document.getElementById('secretId').value = '';

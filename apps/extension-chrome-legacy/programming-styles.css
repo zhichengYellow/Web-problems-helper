@@ -1,7 +1,7 @@
 /* 编程题检测功能专用样式 */
 
 /* 编程题检测结果模态框 */
-.pta-helper-programming-result-modal {
+.wph-programming-result-modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -13,12 +13,12 @@
     transition: all 0.3s ease;
 }
 
-.pta-helper-programming-result-modal.show {
+.wph-programming-result-modal.show {
     opacity: 1;
     visibility: visible;
 }
 
-.pta-helper-programming-result-modal .modal-overlay {
+.wph-programming-result-modal .modal-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -28,7 +28,7 @@
     backdrop-filter: blur(4px);
 }
 
-.pta-helper-programming-result-modal .modal-content {
+.wph-programming-result-modal .modal-content {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -44,7 +44,7 @@
     flex-direction: column;
 }
 
-.pta-helper-programming-result-modal .modal-header {
+.wph-programming-result-modal .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -53,13 +53,13 @@
     color: white;
 }
 
-.pta-helper-programming-result-modal .modal-header h3 {
+.wph-programming-result-modal .modal-header h3 {
     margin: 0;
     font-size: 18px;
     font-weight: 600;
 }
 
-.pta-helper-programming-result-modal .close-btn {
+.wph-programming-result-modal .close-btn {
     background: none;
     border: none;
     color: white;
@@ -70,11 +70,11 @@
     transition: background 0.2s ease;
 }
 
-.pta-helper-programming-result-modal .close-btn:hover {
+.wph-programming-result-modal .close-btn:hover {
     background: rgba(255, 255, 255, 0.2);
 }
 
-.pta-helper-programming-result-modal .modal-body {
+.wph-programming-result-modal .modal-body {
     padding: 24px;
     overflow-y: auto;
     flex: 1;
@@ -191,39 +191,39 @@
 }
 
 /* 工具栏按钮增强样式 */
-.pta-helper-toolbar .prog-detect-btn {
+.wph-toolbar .prog-detect-btn {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
 }
 
-.pta-helper-toolbar .prog-detect-btn:hover {
+.wph-toolbar .prog-detect-btn:hover {
     background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
-.pta-helper-toolbar .template-btn {
+.wph-toolbar .template-btn {
     background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
     color: white;
     border: none;
 }
 
-.pta-helper-toolbar .template-btn:hover {
+.wph-toolbar .template-btn:hover {
     background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
 }
 
 /* 编程题特有的题目高亮样式 */
-.pta-helper-programming-highlight {
+.wph-programming-highlight {
     border: 2px solid #667eea !important;
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%) !important;
     border-radius: 8px !important;
     position: relative;
 }
 
-.pta-helper-programming-highlight::before {
+.wph-programming-highlight::before {
     content: '💻 编程题';
     position: absolute;
     top: -12px;
@@ -238,11 +238,11 @@
 }
 
 /* 代码编辑器检测指示器 */
-.pta-helper-code-editor-detected {
+.wph-code-editor-detected {
     position: relative;
 }
 
-.pta-helper-code-editor-detected::after {
+.wph-code-editor-detected::after {
     content: '✅ 代码编辑器已检测';
     position: absolute;
     top: 8px;
@@ -259,16 +259,16 @@
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-    .pta-helper-programming-result-modal .modal-content {
+    .wph-programming-result-modal .modal-content {
         width: 95%;
         max-height: 95vh;
     }
     
-    .pta-helper-programming-result-modal .modal-header {
+    .wph-programming-result-modal .modal-header {
         padding: 16px 20px;
     }
     
-    .pta-helper-programming-result-modal .modal-body {
+    .wph-programming-result-modal .modal-body {
         padding: 20px;
     }
     
@@ -294,7 +294,7 @@
 
 /* 暗色主题支持 */
 @media (prefers-color-scheme: dark) {
-    .pta-helper-programming-result-modal .modal-content {
+    .wph-programming-result-modal .modal-content {
         background: #1a202c;
         color: #e2e8f0;
     }
@@ -337,17 +337,17 @@
     }
 }
 
-.pta-helper-programming-result-modal.show .modal-content {
+.wph-programming-result-modal.show .modal-content {
     animation: slideInUp 0.3s ease-out;
 }
 
 /* 加载状态样式 */
-.pta-helper-programming-detecting {
+.wph-programming-detecting {
     position: relative;
     pointer-events: none;
 }
 
-.pta-helper-programming-detecting::before {
+.wph-programming-detecting::before {
     content: '';
     position: absolute;
     top: 0;
@@ -359,7 +359,7 @@
     z-index: 1;
 }
 
-.pta-helper-programming-detecting::after {
+.wph-programming-detecting::after {
     content: '🔍 检测中...';
     position: absolute;
     top: 50%;
@@ -387,12 +387,12 @@
 }
 
 /* 成功检测状态 */
-.pta-helper-programming-detected {
+.wph-programming-detected {
     border: 2px solid #28a745 !important;
     background: rgba(40, 167, 69, 0.1) !important;
 }
 
-.pta-helper-programming-detected::before {
+.wph-programming-detected::before {
     content: '✅ 编程题已检测';
     position: absolute;
     top: -12px;
@@ -407,12 +407,12 @@
 }
 
 /* 检测失败状态 */
-.pta-helper-programming-failed {
+.wph-programming-failed {
     border: 2px solid #dc3545 !important;
     background: rgba(220, 53, 69, 0.1) !important;
 }
 
-.pta-helper-programming-failed::before {
+.wph-programming-failed::before {
     content: '❌ 检测失败';
     position: absolute;
     top: -12px;

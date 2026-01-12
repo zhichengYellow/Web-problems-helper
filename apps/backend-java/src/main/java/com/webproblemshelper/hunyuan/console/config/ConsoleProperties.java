@@ -1,8 +1,8 @@
-package com.ptahelper.hunyuan.console.config;
+package com.webproblemshelper.hunyuan.console.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "pta.console")
+@ConfigurationProperties(prefix = "wph.console")
 public class ConsoleProperties {
     /**
      * Data directory for persisting console state (question bank, wrong stats, analytics).

@@ -1,4 +1,4 @@
-package com.ptahelper.hunyuan.console.web;
+package com.webproblemshelper.hunyuan.console.web;
 
 import java.nio.file.Path;
 import java.time.Instant;

@@ -1,106 +1,198 @@
-package com.ptahelper.hunyuan.console.store;
+package com.webproblemshelper.hunyuan.console.store;
 
-import java.nio.file.Path;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptahelper.hunyuan.console.web.dto.QuestionDto;
+import com.webproblemshelper.hunyuan.console.persistence.entity.QuestionEntity;
+import com.webproblemshelper.hunyuan.console.persistence.repo.QuestionRepository;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.webproblemshelper.hunyuan.console.web.dto.QuestionDto;
 
 @Service
 public class QuestionBankStore {
-    private final JsonFileStore<List<QuestionDto>> store;
+    private final QuestionRepository questionRepository;
 
-    public QuestionBankStore(ObjectMapper objectMapper, Path consoleDataDir) {
-        this.store = new JsonFileStore<>(
-                objectMapper,
-                consoleDataDir.resolve("question-bank.json"),
-                new TypeReference<List<QuestionDto>>() {
-                }
-        );
+    public QuestionBankStore(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
     }
 
     public List<QuestionDto> list(String query) {
         String q = query == null ? "" : query.trim().toLowerCase(Locale.ROOT);
-        List<QuestionDto> all = new ArrayList<>(store.readOrDefault(List.of()));
+        LambdaQueryWrapper<QuestionEntity> wrapper = new LambdaQueryWrapper<>();
+        wrapper.orderByDesc(QuestionEntity::getUpdatedAt);
         if (!q.isEmpty()) {
-            all = all.stream()
-                    .filter(it -> containsIgnoreCase(it.getQuestionText(), q)
-                            || containsIgnoreCase(it.getAnswer(), q)
-                            || containsAnyIgnoreCase(it.getKnowledgePoints(), q)
-                            || containsAnyIgnoreCase(it.getTags(), q)
-                            || containsIgnoreCase(it.getSource(), q)
-                            || containsIgnoreCase(it.getType(), q))
-                    .collect(Collectors.toCollection(ArrayList::new));
+            wrapper.and(w -> w
+                    .like(QuestionEntity::getQuestionText, q)
+                    .or().like(QuestionEntity::getAnswer, q)
+                    .or().like(QuestionEntity::getSource, q)
+                    .or().like(QuestionEntity::getType, q)
+                    .or().like(QuestionEntity::getPlatform, q)
+                    .or().like(QuestionEntity::getExternalId, q)
+                    .or().like(QuestionEntity::getUrl, q));
         }
-        all.sort(Comparator.comparing(QuestionDto::getUpdatedAt, Comparator.nullsLast(Comparator.reverseOrder())));
-        return all;
+        return questionRepository.selectList(wrapper).stream().map(QuestionBankStore::toDto).toList();
     }
 
+    @Cacheable(cacheNames = "questionById", key = "#id")
     public Optional<QuestionDto> getById(String id) {
         if (id == null || id.isBlank()) {
             return Optional.empty();
         }
-        return store.readOrDefault(List.of()).stream()
-                .filter(q -> id.equals(q.getId()))
-                .findFirst();
+        return Optional.ofNullable(questionRepository.selectById(id)).map(QuestionBankStore::toDto);
     }
 
+    @Transactional
+    @CacheEvict(cacheNames = { "questionById", "questionByExternalId" }, allEntries = true)
     public QuestionDto create(QuestionDto input) {
-        List<QuestionDto> all = new ArrayList<>(store.readOrDefault(List.of()));
         QuestionDto q = normalize(input);
-        q.setId(UUID.randomUUID().toString());
-        String now = Instant.now().toString();
-        q.setCreatedAt(now);
-        q.setUpdatedAt(now);
-        all.add(q);
-        store.write(all);
-        return q;
+        LocalDateTime now = LocalDateTime.now();
+
+        QuestionEntity entity = new QuestionEntity();
+        entity.setId(UUID.randomUUID().toString());
+        entity.setExternalId(safeTrim(q.getExternalId()));
+        entity.setPlatform(safeTrim(q.getPlatform()));
+        entity.setUrl(safeTrim(q.getUrl()));
+        entity.setType(safeTrim(q.getType()));
+        entity.setQuestionText(safeTrim(q.getQuestionText()));
+        entity.setAnswer(safeTrim(q.getAnswer()));
+        entity.setSource(safeTrim(q.getSource()));
+        entity.setOptions(q.getOptions());
+        entity.setKnowledgePoints(q.getKnowledgePoints());
+        entity.setTags(q.getTags());
+        entity.setCreatedAt(now);
+        entity.setUpdatedAt(now);
+
+        questionRepository.insert(entity);
+        return toDto(entity);
     }
 
+    @Transactional
+    @CacheEvict(cacheNames = { "questionById", "questionByExternalId" }, allEntries = true)
+    public QuestionDto upsertByExternalId(QuestionDto input) {
+        QuestionDto normalized = normalize(input);
+        String ext = safeTrim(normalized.getExternalId());
+
+        // If externalId is missing, fallback to plain create
+        if (ext == null || ext.isBlank()) {
+            return create(normalized);
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        QuestionEntity entity = questionRepository.selectOne(new LambdaQueryWrapper<QuestionEntity>()
+                .eq(QuestionEntity::getExternalId, ext)
+                .last("limit 1"));
+        boolean isCreate = false;
+        if (entity == null) {
+            isCreate = true;
+            entity = new QuestionEntity();
+            entity.setId(UUID.randomUUID().toString());
+            entity.setExternalId(ext);
+            entity.setCreatedAt(now);
+        }
+
+        entity.setPlatform(safeTrim(normalized.getPlatform()));
+        entity.setUrl(safeTrim(normalized.getUrl()));
+        entity.setType(safeTrim(normalized.getType()));
+        entity.setQuestionText(safeTrim(normalized.getQuestionText()));
+        entity.setAnswer(safeTrim(normalized.getAnswer()));
+        entity.setSource(safeTrim(normalized.getSource()));
+        entity.setOptions(normalized.getOptions());
+        entity.setKnowledgePoints(normalized.getKnowledgePoints());
+        entity.setTags(normalized.getTags());
+        entity.setUpdatedAt(now);
+
+        if (isCreate) {
+            questionRepository.insert(entity);
+        } else {
+            questionRepository.updateById(entity);
+        }
+        return toDto(entity);
+    }
+
+    @Transactional
+    @CacheEvict(cacheNames = { "questionById", "questionByExternalId" }, allEntries = true)
+    public ImportResult bulkUpsert(List<QuestionDto> inputs) {
+        if (inputs == null || inputs.isEmpty()) {
+            return new ImportResult(0, 0);
+        }
+
+        int created = 0;
+        int updated = 0;
+        for (QuestionDto it : inputs) {
+            String ext = safeTrim(it == null ? null : it.getExternalId());
+            boolean existed = ext != null && !ext.isBlank() && questionRepository.selectCount(
+                    new LambdaQueryWrapper<QuestionEntity>().eq(QuestionEntity::getExternalId, ext)) > 0;
+            upsertByExternalId(it);
+            if (existed) {
+                updated++;
+            } else {
+                created++;
+            }
+        }
+        return new ImportResult(created, updated);
+    }
+
+    @Cacheable(cacheNames = "questionByExternalId", key = "#externalId")
+    public Optional<QuestionDto> getByExternalId(String externalId) {
+        String ext = safeTrim(externalId);
+        if (ext == null || ext.isBlank()) {
+            return Optional.empty();
+        }
+        QuestionEntity entity = questionRepository.selectOne(new LambdaQueryWrapper<QuestionEntity>()
+                .eq(QuestionEntity::getExternalId, ext)
+                .last("limit 1"));
+        return Optional.ofNullable(entity).map(QuestionBankStore::toDto);
+    }
+
+    @Transactional
+    @CacheEvict(cacheNames = { "questionById", "questionByExternalId" }, allEntries = true)
     public Optional<QuestionDto> update(String id, QuestionDto input) {
         if (id == null || id.isBlank()) {
             return Optional.empty();
         }
-        List<QuestionDto> all = new ArrayList<>(store.readOrDefault(List.of()));
-        for (int i = 0; i < all.size(); i++) {
-            if (id.equals(all.get(i).getId())) {
-                QuestionDto existing = all.get(i);
-                QuestionDto merged = normalize(input);
-                merged.setId(existing.getId());
-                merged.setCreatedAt(existing.getCreatedAt());
-                merged.setUpdatedAt(Instant.now().toString());
-                all.set(i, merged);
-                store.write(all);
-                return Optional.of(merged);
-            }
+
+        QuestionEntity existing = questionRepository.selectById(id);
+        if (existing == null) {
+            return Optional.empty();
         }
-        return Optional.empty();
+        QuestionDto merged = normalize(input);
+        existing.setExternalId(safeTrim(merged.getExternalId()));
+        existing.setPlatform(safeTrim(merged.getPlatform()));
+        existing.setUrl(safeTrim(merged.getUrl()));
+        existing.setType(safeTrim(merged.getType()));
+        existing.setQuestionText(safeTrim(merged.getQuestionText()));
+        existing.setAnswer(safeTrim(merged.getAnswer()));
+        existing.setSource(safeTrim(merged.getSource()));
+        existing.setOptions(merged.getOptions());
+        existing.setKnowledgePoints(merged.getKnowledgePoints());
+        existing.setTags(merged.getTags());
+        existing.setUpdatedAt(LocalDateTime.now());
+        questionRepository.updateById(existing);
+        return Optional.of(toDto(existing));
     }
 
+    @Transactional
+    @CacheEvict(cacheNames = { "questionById", "questionByExternalId" }, allEntries = true)
     public boolean delete(String id) {
         if (id == null || id.isBlank()) {
             return false;
         }
-        List<QuestionDto> all = new ArrayList<>(store.readOrDefault(List.of()));
-        boolean removed = all.removeIf(q -> id.equals(q.getId()));
-        if (removed) {
-            store.write(all);
-        }
-        return removed;
+        return questionRepository.deleteById(id) > 0;
     }
 
     private static QuestionDto normalize(QuestionDto input) {
         QuestionDto q = new QuestionDto();
+        q.setExternalId(safeTrim(input == null ? null : input.getExternalId()));
+        q.setPlatform(safeTrim(input == null ? null : input.getPlatform()));
+        q.setUrl(safeTrim(input == null ? null : input.getUrl()));
         q.setType(safeTrim(input == null ? null : input.getType()));
         q.setQuestionText(safeTrim(input == null ? null : input.getQuestionText()));
         q.setAnswer(safeTrim(input == null ? null : input.getAnswer()));
@@ -111,26 +203,28 @@ public class QuestionBankStore {
         return q;
     }
 
+    public record ImportResult(int created, int updated) {
+    }
+
     private static String safeTrim(String s) {
         return s == null ? null : s.trim();
     }
 
-    private static boolean containsIgnoreCase(String text, String queryLower) {
-        if (text == null || text.isBlank() || queryLower == null || queryLower.isBlank()) {
-            return false;
-        }
-        return text.toLowerCase(Locale.ROOT).contains(queryLower);
-    }
-
-    private static boolean containsAnyIgnoreCase(List<String> list, String queryLower) {
-        if (list == null || list.isEmpty()) {
-            return false;
-        }
-        for (String item : list) {
-            if (containsIgnoreCase(item, queryLower)) {
-                return true;
-            }
-        }
-        return false;
+    private static QuestionDto toDto(QuestionEntity e) {
+        QuestionDto q = new QuestionDto();
+        q.setId(e.getId());
+        q.setExternalId(e.getExternalId());
+        q.setPlatform(e.getPlatform());
+        q.setUrl(e.getUrl());
+        q.setType(e.getType());
+        q.setQuestionText(e.getQuestionText());
+        q.setAnswer(e.getAnswer());
+        q.setSource(e.getSource());
+        q.setOptions(e.getOptions() == null ? List.of() : e.getOptions());
+        q.setKnowledgePoints(e.getKnowledgePoints() == null ? List.of() : e.getKnowledgePoints());
+        q.setTags(e.getTags() == null ? List.of() : e.getTags());
+        q.setCreatedAt(e.getCreatedAt() == null ? null : e.getCreatedAt().toString());
+        q.setUpdatedAt(e.getUpdatedAt() == null ? null : e.getUpdatedAt().toString());
+        return q;
     }
 }

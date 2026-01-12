@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "PTA答题助手",
+  "name": "Web 题目助手",
   "version": "1.2.0",
   "description": "PTA平台自动化/半自动化答题插件，支持外部API和本地存档",
   "permissions": [
@@ -26,7 +26,7 @@
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "PTA答题助手"
+    "default_title": "Web 题目助手"
   },
   "options_page": "config-ui.html",
   "background": {
@@ -39,7 +39,7 @@
         "https://*.pintia.cn/*",
     "wss://live.pintia.cn/*"
       ],
-      "js": ["utils.js", "hunyuan-service.js", "api-service.js", "ai-service.js", "answer-database.js", "programming-problem-detector.js", "programming-answer-enhancer.js", "pta-codemirror-filler.js", "pta-ui-enhancer.js", "programming-problem-integration.js", "programming-integration-complete.js", "content.js"],
+      "js": ["utils.js", "hunyuan-service.js", "api-service.js", "ai-service.js", "answer-database.js", "programming-problem-detector.js", "programming-answer-enhancer.js", "wph-codemirror-filler.js", "wph-ui-enhancer.js", "programming-problem-integration.js", "programming-integration-complete.js", "content.js"],
       "css": ["content.css", "programming-styles.css"],
       "run_at": "document_idle"
     }
